@@ -27,11 +27,13 @@ Fill every field. Empty fields are not allowed.
 
 ```md
 ### Objective 🎯
+
 <!-- In one sentence, what is the goal of this task? -->
 
 Exemple: Add a template for new tasks.
 
 ### Context 📖
+
 <!-- Why is this task needed? Links/references if needed. -->
 
 Exemple: The current task template is not clear and does not follow the standard.
@@ -45,6 +47,13 @@ To be done, all steps must be checked.
 
 Exemple:
 - [ ] Create a new task template
+
+### Acceptance Criteria ✅
+
+- [ ] GoogleTest 1
+- [ ] GoogleTest 2
+- [ ] GoogleTest 3
+- [ ] ...
 
 ## 3 · Task Metadata
 
@@ -67,6 +76,7 @@ Exemple:
 ### Size 📏
 
 <!-- What is the size/time of this task? -->
+
 - `XS`: Minor change/ Small function         | 1 hour
 - `S`: A file/ Small tests                   | 2–4 hours
 - `M`: Small feature/ Meny files             | 1 day
@@ -76,6 +86,7 @@ Exemple:
 ### Weight ⚖️
 
 <!-- What is the weight of this task? -->
+
 - **Weight** uses the Fibonacci sequence **1 · 2 · 3 · 5 · 8 · 13** story points; complexity only, **not** time.
 
 ### Dates 📅
@@ -87,20 +98,20 @@ Exemple:
 ### Milestone 🚀
 
 <!-- Which sprint is this task part of? -->
-<!-- Must be one of the defined sprints. -->
-<!-- The diffrents milestone are comming -->
 
 | Milestone | Dates | Goal |
 |-----------|-------|------|
-| **Sprint 0** — Kick‑off | 22 Apr → 24 Apr | Environment, templates |
-| **Sprint 1** — Core engine | 25 Apr → 01 May | Spheres, planes, camera |
-| **Sprint 2** — Lighting | 02 May → 08 May | Directional & ambient, shadows |
-| **Sprint 3** — Extensibility | 09 May → 15 May | Cylinders, cones, rotations |
-| **Sprint 4** — Polish & Buffer | 16 May → 18 May | Docs, packaging, defense prep |
+| **Project Setup** | 22 Apr → 25 Apr | Environment, templates |
+| **Core Engine** | 26 Apr → 1 May | Raytracer core, primitives |
+| **Lighting & Transform** | 2 May → 8 May | Light, camera, transformations |
+| **Extented Primitive & Shadows** | 9 May → 15 May | Extended primitives, shadows |
+| **Polish & Delivery** | 16 May → 21 May | Final touches, delivery |
 
 ### Branch Naming 🌿
 
 <!-- What is the name of the branch? -->
-<!-- Must be in the format <issue-github‑id>/<kebab‑case‑title> -->
-<!-- Example: 12/fix‑plane‑normal -->
+
+Must be in the format <issue-github‑id>/<kebab‑case‑title>
+
+Example: 12/fix‑plane‑normal
 ```
