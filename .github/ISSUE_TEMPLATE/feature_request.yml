@@ -1,0 +1,46 @@
+name: "🚀 Feature Request"
+about: "Suggest an idea or enhancement for the raytracer"
+labels: ["type:feature"]
+body:
+  - type: markdown
+    attributes:
+      value: "Tell us about the feature you'd love to see."
+
+  - type: input
+    id: summary
+    attributes:
+      label: ✨ Feature Summary
+      placeholder: "Add point lights with attenuation"
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 🤔 Motivation
+      description: Why is this feature important? What problem does it solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 🛠️ Proposed Solution
+      description: Describe how you think this should be implemented.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 🔍 Alternatives Considered
+      description: Any other solutions or features you've considered.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: extras
+    attributes:
+      label: Additional Context
+      options:
+        - label: I'd be willing to submit a PR implementing this feature.

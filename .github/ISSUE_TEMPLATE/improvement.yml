@@ -1,0 +1,35 @@
+name: "🔧 Improvement"
+about: "Refine existing code or UX without adding new features"
+labels: ["type:improvement"]
+body:
+  - type: input
+    id: component
+    attributes:
+      label: 🧩 Component
+      placeholder: "Renderer / Shadow algorithm"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: 📌 Current Behaviour
+      description: What is happening now?
+    validations:
+      required: true
+
+  - type: textarea
+    id: better
+    attributes:
+      label: 🚀 Proposed Improvement
+      description: Describe the change and why it is better.
+    validations:
+      required: true
+
+  - type: textarea
+    id: risk
+    attributes:
+      label: ⚠️ Risks & Trade‑offs
+      description: Any potential downsides or breaking changes?
+    validations:
+      required: false

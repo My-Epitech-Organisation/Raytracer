@@ -1,0 +1,36 @@
+name: "🗒️ Task"
+about: "Standalone piece of work (refactor, docs, chores…)"
+labels: ["type:chore"]
+body:
+  - type: input
+    id: goal
+    attributes:
+      label: 🎯 Task Goal
+      placeholder: "Integrate Catch2 via CPM.cmake"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 📋 Acceptance Criteria / Steps
+      description: Checklist of what "done" looks like.
+      placeholder: |
+        - [ ] Catch2 added as external project
+        - [ ] Example test passes in CI
+    validations:
+      required: true
+
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: 📆 Milestone
+      description: Select the planned milestone (optional).
+      options:
+        - Project Setup
+        - Core Engine
+        - Lighting & Transforms
+        - Extended Primitives & Shadows
+        - Polish & Delivery
+    validations:
+      required: false
