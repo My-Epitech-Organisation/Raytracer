@@ -29,7 +29,7 @@ body:
   - type: textarea
     id: risk
     attributes:
-      label: ⚠️ Risks & Trade‑offs
+      label: ⚠️ Risks & Trade-offs
       description: Any potential downsides or breaking changes?
     validations:
       required: false
