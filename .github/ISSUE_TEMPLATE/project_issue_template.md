@@ -40,8 +40,8 @@ Add any other context or screenshots about the issue here.
 
 ## Acceptance Criteria
 
-- [ ] Criterion 1
-- [ ] Criterion 2
+- [ ] GoogleTest 1
+- [ ] GoogleTest 2
 - [ ] ...
 
 ## Related Issues / PRs
