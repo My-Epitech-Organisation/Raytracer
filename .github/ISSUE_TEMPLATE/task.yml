@@ -21,17 +21,3 @@ body:
         - [ ] Example test passes in CI
     validations:
       required: true
-
-  - type: dropdown
-    id: milestone
-    attributes:
-      label: 📆 Milestone
-      description: Select the planned milestone (optional).
-      options:
-        - Project Setup
-        - Core Engine
-        - Lighting & Transforms
-        - Extended Primitives & Shadows
-        - Polish & Delivery
-    validations:
-      required: false
