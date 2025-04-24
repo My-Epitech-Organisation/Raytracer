@@ -7,7 +7,7 @@ body:
     id: goal
     attributes:
       label: 🎯 Task Goal
-      placeholder: "Integrate Catch2 via CPM.cmake"
+      placeholder: "Integrate GoogleTest via CPM.cmake"
     validations:
       required: true
 
@@ -17,7 +17,7 @@ body:
       label: 📋 Acceptance Criteria / Steps
       description: Checklist of what "done" looks like.
       placeholder: |
-        - [ ] Catch2 added as external project
+        - [ ] GoogleTest added as external project
         - [ ] Example test passes in CI
     validations:
       required: true
