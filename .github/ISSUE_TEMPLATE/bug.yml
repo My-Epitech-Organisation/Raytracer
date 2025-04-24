@@ -1,0 +1,74 @@
+name: "🐞 Bug Report"
+about: "Report something that isn't working as expected"
+labels: ["type:bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please fill out all required sections so we can help you quickly.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Description
+      description: A clear and concise description of what the bug is.
+      placeholder: "When I run ./raytracer on demo_sphere.cfg, the image is completely black…"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 🔢 Steps to Reproduce
+      description: How can we reproduce the issue?
+      placeholder: |
+        1. make
+        2. ./raytracer scenes/demo_sphere.cfg
+        3. Open output.ppm
+    validations:
+      required: true
+
+  - type: input
+    id: expected
+    attributes:
+      label: ✅ Expected Behaviour
+      description: What *should* have happened?
+      placeholder: "A red sphere lit by a directional light"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 📄 Relevant Logs & Screenshots
+      description: Paste any terminal output or attach screenshots.
+      render: shell
+    validations:
+      required: false
+
+  - type: dropdown
+    id: build
+    attributes:
+      label: 🔨 Build Type
+      options:
+        - Debug
+        - Release
+    validations:
+      required: true
+
+  - type: input
+    id: env
+    attributes:
+      label: 🖥️ Environment
+      description: OS, compiler version, CPU/GPU, etc.
+      placeholder: "Ubuntu 24.04, g++ 14, Intel i7-12700H"
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: ☑️ Confirmations
+      options:
+        - label: I have searched the existing issues and none match this bug.
+          required: true
+        - label: I have built the project with the latest `main` branch.
+          required: true
