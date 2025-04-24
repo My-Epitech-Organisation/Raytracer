@@ -1,5 +1,6 @@
+---
 name: "🔧 Improvement"
-about: "Refine existing code or UX without adding new features"
+description: "Template for suggesting improvements to existing code or UX"
 labels: ["type:improvement"]
 body:
   - type: input
