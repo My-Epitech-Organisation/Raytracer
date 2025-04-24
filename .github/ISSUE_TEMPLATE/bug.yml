@@ -1,5 +1,6 @@
+---
 name: "🐞 Bug Report"
-about: "Report something that isn't working as expected"
+description: "Use this template to report a bug in the raytracer project."
 labels: ["type:bug"]
 body:
   - type: markdown

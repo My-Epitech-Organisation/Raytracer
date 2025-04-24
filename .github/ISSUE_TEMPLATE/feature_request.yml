@@ -1,5 +1,6 @@
+---
 name: "🚀 Feature Request"
-about: "Suggest an idea or enhancement for the raytracer"
+description: "Use this template to request new features or enhancements."
 labels: ["type:feature"]
 body:
   - type: markdown
