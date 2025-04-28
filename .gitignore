@@ -1,3 +1,19 @@
+# Project files
+raytracer
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+CMakeOutput.log
+CMakeError.log
+
+# Build files
+build
+
+#vscode
+.vscode
+
 # Prerequisites
 *.d
 
