@@ -10,6 +10,7 @@ CMakeError.log
 
 # Build files
 build
+.cache
 
 #vscode
 .vscode
