@@ -15,9 +15,9 @@ target_link_libraries(raytracer_tests PRIVATE
 
 # Link with project code (create a separate library with the core raytracer code)
 set(RAYTRACER_CORE_SOURCES
-    ${CMAKE_SOURCE_DIR}/src/core/Vec3.cpp
+    ${CMAKE_SOURCE_DIR}/src/core/Vector3D.cpp
     ${CMAKE_SOURCE_DIR}/src/core/Ray.cpp
-    ${CMAKE_SOURCE_DIR}/src/core/Mat4.cpp
+    ${CMAKE_SOURCE_DIR}/src/core/Matrix.cpp
     ${CMAKE_SOURCE_DIR}/src/core/Transform.cpp
     ${CMAKE_SOURCE_DIR}/src/core/Color.cpp
 )
