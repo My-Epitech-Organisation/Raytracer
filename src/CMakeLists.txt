@@ -1,8 +1,8 @@
 set(RAYTRACER_SOURCES
     main.cpp
-    core/Vec3.cpp
+    core/Vector3D.cpp
     core/Ray.cpp
-    core/Mat4.cpp
+    core/Matrix.cpp
     core/Transform.cpp
     core/Color.cpp
     display/PPMDisplay.cpp
