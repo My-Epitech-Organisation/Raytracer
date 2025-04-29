@@ -6,6 +6,7 @@
 */
 
 #include "Ray.hpp"
+#include "Vector3D.hpp"
 #include "Transform.hpp"
 
 namespace RayTracer {
