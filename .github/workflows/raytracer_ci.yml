@@ -37,8 +37,8 @@ jobs:
         FOUND_SPHERE=0
         FOUND_PLANE=0
 
-        find . -type f -name "*.cpp" -o -name "*.hpp" | xargs grep -l "class.*Sphere" > /dev/null && FOUND_SPHERE=1
-        find . -type f -name "*.cpp" -o -name "*.hpp" | xargs grep -l "class.*Plane" > /dev/null && FOUND_PLANE=1
+        find . -type f \( -name "*.cpp" -o -name "*.hpp" \) | xargs grep -l "class.*Sphere" > /dev/null && FOUND_SPHERE=1
+        find . -type f \( -name "*.cpp" -o -name "*.hpp" \) | xargs grep -l "class.*Plane" > /dev/null && FOUND_PLANE=1
 
         [ $FOUND_SPHERE -eq 1 ] || { echo "❌ Sphere primitive not found"; exit 1; }
         [ $FOUND_PLANE -eq 1 ] || { echo "❌ Plane primitive not found"; exit 1; }
@@ -47,8 +47,8 @@ jobs:
         FOUND_DIRECTIONAL=0
         FOUND_AMBIENT=0
 
-        find . -type f -name "*.cpp" -o -name "*.hpp" | xargs grep -l "class.*DirectionalLight\|Directional.*Light" > /dev/null && FOUND_DIRECTIONAL=1
-        find . -type f -name "*.cpp" -o -name "*.hpp" | xargs grep -l "class.*AmbientLight\|Ambient.*Light" > /dev/null && FOUND_AMBIENT=1
+        find . -type f \( -name "*.cpp" -o -name "*.hpp" \) | xargs grep -l "class.*DirectionalLight\|Directional.*Light" > /dev/null && FOUND_DIRECTIONAL=1
+        find . -type f \( -name "*.cpp" -o -name "*.hpp" \) | xargs grep -l "class.*AmbientLight\|Ambient.*Light" > /dev/null && FOUND_AMBIENT=1
 
         [ $FOUND_DIRECTIONAL -eq 1 ] || { echo "❌ Directional light not found"; exit 1; }
         [ $FOUND_AMBIENT -eq 1 ] || { echo "❌ Ambient light not found"; exit 1; }
