@@ -69,12 +69,12 @@ jobs:
     - name: Install dependencies
       run: |
         apt-get update
-        apt-get install -y libconfig++-dev libsfml-dev lcov # clang-format is usually included
+        apt-get install -y libconfig++-dev libsfml-dev lcov clang-format
 
     - name: Check Code Formatting (clang-format)
       run: |
         echo "Checking code formatting with clang-format..."
-        find . -path ./build -prune -o -path ./_deps -prune -o \\( -name "*.cpp" -o -name "*.hpp" \\) -print0 | xargs -0 clang-format --dry-run --Werror
+        find . -path ./build -prune -o -path ./_deps -prune -o '(' -name "*.cpp" -o -name "*.hpp" ')' -print0 | xargs -0 clang-format --dry-run --Werror
         echo "✅ Code formatting is correct."
 
     - name: Build with Makefile
