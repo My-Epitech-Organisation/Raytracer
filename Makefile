@@ -31,9 +31,7 @@ fclean: clean
 
 normalize:
 	@echo "Applying clang format to all C++ files..."
-	@find ./client -type f \( -name "*.cpp" -o -name "*.hpp" \) \
-	-exec $(CLANG_FORMAT) -i -style=llvm {} \;
-	@echo "Formatting complete!"
+	@find . -name "*.cpp" -o -name "*.hpp" | xargs clang-format -i
 
 
 .PHONY: all re tests_run clean fclean normalize
