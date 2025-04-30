@@ -142,7 +142,10 @@ void Transform::updateInverseMatrix() {
   try {
     _inverseMatrix = _matrix.inverse();
   } catch (const std::runtime_error& e) {
-    throw std::runtime_error("Transform has become non-invertible: " + std::string(e.what()));
+    // Handle non-invertible matrices
+    // This might happen with degenerate scales or singular transformations
+    throw std::runtime_error(
+        std::string("Transform has become non-invertible: ") + e.what());
   }
 }
 
