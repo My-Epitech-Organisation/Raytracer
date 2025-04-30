@@ -85,6 +85,14 @@ Transform Transform::inverse() const {
   return result;
 }
 
+Vector3D Transform::performHomogeneousDivision(double x, double y, double z,
+                                               double w) const {
+  if (std::abs(w - 1.0) > 1e-10 && std::abs(w) > 1e-10) {
+    return Vector3D(x / w, y / w, z / w);
+  }
+  return Vector3D(x, y, z);
+}
+
 Vector3D Transform::applyToPoint(const Vector3D& point) const {
   // Apply matrix to a point (w=1)
   double x = point.getX();
@@ -101,14 +109,8 @@ Vector3D Transform::applyToPoint(const Vector3D& point) const {
   double newW = _matrix.at(3, 0) * x + _matrix.at(3, 1) * y +
                 _matrix.at(3, 2) * z + _matrix.at(3, 3) * w;
 
-  // Handle perspective division if needed
-  if (std::abs(newW - 1.0) > 1e-10 && std::abs(newW) > 1e-10) {
-    newX /= newW;
-    newY /= newW;
-    newZ /= newW;
-  }
-
-  return Vector3D(newX, newY, newZ);
+  // Use the helper function to handle homogeneous division
+  return performHomogeneousDivision(newX, newY, newZ, newW);
 }
 
 Vector3D Transform::applyToVector(const Vector3D& vector) const {

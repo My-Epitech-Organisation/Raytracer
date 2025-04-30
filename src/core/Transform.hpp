@@ -97,7 +97,15 @@ class Transform {
 
   /**
      * @brief Get inverse of this transformation
-     * @return A new transform representing the inverse
+     * This method returns a new Transform object where the main matrix (_matrix)
+     * and the inverse matrix (_inverseMatrix) are swapped. This allows the
+     * resulting Transform to represent the inverse transformation efficiently.
+     *
+     * Note that this method does not perform a mathematical inversion of the matrix;
+     * it relies on the assumption that the inverse matrix is already maintained
+     * correctly during transformations via the updateInverseMatrix() method.
+     *
+     * @return A new Transform representing the inverse of this transformation
      * @throws std::runtime_error if the matrix cannot be inverted
      */
   Transform inverse() const;
@@ -133,10 +141,25 @@ class Transform {
   Matrix _inverseMatrix;  ///< 4x4 inverse transformation matrix
 
   /**
-     * @brief Update the inverse matrix
-     * Called after any operation that modifies the main matrix
-     */
+   * @brief Update the inverse matrix
+   * Called after any operation that modifies the main matrix
+   */
   void updateInverseMatrix();
+
+  /**
+   * @brief Performs homogeneous coordinate division if needed
+   *
+   * This helper method handles perspective division for homogeneous coordinates
+   * when the w component is not 1.0 (non-affine transformations).
+   *
+   * @param x X coordinate to normalize
+   * @param y Y coordinate to normalize
+   * @param z Z coordinate to normalize
+   * @param w W coordinate (homogeneous component)
+   * @return Vector3D The normalized 3D point
+   */
+  Vector3D performHomogeneousDivision(double x, double y, double z,
+                                      double w) const;
 };
 
 }  // namespace RayTracer
