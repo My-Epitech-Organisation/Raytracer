@@ -31,10 +31,26 @@ clean:
 
 fclean: clean
 	@rm -rf $(BUILD_DIR)
+	@rm -f $(TARGET)
 
 normalize:
 	@echo "Applying clang format to all C++ files..."
 	@find . -name "*.cpp" -o -name "*.hpp" | xargs clang-format -i
 
+cov:
+	@cmake -B $(BUILD_DIR) -S . $(CMAKE_FLAGS) \
+		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS="--coverage" \
+		-DCMAKE_C_FLAGS="--coverage"
+	@cmake --build $(BUILD_DIR) --target $(TEST_TARGET)
+	@$(BUILD_DIR)/tests/$(TEST_TARGET)
+	@cd $(BUILD_DIR) && lcov --capture --directory . --output-file \
+		coverage.info --ignore-errors gcov --ignore-errors mismatch \
+		--ignore-errors unused --memory 0
+	@cd $(BUILD_DIR) && lcov --remove coverage.info '*/_deps/*' \
+		'*/usr/include/*' '*/tests/*' --output-file coverage_filtered.info
+	@cd $(BUILD_DIR) && \
+		genhtml coverage_filtered.info --output-directory coverage
 
-.PHONY: all re tests_run clean fclean normalize
+	@echo "Coverage report generated at: build/coverage/index.html"
+
+.PHONY: all re tests_run clean fclean normalize cov
