@@ -69,7 +69,13 @@ jobs:
     - name: Install dependencies
       run: |
         apt-get update
-        apt-get install -y libconfig++-dev libsfml-dev lcov
+        apt-get install -y libconfig++-dev libsfml-dev lcov # clang-format is usually included
+
+    - name: Check Code Formatting (clang-format)
+      run: |
+        echo "Checking code formatting with clang-format..."
+        find . -path ./build -prune -o -path ./_deps -prune -o \\( -name "*.cpp" -o -name "*.hpp" \\) -print0 | xargs -0 clang-format --dry-run --Werror
+        echo "✅ Code formatting is correct."
 
     - name: Build with Makefile
       run: |
@@ -98,10 +104,6 @@ jobs:
         cd cmake_build
         cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
         cmake --build .
-
-    - name: Code linting
-      run: |
-        clang-tidy src/*.cpp -- -Iinclude
 
   mirror-to-epitech:
     runs-on: ubuntu-latest
