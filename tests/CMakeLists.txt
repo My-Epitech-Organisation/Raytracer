@@ -1,6 +1,7 @@
 set(TEST_SOURCES
-    test_vec3.cpp
-    test_ray.cpp
+    test_Vector3D.cpp
+    test_Ray.cpp
+    test_Transform.cpp
     test_parser.cpp
 )
 
