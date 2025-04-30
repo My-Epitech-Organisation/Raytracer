@@ -18,6 +18,7 @@ CMAKE_TEST_FLAGS := -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON
 CP = cp
 
 all:
+	@echo "Building project..."
 	@cmake -B $(BUILD_DIR) -S . $(CMAKE_FLAGS)
 	@cmake --build $(BUILD_DIR)
 	@$(CP) $(BUILD_DIR)/src/$(TARGET) ./
@@ -25,14 +26,17 @@ all:
 re: fclean all
 
 tests_run:
+	@echo "Running tests..."
 	@cmake -B $(BUILD_DIR) -S . $(CMAKE_TEST_FLAGS)
 	@cmake --build $(BUILD_DIR) --target $(TEST_TARGET)
 	@$(BUILD_DIR)/tests/$(TEST_TARGET)
 
 clean:
+	@echo "Cleaning up build directory..."
 	@cmake --build $(BUILD_DIR) --target clean || true
 
 fclean: clean
+	@echo "Cleaning up build directory..."
 	@rm -rf $(BUILD_DIR)
 	@rm -f $(TARGET)
 
@@ -40,7 +44,8 @@ normalize:
 	@echo "Applying clang format to all C++ files..."
 	@find . -name "*.cpp" -o -name "*.hpp" | xargs clang-format -i
 
-cov:
+cov: fclean
+	@echo "Generating coverage report..."
 	@cmake -B $(BUILD_DIR) -S . $(CMAKE_TEST_FLAGS) \
 		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS="--coverage" \
 		-DCMAKE_C_FLAGS="--coverage"
