@@ -74,7 +74,7 @@ jobs:
     - name: Check Code Formatting (clang-format)
       run: |
         echo "Checking code formatting with clang-format..."
-        find . -path ./build -prune -o -path ./_deps -prune -o \\( -name "*.cpp" -o -name "*.hpp" \\) -print0 | xargs -0 clang-format --dry-run --Werror
+        find . -path ./build -prune -o -path ./_deps -prune -o '(' -name "*.cpp" -o -name "*.hpp" ')' -print0 | xargs -0 clang-format --dry-run --Werror
         echo "✅ Code formatting is correct."
 
     - name: Build with Makefile
