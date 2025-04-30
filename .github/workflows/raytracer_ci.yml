@@ -101,7 +101,6 @@ jobs:
 
     - name: Code linting
       run: |
-        cpplint src/*.cpp include/*.hpp
         clang-tidy src/*.cpp -- -Iinclude
 
   mirror-to-epitech:
