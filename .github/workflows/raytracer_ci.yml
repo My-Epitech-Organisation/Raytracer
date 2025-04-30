@@ -84,7 +84,12 @@ jobs:
     - name: Run tests
       run: |
         echo "Running tests..."
-        make tests_run || echo "⚠️ Tests failed but continuing"
+        make tests_run && echo "✅ All tests passed!"
+
+    - name: Generate code coverage
+      run: |
+        echo "Generating code coverage..."
+        make cov && echo "✅ Code coverage generated!"
 
     - name: Build with CMake directly
       run: |
@@ -93,6 +98,11 @@ jobs:
         cd cmake_build
         cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
         cmake --build .
+
+    - name: Code linting
+      run: |
+        cpplint src/*.cpp include/*.hpp
+        clang-tidy src/*.cpp -- -Iinclude
 
   mirror-to-epitech:
     runs-on: ubuntu-latest
