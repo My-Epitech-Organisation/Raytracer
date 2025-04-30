@@ -69,7 +69,7 @@ jobs:
     - name: Install dependencies
       run: |
         apt-get update
-        apt-get install -y libconfig++-dev libsfml-dev
+        apt-get install -y libconfig++-dev libsfml-dev lcov
 
     - name: Build with Makefile
       run: |
