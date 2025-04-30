@@ -11,7 +11,9 @@ TARGET      := raytracer
 
 TEST_TARGET := raytracer_tests
 
-CMAKE_FLAGS := -DCMAKE_BUILD_TYPE=Debug
+CMAKE_FLAGS := -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=OFF
+
+CMAKE_TEST_FLAGS := -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON
 
 CP = cp
 
@@ -22,7 +24,8 @@ all:
 
 re: fclean all
 
-tests_run: all
+tests_run:
+	@cmake -B $(BUILD_DIR) -S . $(CMAKE_TEST_FLAGS)
 	@cmake --build $(BUILD_DIR) --target $(TEST_TARGET)
 	@$(BUILD_DIR)/tests/$(TEST_TARGET)
 
@@ -38,7 +41,7 @@ normalize:
 	@find . -name "*.cpp" -o -name "*.hpp" | xargs clang-format -i
 
 cov:
-	@cmake -B $(BUILD_DIR) -S . $(CMAKE_FLAGS) \
+	@cmake -B $(BUILD_DIR) -S . $(CMAKE_TEST_FLAGS) \
 		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_FLAGS="--coverage" \
 		-DCMAKE_C_FLAGS="--coverage"
 	@cmake --build $(BUILD_DIR) --target $(TEST_TARGET)
