@@ -13,9 +13,12 @@ TEST_TARGET := raytracer_tests
 
 CMAKE_FLAGS := -DCMAKE_BUILD_TYPE=Debug
 
+CP = cp
+
 all:
 	@cmake -B $(BUILD_DIR) -S . $(CMAKE_FLAGS)
 	@cmake --build $(BUILD_DIR)
+	@$(CP) $(BUILD_DIR)/src/$(TARGET) ./
 
 re: fclean all
 
