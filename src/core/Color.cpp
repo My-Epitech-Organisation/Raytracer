@@ -12,15 +12,24 @@
 namespace RayTracer {
 
 // Define static constant colors
-const Color Color::BLACK(0, 0, 0);
-const Color Color::WHITE(255, 255, 255);
-const Color Color::RED(255, 0, 0);
-const Color Color::GREEN(0, 255, 0);
-const Color Color::BLUE(0, 0, 255);
-const Color Color::YELLOW(255, 255, 0);
-const Color Color::CYAN(0, 255, 255);
-const Color Color::MAGENTA(255, 0, 255);
-const Color Color::GRAY(128, 128, 128);
+const Color Color::BLACK(static_cast<uint8_t>(0), static_cast<uint8_t>(0),
+                         static_cast<uint8_t>(0));
+const Color Color::WHITE(static_cast<uint8_t>(255), static_cast<uint8_t>(255),
+                         static_cast<uint8_t>(255));
+const Color Color::RED(static_cast<uint8_t>(255), static_cast<uint8_t>(0),
+                       static_cast<uint8_t>(0));
+const Color Color::GREEN(static_cast<uint8_t>(0), static_cast<uint8_t>(255),
+                         static_cast<uint8_t>(0));
+const Color Color::BLUE(static_cast<uint8_t>(0), static_cast<uint8_t>(0),
+                        static_cast<uint8_t>(255));
+const Color Color::YELLOW(static_cast<uint8_t>(255), static_cast<uint8_t>(255),
+                          static_cast<uint8_t>(0));
+const Color Color::CYAN(static_cast<uint8_t>(0), static_cast<uint8_t>(255),
+                        static_cast<uint8_t>(255));
+const Color Color::MAGENTA(static_cast<uint8_t>(255), static_cast<uint8_t>(0),
+                           static_cast<uint8_t>(255));
+const Color Color::GRAY(static_cast<uint8_t>(128), static_cast<uint8_t>(128),
+                        static_cast<uint8_t>(128));
 
 Color::Color() : _r(0), _g(0), _b(0) {}
 
