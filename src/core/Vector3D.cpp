@@ -33,6 +33,10 @@ Vector3D& Vector3D::operator=(const Vector3D& other) {
   return *this;
 }
 
+bool Vector3D::operator==(const Vector3D& other) const {
+  return _x == other._x && _y == other._y && _z == other._z;
+}
+
 Vector3D::~Vector3D() {
   // Destructor (nothing to clean up for simple POD types)
 }
