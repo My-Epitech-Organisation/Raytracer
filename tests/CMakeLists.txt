@@ -14,21 +14,7 @@ target_link_libraries(raytracer_tests PRIVATE
     GTest::gtest_main
 )
 
-# Link with project code (create a separate library with the core raytracer code)
-set(RAYTRACER_CORE_SOURCES
-    ${CMAKE_SOURCE_DIR}/src/core/Vector3D.cpp
-    ${CMAKE_SOURCE_DIR}/src/core/Ray.cpp
-    ${CMAKE_SOURCE_DIR}/src/core/Matrix.cpp
-    ${CMAKE_SOURCE_DIR}/src/core/Transform.cpp
-    ${CMAKE_SOURCE_DIR}/src/core/Color.cpp
-)
-
-add_library(raytracer_core STATIC ${RAYTRACER_CORE_SOURCES})
-target_include_directories(raytracer_core PUBLIC
-    ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/include
-)
-
+# Link with the existing core raytracer library
 target_link_libraries(raytracer_tests PRIVATE raytracer_core)
 
 # Include project header files

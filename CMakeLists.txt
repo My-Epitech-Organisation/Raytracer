@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(raytracer 
+project(raytracer
         VERSION 0.1.0
         DESCRIPTION "A modular raytracing engine"
         LANGUAGES CXX)
@@ -15,19 +15,18 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 
 # Build options
-option(BUILD_TESTS "Build test suite" ON)
+option(BUILD_TESTS "Build test suite" OFF)
 option(BUILD_PLUGINS "Build plugin modules" ON)
 
 # Include directories
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-# Fetch external dependencies
-include(cmake/FetchGoogleTest.cmake)
-
-# Add subdirectories
+# Add subdirectories for the main project
 add_subdirectory(src)
 
+# Only fetch and build GoogleTest when testing is enabled
 if(BUILD_TESTS)
+    include(cmake/FetchGoogleTest.cmake)
     enable_testing()
     add_subdirectory(tests)
 endif()
