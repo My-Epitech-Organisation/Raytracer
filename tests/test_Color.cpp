@@ -153,8 +153,8 @@ TEST(ColorTest, InequalityOperator) {
 
 TEST(ColorTest, IsEqual) {
   Color a(100, 150, 200);
-  Color b(101, 151, 201);  // Difference of 1 in each component
-  Color c(110, 160, 210);  // Difference of 10 in each component
+  Color b(101, 151, 201);         // Difference of 1 in each component
+  Color c(110, 160, 210);         // Difference of 10 in each component
   EXPECT_TRUE(a.isEqual(b, 1));   // Within tolerance
   EXPECT_FALSE(a.isEqual(c, 5));  // Outside tolerance
 }
@@ -163,13 +163,13 @@ TEST(ColorTest, IsEqual) {
 TEST(ColorTest, Blend) {
   Color a(100, 100, 100);
   Color b(200, 200, 200);
-  
+
   // 25% blend
   Color blend1 = a.blend(b, 0.25);
   EXPECT_EQ(blend1.getR(), 125);
   EXPECT_EQ(blend1.getG(), 125);
   EXPECT_EQ(blend1.getB(), 125);
-  
+
   // 75% blend
   Color blend2 = a.blend(b, 0.75);
   EXPECT_EQ(blend2.getR(), 175);
@@ -180,13 +180,13 @@ TEST(ColorTest, Blend) {
 TEST(ColorTest, ToGrayscale) {
   Color color(255, 0, 0);  // Pure red
   Color gray = color.toGrayscale();
-  
+
   // Using standard luminance formula: Y = 0.2126*R + 0.7152*G + 0.0722*B
   uint8_t expected = static_cast<uint8_t>(std::round(0.2126 * 255));
   EXPECT_EQ(gray.getR(), expected);
   EXPECT_EQ(gray.getG(), expected);
   EXPECT_EQ(gray.getB(), expected);
-  
+
   // Check that all components are equal (it's gray)
   EXPECT_EQ(gray.getR(), gray.getG());
   EXPECT_EQ(gray.getG(), gray.getB());

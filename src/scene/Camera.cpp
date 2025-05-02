@@ -36,8 +36,7 @@ Camera::Camera(const Vector3D& position, int width, int height,
   updateTransform();
 }
 
-Camera::~Camera() {
-}
+Camera::~Camera() {}
 
 void Camera::setPosition(const Vector3D& position) {
   _position = position;
@@ -90,9 +89,7 @@ Ray Camera::generateRay(int x, int y) const {
   }
 
   double ndcX = (2.0 * x / _width) - 1.0;
-  double ndcY =
-      1.0 - (2.0 * y /
-             _height);
+  double ndcY = 1.0 - (2.0 * y / _height);
 
   double aspectRatio = static_cast<double>(_width) / _height;
 

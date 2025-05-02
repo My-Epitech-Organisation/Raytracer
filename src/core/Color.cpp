@@ -22,20 +22,16 @@ const Color Color::CYAN(0, 255, 255);
 const Color Color::MAGENTA(255, 0, 255);
 const Color Color::GRAY(128, 128, 128);
 
-Color::Color() : _r(0), _g(0), _b(0) {
-}
+Color::Color() : _r(0), _g(0), _b(0) {}
 
-Color::Color(uint8_t r, uint8_t g, uint8_t b) : _r(r), _g(g), _b(b) {
-}
+Color::Color(uint8_t r, uint8_t g, uint8_t b) : _r(r), _g(g), _b(b) {}
 
 Color::Color(double r, double g, double b)
     : _r(floatToByte(clamp(r))),
       _g(floatToByte(clamp(g))),
-      _b(floatToByte(clamp(b))) {
-}
+      _b(floatToByte(clamp(b))) {}
 
-Color::Color(const Color& other) : _r(other._r), _g(other._g), _b(other._b) {
-}
+Color::Color(const Color& other) : _r(other._r), _g(other._g), _b(other._b) {}
 
 Color& Color::operator=(const Color& other) {
   if (this != &other) {
@@ -46,8 +42,7 @@ Color& Color::operator=(const Color& other) {
   return *this;
 }
 
-Color::~Color() {
-}
+Color::~Color() {}
 
 uint8_t Color::getR() const {
   return _r;
@@ -102,10 +97,9 @@ Color Color::operator+(const Color& other) const {
   uint16_t g = static_cast<uint16_t>(_g) + static_cast<uint16_t>(other._g);
   uint16_t b = static_cast<uint16_t>(_b) + static_cast<uint16_t>(other._b);
 
-  return Color(
-      static_cast<uint8_t>(std::min(r, static_cast<uint16_t>(255))),
-      static_cast<uint8_t>(std::min(g, static_cast<uint16_t>(255))),
-      static_cast<uint8_t>(std::min(b, static_cast<uint16_t>(255))));
+  return Color(static_cast<uint8_t>(std::min(r, static_cast<uint16_t>(255))),
+               static_cast<uint8_t>(std::min(g, static_cast<uint16_t>(255))),
+               static_cast<uint8_t>(std::min(b, static_cast<uint16_t>(255))));
 }
 
 Color& Color::operator+=(const Color& other) {
@@ -122,10 +116,9 @@ Color& Color::operator+=(const Color& other) {
 
 Color Color::operator*(double scalar) const {
   scalar = clamp(scalar);
-  return Color(
-      static_cast<uint8_t>(std::round(_r * scalar)),
-      static_cast<uint8_t>(std::round(_g * scalar)),
-      static_cast<uint8_t>(std::round(_b * scalar)));
+  return Color(static_cast<uint8_t>(std::round(_r * scalar)),
+               static_cast<uint8_t>(std::round(_g * scalar)),
+               static_cast<uint8_t>(std::round(_b * scalar)));
 }
 
 Color& Color::operator*=(double scalar) {
@@ -138,10 +131,9 @@ Color& Color::operator*=(double scalar) {
 }
 
 Color Color::operator*(const Color& other) const {
-  return Color(
-      floatToByte(getRf() * other.getRf()),
-      floatToByte(getGf() * other.getGf()),
-      floatToByte(getBf() * other.getBf()));
+  return Color(floatToByte(getRf() * other.getRf()),
+               floatToByte(getGf() * other.getGf()),
+               floatToByte(getBf() * other.getBf()));
 }
 
 Color& Color::operator*=(const Color& other) {
@@ -161,31 +153,31 @@ bool Color::operator!=(const Color& other) const {
 }
 
 bool Color::isEqual(const Color& other, uint8_t tolerance) const {
-  return (std::abs(static_cast<int>(_r) - static_cast<int>(other._r)) <= tolerance &&
-          std::abs(static_cast<int>(_g) - static_cast<int>(other._g)) <= tolerance &&
-          std::abs(static_cast<int>(_b) - static_cast<int>(other._b)) <= tolerance);
+  return (std::abs(static_cast<int>(_r) - static_cast<int>(other._r)) <=
+              tolerance &&
+          std::abs(static_cast<int>(_g) - static_cast<int>(other._g)) <=
+              tolerance &&
+          std::abs(static_cast<int>(_b) - static_cast<int>(other._b)) <=
+              tolerance);
 }
 
 Color Color::blend(const Color& other, double t) const {
   t = clamp(t);
   double invT = 1.0 - t;
 
-  return Color(
-      _r * invT + other._r * t,
-      _g * invT + other._g * t,
-      _b * invT + other._b * t);
+  return Color(_r * invT + other._r * t, _g * invT + other._g * t,
+               _b * invT + other._b * t);
 }
 
 Color Color::toGrayscale() const {
-  uint8_t gray = static_cast<uint8_t>(std::round(
-      0.2126 * _r + 0.7152 * _g + 0.0722 * _b));
+  uint8_t gray =
+      static_cast<uint8_t>(std::round(0.2126 * _r + 0.7152 * _g + 0.0722 * _b));
 
   return Color(gray, gray, gray);
 }
 
 uint32_t Color::toRGB() const {
-  return (static_cast<uint32_t>(_r) << 16) |
-         (static_cast<uint32_t>(_g) << 8) |
+  return (static_cast<uint32_t>(_r) << 16) | (static_cast<uint32_t>(_g) << 8) |
          static_cast<uint32_t>(_b);
 }
 
@@ -211,8 +203,8 @@ double Color::byteToFloat(uint8_t value) {
 
 std::ostream& operator<<(std::ostream& os, const Color& color) {
   os << "Color(" << static_cast<int>(color.getR()) << ", "
-     << static_cast<int>(color.getG()) << ", "
-     << static_cast<int>(color.getB()) << ")";
+     << static_cast<int>(color.getG()) << ", " << static_cast<int>(color.getB())
+     << ")";
   return os;
 }
 

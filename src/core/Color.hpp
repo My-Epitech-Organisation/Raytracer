@@ -8,9 +8,9 @@
 #ifndef COLOR_HPP_
 #define COLOR_HPP_
 
+#include <algorithm>
 #include <cstdint>
 #include <iostream>
-#include <algorithm>
 
 namespace RayTracer {
 
@@ -224,15 +224,15 @@ class Color {
   static Color fromRGB(uint32_t rgb);
 
   // Predefined colors
-  static const Color BLACK;       ///< Black color (0, 0, 0)
-  static const Color WHITE;       ///< White color (255, 255, 255)
-  static const Color RED;         ///< Red color (255, 0, 0)
-  static const Color GREEN;       ///< Green color (0, 255, 0)
-  static const Color BLUE;        ///< Blue color (0, 0, 255)
-  static const Color YELLOW;      ///< Yellow color (255, 255, 0)
-  static const Color CYAN;        ///< Cyan color (0, 255, 255)
-  static const Color MAGENTA;     ///< Magenta color (255, 0, 255)
-  static const Color GRAY;        ///< Gray color (128, 128, 128)
+  static const Color BLACK;    ///< Black color (0, 0, 0)
+  static const Color WHITE;    ///< White color (255, 255, 255)
+  static const Color RED;      ///< Red color (255, 0, 0)
+  static const Color GREEN;    ///< Green color (0, 255, 0)
+  static const Color BLUE;     ///< Blue color (0, 0, 255)
+  static const Color YELLOW;   ///< Yellow color (255, 255, 0)
+  static const Color CYAN;     ///< Cyan color (0, 255, 255)
+  static const Color MAGENTA;  ///< Magenta color (255, 0, 255)
+  static const Color GRAY;     ///< Gray color (128, 128, 128)
 
  private:
   uint8_t _r;  ///< Red component (0-255)
