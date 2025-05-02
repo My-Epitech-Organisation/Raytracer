@@ -2,20 +2,52 @@ set(TEST_SOURCES
     test_Vector3D.cpp
     test_Ray.cpp
     test_Transform.cpp
-    test_parser.cpp
+    test_Parser.cpp
+    test_Color.cpp
+    test_Resolution.cpp
+    test_Sphere.cpp
+    test_Camera.cpp
+    test_Plane.cpp
+    test_SceneParser.cpp
+    ${CMAKE_SOURCE_DIR}/src/scene/parser/SceneParser.cpp
 )
 
 # Test executable
 add_executable(raytracer_tests ${TEST_SOURCES})
 
-# Link with GoogleTest
+find_path(LIBCONFIG_INCLUDE_DIR libconfig.h++ /opt/homebrew/include)
+find_library(LIBCONFIG_LIBRARY NAMES config++ PATHS /opt/homebrew/lib)
+
+if(NOT LIBCONFIG_INCLUDE_DIR OR NOT LIBCONFIG_LIBRARY)
+    message(FATAL_ERROR "libconfig++ not found. Install it with brew install libconfig")
+endif()
+
+target_include_directories(raytracer_tests PRIVATE ${LIBCONFIG_INCLUDE_DIR})
+target_link_libraries(raytracer_tests PRIVATE ${LIBCONFIG_LIBRARY})
+
 target_link_libraries(raytracer_tests PRIVATE
     GTest::gtest
     GTest::gtest_main
+    raytracer_core
 )
 
 # Link with the existing core raytracer library
 target_link_libraries(raytracer_tests PRIVATE raytracer_core)
+
+# Link with project code (create a separate library with the core raytracer code)
+set(RAYTRACER_CORE_SOURCES
+    ${CMAKE_SOURCE_DIR}/src/core/Vector3D.cpp
+    ${CMAKE_SOURCE_DIR}/src/core/Ray.cpp
+    ${CMAKE_SOURCE_DIR}/src/core/Matrix.cpp
+    ${CMAKE_SOURCE_DIR}/src/core/Transform.cpp
+    ${CMAKE_SOURCE_DIR}/src/core/Color.cpp
+)
+
+add_library(raytracer_core STATIC ${RAYTRACER_CORE_SOURCES})
+target_include_directories(raytracer_core PUBLIC
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/include
+)
 
 # Include project header files
 target_include_directories(raytracer_tests PRIVATE

@@ -9,10 +9,12 @@ set(RAYTRACER_SOURCES
     scene/Scene.cpp
     scene/SceneBuilder.cpp
     scene/Camera.cpp
+    scene/Resolution.cpp
     scene/primitives/Sphere.cpp
     scene/primitives/Plane.cpp
     scene/primitives/Cylinder.cpp
     scene/lights/DirectionalLight.cpp
+    scene/parser/SceneParser.cpp
 )
 
 # Create a library with the core functionality
@@ -41,3 +43,22 @@ target_link_libraries(raytracer PRIVATE raytracer_core)
 if(UNIX AND NOT APPLE)
     target_link_libraries(raytracer PRIVATE dl)
 endif()
+
+# Rechercher libconfig++ (utilisé pour le parsing de scène)
+find_path(LIBCONFIG_INCLUDE_DIR libconfig.h++ /opt/homebrew/include)
+find_library(LIBCONFIG_LIBRARY NAMES config++ PATHS /opt/homebrew/lib)
+
+# Vérifie qu'on a bien trouvé
+if(NOT LIBCONFIG_INCLUDE_DIR OR NOT LIBCONFIG_LIBRARY)
+    message(FATAL_ERROR "libconfig++ not found. Install it with brew install libconfig")
+endif()
+
+# Inclure les headers et linker la lib
+target_include_directories(raytracer PRIVATE ${LIBCONFIG_INCLUDE_DIR})
+target_link_libraries(raytracer PRIVATE ${LIBCONFIG_LIBRARY})
+
+# Include project header files
+target_include_directories(raytracer PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/include
+)
