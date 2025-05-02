@@ -44,7 +44,6 @@ class Vector3D {
      */
   Vector3D& operator=(const Vector3D& other);
 
-
   /**
     * @brief Equality operator
     * @param other The vector to compare with
