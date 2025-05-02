@@ -20,7 +20,8 @@ Camera::Camera()
   updateTransform();
 }
 
-Camera::Camera(const Vector3D& position, int width, int height, double fieldOfView)
+Camera::Camera(const Vector3D& position, int width, int height,
+               double fieldOfView)
     : _position(position),
       _rotation(0, 0, 0),
       _width(width),
@@ -93,7 +94,9 @@ Ray Camera::generateRay(int x, int y) const {
   // Calculate normalized device coordinates (NDC)
   // Convert pixel coordinates to range [-1, 1]
   double ndcX = (2.0 * x / _width) - 1.0;
-  double ndcY = 1.0 - (2.0 * y / _height); // Flip Y to match image coordinates (0,0 at top-left)
+  double ndcY =
+      1.0 - (2.0 * y /
+             _height);  // Flip Y to match image coordinates (0,0 at top-left)
 
   // Calculate the aspect ratio to maintain proper perspective
   double aspectRatio = static_cast<double>(_width) / _height;
@@ -108,10 +111,8 @@ Ray Camera::generateRay(int x, int y) const {
   // Calculate the ray direction in camera space
   // The ray originates at the camera position and passes through the pixel
   // on the virtual screen at z = -1
-  Vector3D rayDirection(
-      ndcX * aspectRatio * tanHalfFov,
-      ndcY * tanHalfFov,
-      -1.0);
+  Vector3D rayDirection(ndcX * aspectRatio * tanHalfFov, ndcY * tanHalfFov,
+                        -1.0);
 
   // Create the ray in camera space
   Ray ray(Vector3D(0, 0, 0), rayDirection);
