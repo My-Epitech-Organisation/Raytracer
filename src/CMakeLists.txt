@@ -9,7 +9,6 @@ set(RAYTRACER_SOURCES
     scene/Scene.cpp
     scene/SceneBuilder.cpp
     scene/Camera.cpp
-    scene/Resolution.cpp
     scene/primitives/Sphere.cpp
     scene/primitives/Plane.cpp
     scene/primitives/Cylinder.cpp
