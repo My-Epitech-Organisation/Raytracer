@@ -18,7 +18,7 @@ using namespace RayTracer;
 
 // Helper function to compare Vector3D with tolerance
 bool vectorsNearlyEqual_Sphere(const Vector3D& v1, const Vector3D& v2,
-                        double epsilon = 1e-5) {
+                               double epsilon = 1e-5) {
   double dx = std::abs(v1.getX() - v2.getX());
   double dy = std::abs(v1.getY() - v2.getY());
   double dz = std::abs(v1.getZ() - v2.getZ());
@@ -37,7 +37,8 @@ TEST(SphereTest, DefaultConstructor) {
 TEST(SphereTest, ParameterizedConstructor) {
   Vector3D center(1, 2, 3);
   double radius = 2.5;
-  Color color(static_cast<uint8_t>(128), static_cast<uint8_t>(64), static_cast<uint8_t>(32));
+  Color color(static_cast<uint8_t>(128), static_cast<uint8_t>(64),
+              static_cast<uint8_t>(32));
 
   Sphere sphere(center, radius, color);
 
@@ -48,7 +49,8 @@ TEST(SphereTest, ParameterizedConstructor) {
 
 TEST(SphereTest, InvalidRadius) {
   Vector3D center(1, 2, 3);
-  Color color(static_cast<uint8_t>(128), static_cast<uint8_t>(64), static_cast<uint8_t>(32));
+  Color color(static_cast<uint8_t>(128), static_cast<uint8_t>(64),
+              static_cast<uint8_t>(32));
 
   EXPECT_THROW(Sphere(center, -1.0, color), std::invalid_argument);
   EXPECT_THROW(Sphere(center, 0.0, color), std::invalid_argument);
@@ -80,7 +82,8 @@ TEST(SphereTest, SetInvalidRadius) {
 
 TEST(SphereTest, SetColor) {
   Sphere sphere;
-  Color newColor(static_cast<uint8_t>(50), static_cast<uint8_t>(100), static_cast<uint8_t>(150));
+  Color newColor(static_cast<uint8_t>(50), static_cast<uint8_t>(100),
+                 static_cast<uint8_t>(150));
 
   sphere.setColor(newColor);
   EXPECT_EQ(sphere.getColor(), newColor);
@@ -100,7 +103,8 @@ TEST(SphereTest, SetTransform) {
 TEST(SphereTest, Clone) {
   Vector3D center(1, 2, 3);
   double radius = 2.5;
-  Color color(static_cast<uint8_t>(128), static_cast<uint8_t>(64), static_cast<uint8_t>(32));
+  Color color(static_cast<uint8_t>(128), static_cast<uint8_t>(64),
+              static_cast<uint8_t>(32));
   Transform transform;
   transform.translate(4, 5, 6);
 
@@ -130,8 +134,10 @@ TEST(SphereTest, RayIntersectionFromOutside) {
   ASSERT_TRUE(intersection.has_value());
   EXPECT_DOUBLE_EQ(intersection->distance,
                    4.0);  // Ray starts at z=-5, sphere surface is at z=-1
-  EXPECT_TRUE(vectorsNearlyEqual_Sphere(intersection->point, Vector3D(0, 0, -1)));
-  EXPECT_TRUE(vectorsNearlyEqual_Sphere(intersection->normal, Vector3D(0, 0, -1)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Sphere(intersection->point, Vector3D(0, 0, -1)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Sphere(intersection->normal, Vector3D(0, 0, -1)));
   EXPECT_EQ(intersection->color, Color::RED);
   EXPECT_EQ(intersection->primitive, &sphere);
 }
@@ -147,8 +153,10 @@ TEST(SphereTest, RayIntersectionFromInside) {
   ASSERT_TRUE(intersection.has_value());
   EXPECT_DOUBLE_EQ(intersection->distance,
                    1.0);  // Ray starts at center, sphere surface is 1 unit away
-  EXPECT_TRUE(vectorsNearlyEqual_Sphere(intersection->point, Vector3D(0, 0, 1)));
-  EXPECT_TRUE(vectorsNearlyEqual_Sphere(intersection->normal, Vector3D(0, 0, 1)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Sphere(intersection->point, Vector3D(0, 0, 1)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Sphere(intersection->normal, Vector3D(0, 0, 1)));
   EXPECT_EQ(intersection->color, Color::RED);
   EXPECT_EQ(intersection->primitive, &sphere);
 }
@@ -192,8 +200,10 @@ TEST(SphereTest, IntersectWithTranslatedSphere) {
   ASSERT_TRUE(intersection.has_value());
   EXPECT_DOUBLE_EQ(intersection->distance,
                    4.0);  // Sphere surface is 4 units from ray origin
-  EXPECT_TRUE(vectorsNearlyEqual_Sphere(intersection->point, Vector3D(0, 0, 4)));
-  EXPECT_TRUE(vectorsNearlyEqual_Sphere(intersection->normal, Vector3D(0, 0, -1)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Sphere(intersection->point, Vector3D(0, 0, 4)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Sphere(intersection->normal, Vector3D(0, 0, -1)));
 }
 
 TEST(SphereTest, IntersectWithScaledSphere) {
@@ -212,8 +222,10 @@ TEST(SphereTest, IntersectWithScaledSphere) {
   ASSERT_TRUE(intersection.has_value());
   EXPECT_DOUBLE_EQ(intersection->distance,
                    3.0);  // Sphere surface is now at z=-2
-  EXPECT_TRUE(vectorsNearlyEqual_Sphere(intersection->point, Vector3D(0, 0, -2)));
-  EXPECT_TRUE(vectorsNearlyEqual_Sphere(intersection->normal, Vector3D(0, 0, -1)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Sphere(intersection->point, Vector3D(0, 0, -2)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Sphere(intersection->normal, Vector3D(0, 0, -1)));
 }
 
 // Test normals
@@ -266,5 +278,6 @@ TEST(SphereTest, NormalOnTransformedSphere) {
   // Expected normal after transformation
   // For a point on the z-axis (0,0,1), scaling by (1,0.5,1) would make the normal (0,0,1)
   // When transformed by the transpose of the inverse of the transform
-  EXPECT_TRUE(vectorsNearlyEqual_Sphere(normal.normalized(), Vector3D(0, 0, 1)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Sphere(normal.normalized(), Vector3D(0, 0, 1)));
 }

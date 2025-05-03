@@ -15,7 +15,7 @@ using namespace RayTracer;
 
 // Helper function to compare Vector3D with tolerance
 bool vectorsNearlyEqual_Camera(const Vector3D& v1, const Vector3D& v2,
-                        double epsilon = 1e-3) {
+                               double epsilon = 1e-3) {
   double dx = std::abs(v1.getX() - v2.getX());
   double dy = std::abs(v1.getY() - v2.getY());
   double dz = std::abs(v1.getZ() - v2.getZ());
@@ -29,8 +29,10 @@ TEST(CameraTest, DefaultConstructor) {
   EXPECT_EQ(camera.getWidth(), 800);
   EXPECT_EQ(camera.getHeight(), 600);
   EXPECT_EQ(camera.getFieldOfView(), 60.0);
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(camera.getPosition(), Vector3D(0, 0, 0)));
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(camera.getRotation(), Vector3D(0, 0, 0)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(camera.getPosition(), Vector3D(0, 0, 0)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(camera.getRotation(), Vector3D(0, 0, 0)));
 }
 
 // Test the parameterized constructor
@@ -42,7 +44,8 @@ TEST(CameraTest, ParameterizedConstructor) {
   EXPECT_EQ(camera.getHeight(), 1080);
   EXPECT_EQ(camera.getFieldOfView(), 72.0);
   EXPECT_TRUE(vectorsNearlyEqual_Camera(camera.getPosition(), position));
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(camera.getRotation(), Vector3D(0, 0, 0)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(camera.getRotation(), Vector3D(0, 0, 0)));
 }
 
 // Test invalid parameters
@@ -87,8 +90,10 @@ TEST(CameraTest, CenterRayGeneration) {
   Ray centerRay =
       camera.generateRay(camera.getWidth() / 2, camera.getHeight() / 2);
 
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(centerRay.getOrigin(), Vector3D(0, 0, 0)));
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(centerRay.getDirection(), Vector3D(0, 0, -1)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(centerRay.getOrigin(), Vector3D(0, 0, 0)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(centerRay.getDirection(), Vector3D(0, 0, -1)));
 }
 
 // Test ray generation with default camera (corner pixels)
@@ -103,9 +108,12 @@ TEST(CameraTest, CornerRaysGeneration) {
       camera.generateRay(camera.getWidth() - 1, camera.getHeight() - 1);
 
   // All rays should start at the origin
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(topLeftRay.getOrigin(), Vector3D(0, 0, 0)));
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(topRightRay.getOrigin(), Vector3D(0, 0, 0)));
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(bottomLeftRay.getOrigin(), Vector3D(0, 0, 0)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(topLeftRay.getOrigin(), Vector3D(0, 0, 0)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(topRightRay.getOrigin(), Vector3D(0, 0, 0)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(bottomLeftRay.getOrigin(), Vector3D(0, 0, 0)));
   EXPECT_TRUE(
       vectorsNearlyEqual_Camera(bottomRightRay.getOrigin(), Vector3D(0, 0, 0)));
 
@@ -125,12 +133,14 @@ TEST(CameraTest, CornerRaysGeneration) {
   Vector3D expectedBottomRight =
       Vector3D(aspectRatio * tanHalfFov, -tanHalfFov, -1.0).normalized();
 
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(topLeftRay.getDirection(), expectedTopLeft));
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(topRightRay.getDirection(), expectedTopRight));
   EXPECT_TRUE(
-      vectorsNearlyEqual_Camera(bottomLeftRay.getDirection(), expectedBottomLeft));
+      vectorsNearlyEqual_Camera(topLeftRay.getDirection(), expectedTopLeft));
   EXPECT_TRUE(
-      vectorsNearlyEqual_Camera(bottomRightRay.getDirection(), expectedBottomRight));
+      vectorsNearlyEqual_Camera(topRightRay.getDirection(), expectedTopRight));
+  EXPECT_TRUE(vectorsNearlyEqual_Camera(bottomLeftRay.getDirection(),
+                                        expectedBottomLeft));
+  EXPECT_TRUE(vectorsNearlyEqual_Camera(bottomRightRay.getDirection(),
+                                        expectedBottomRight));
 }
 
 // Test ray generation with offset camera position
@@ -143,7 +153,8 @@ TEST(CameraTest, OffsetPositionRayGeneration) {
       camera.generateRay(camera.getWidth() / 2, camera.getHeight() / 2);
 
   EXPECT_TRUE(vectorsNearlyEqual_Camera(centerRay.getOrigin(), position));
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(centerRay.getDirection(), Vector3D(0, 0, -1)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(centerRay.getDirection(), Vector3D(0, 0, -1)));
 }
 
 // Test ray generation with camera rotation
@@ -158,7 +169,8 @@ TEST(CameraTest, RotatedCameraRayGeneration) {
   Ray centerRay =
       camera.generateRay(camera.getWidth() / 2, camera.getHeight() / 2);
 
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(centerRay.getOrigin(), Vector3D(0, 0, 0)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(centerRay.getOrigin(), Vector3D(0, 0, 0)));
   EXPECT_TRUE(
       vectorsNearlyEqual_Camera(centerRay.getDirection(), Vector3D(1, 0, 0)));
 
@@ -166,7 +178,8 @@ TEST(CameraTest, RotatedCameraRayGeneration) {
   camera.setRotation(Vector3D(90, 0, 0));
   centerRay = camera.generateRay(camera.getWidth() / 2, camera.getHeight() / 2);
 
-  EXPECT_TRUE(vectorsNearlyEqual_Camera(centerRay.getOrigin(), Vector3D(0, 0, 0)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(centerRay.getOrigin(), Vector3D(0, 0, 0)));
   EXPECT_TRUE(
       vectorsNearlyEqual_Camera(centerRay.getDirection(), Vector3D(0, -1, 0)));
 }

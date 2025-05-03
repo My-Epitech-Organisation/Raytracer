@@ -88,7 +88,8 @@ std::optional<Intersection> Sphere::intersect(const Ray& ray) const {
 
   // Pour la normale, nous devons calculer la distance du point d'intersection
   // à la caméra dans l'espace monde car la paramètre t est basé sur le rayon local
-  double worldDistance = (worldIntersectionPoint - ray.getOrigin()).getMagnitude();
+  double worldDistance =
+      (worldIntersectionPoint - ray.getOrigin()).getMagnitude();
 
   Vector3D worldNormal = _transform.applyToVector(localNormal).normalized();
 
