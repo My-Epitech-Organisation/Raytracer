@@ -123,15 +123,17 @@ void Camera::updateTransform() {
   // Start with identity transform
   _transform = Transform();
 
-  // Pour une caméra, nous devons d'abord positionner la caméra, puis l'orienter
-  // C'est l'inverse de l'ordre habituel pour les objets
-
-  // D'abord, nous appliquons la rotation (dans l'ordre Z, Y, X pour une séquence Euler yaw-pitch-roll)
-  _transform.rotateZ(_rotation.getZ());
-  _transform.rotateY(_rotation.getY());
+  // Pour une caméra, l'ordre correct des transformations est crucial
+  // 1. Appliquer la rotation selon X (pitch)
   _transform.rotateX(_rotation.getX());
   
-  // Ensuite, nous appliquons la translation
+  // 2. Appliquer la rotation selon Y (yaw)
+  _transform.rotateY(_rotation.getY());
+  
+  // 3. Appliquer la rotation selon Z (roll)
+  _transform.rotateZ(_rotation.getZ());
+  
+  // 4. Appliquer la translation en dernier
   _transform.translate(_position.getX(), _position.getY(), _position.getZ());
 }
 
