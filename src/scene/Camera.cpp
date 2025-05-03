@@ -112,29 +112,40 @@ Ray Camera::generateRay(int x, int y) const {
   // Normalize the direction
   rayDirection = rayDirection.normalized();
 
-  // Create the ray in camera space
-  Ray ray(Vector3D(0, 0, 0), rayDirection);
-
-  // Transform the ray to world space using the camera transform
-  return ray.transform(_transform);
+  // Apply only the rotation part of the transform to the direction
+  Vector3D worldDirection = _transform.applyToVector(rayDirection);
+  
+  // The ray origin is simply the camera position
+  Vector3D worldOrigin = _position;
+  
+  // Create the ray directly in world space
+  return Ray(worldOrigin, worldDirection);
 }
 
 void Camera::updateTransform() {
-  // Start with identity transform
+  // Pour une caméra, nous avons besoin de créer une matrice de transformation view-to-world
+  
+  // Commencer par une transformation identité
   _transform = Transform();
 
-  // Pour une caméra, l'ordre correct des transformations est crucial
-  // 1. Appliquer la rotation selon X (pitch)
-  _transform.rotateX(_rotation.getX());
+  // L'ordre et la direction des rotations sont critiques
+  // Pour une caméra avec rotation (φ, θ, ψ) nous devons appliquer
+  // les rotations inverses (-φ, -θ, -ψ) dans l'ordre inverse (Z, Y, X)
   
-  // 2. Appliquer la rotation selon Y (yaw)
-  _transform.rotateY(_rotation.getY());
+  // Calculer la transformation de la vue (view transform)
+  Transform viewTransform;
   
-  // 3. Appliquer la rotation selon Z (roll)
-  _transform.rotateZ(_rotation.getZ());
+  // Appliquer les rotations en ordre inverse (Z, Y, X) et avec les angles inversés
+  viewTransform.rotateX(-_rotation.getX());
+  viewTransform.rotateY(-_rotation.getY());
+  viewTransform.rotateZ(-_rotation.getZ());
   
-  // 4. Appliquer la translation en dernier
-  _transform.translate(_position.getX(), _position.getY(), _position.getZ());
+  // Appliquer la translation inverse (-position)
+  viewTransform.translate(-_position.getX(), -_position.getY(), -_position.getZ());
+  
+  // La transformation de la caméra est la même que la transformation de la vue
+  // puisque nous transformons de l'espace caméra vers l'espace monde
+  _transform = viewTransform;
 }
 
 }  // namespace RayTracer
