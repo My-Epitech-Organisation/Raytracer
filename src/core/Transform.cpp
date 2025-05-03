@@ -11,14 +11,12 @@
 namespace RayTracer {
 
 Transform::Transform() : _matrix(), _inverseMatrix() {
-  // Initialize with identity matrices
   _matrix.setIdentity();
   _inverseMatrix.setIdentity();
 }
 
 Transform::Transform(const Transform& other)
     : _matrix(other._matrix), _inverseMatrix(other._inverseMatrix) {
-  // Copy constructor
 }
 
 Transform& Transform::operator=(const Transform& other) {
@@ -34,7 +32,6 @@ bool Transform::operator==(const Transform& other) const {
 }
 
 Transform::~Transform() {
-  // Destructor - nothing special to do
 }
 
 Transform& Transform::translate(double x, double y, double z) {
@@ -98,7 +95,6 @@ Vector3D Transform::performHomogeneousDivision(double x, double y, double z,
 }
 
 Vector3D Transform::applyToPoint(const Vector3D& point) const {
-  // Apply matrix to a point (w=1)
   double x = point.getX();
   double y = point.getY();
   double z = point.getZ();
@@ -113,13 +109,10 @@ Vector3D Transform::applyToPoint(const Vector3D& point) const {
   double newW = _matrix.at(3, 0) * x + _matrix.at(3, 1) * y +
                 _matrix.at(3, 2) * z + _matrix.at(3, 3) * w;
 
-  // Use the helper function to handle homogeneous division
   return performHomogeneousDivision(newX, newY, newZ, newW);
 }
 
 Vector3D Transform::applyToVector(const Vector3D& vector) const {
-  // Apply matrix to a direction vector (w=0)
-  // This means translation doesn't affect the vector
   double x = vector.getX();
   double y = vector.getY();
   double z = vector.getZ();
@@ -146,8 +139,6 @@ void Transform::updateInverseMatrix() {
   try {
     _inverseMatrix = _matrix.inverse();
   } catch (const std::runtime_error& e) {
-    // Handle non-invertible matrices
-    // This might happen with degenerate scales or singular transformations
     throw std::runtime_error(
         std::string("Transform has become non-invertible: ") + e.what());
   }

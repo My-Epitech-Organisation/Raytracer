@@ -12,16 +12,13 @@
 namespace RayTracer {
 
 Vector3D::Vector3D() : _x(0.0), _y(0.0), _z(0.0) {
-  // Default constructor initializes vector to (0,0,0)
 }
 
 Vector3D::Vector3D(double x, double y, double z) : _x(x), _y(y), _z(z) {
-  // Constructor with coordinates
 }
 
 Vector3D::Vector3D(const Vector3D& other)
     : _x(other._x), _y(other._y), _z(other._z) {
-  // Copy constructor
 }
 
 Vector3D& Vector3D::operator=(const Vector3D& other) {
@@ -34,7 +31,6 @@ Vector3D& Vector3D::operator=(const Vector3D& other) {
 }
 
 Vector3D::~Vector3D() {
-  // Destructor (nothing to clean up for simple POD types)
 }
 
 double Vector3D::getX() const {
