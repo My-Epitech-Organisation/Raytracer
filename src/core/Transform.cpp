@@ -16,8 +16,7 @@ Transform::Transform() : _matrix(), _inverseMatrix() {
 }
 
 Transform::Transform(const Transform& other)
-    : _matrix(other._matrix), _inverseMatrix(other._inverseMatrix) {
-}
+    : _matrix(other._matrix), _inverseMatrix(other._inverseMatrix) {}
 
 Transform& Transform::operator=(const Transform& other) {
   if (this != &other) {
@@ -31,8 +30,7 @@ bool Transform::operator==(const Transform& other) const {
   return _matrix == other._matrix && _inverseMatrix == other._inverseMatrix;
 }
 
-Transform::~Transform() {
-}
+Transform::~Transform() {}
 
 Transform& Transform::translate(double x, double y, double z) {
   Matrix translationMatrix = Matrix::createTranslation(x, y, z);

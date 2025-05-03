@@ -37,65 +37,49 @@ Sphere& Sphere::operator=(const Sphere& other) {
   return *this;
 }
 
-Sphere::~Sphere() {
-  // Nothing to clean up
-}
+Sphere::~Sphere() {}
 
 std::optional<Intersection> Sphere::intersect(const Ray& ray) const {
-  // Transform the ray to the sphere's local space
   Ray localRay = ray.transform(_transform.inverse());
 
-  // Vector from ray origin to sphere center
   Vector3D oc = localRay.getOrigin() - _center;
 
-  // Coefficients for the quadratic equation
-  double a = localRay.getDirection().dot(
-      localRay.getDirection());  // Always 1 for normalized directions
+  double a = localRay.getDirection().dot(localRay.getDirection());
   double b = 2.0 * oc.dot(localRay.getDirection());
   double c = oc.dot(oc) - _radius * _radius;
 
-  // Calculate the discriminant
   double discriminant = b * b - 4 * a * c;
 
-  // If discriminant is negative, there's no intersection
   if (discriminant < 0) {
     return std::nullopt;
   }
 
-  // Calculate the two intersections (t values)
   double sqrtDiscriminant = std::sqrt(discriminant);
   double t1 = (-b - sqrtDiscriminant) / (2 * a);
   double t2 = (-b + sqrtDiscriminant) / (2 * a);
 
-  // Find the closest intersection in front of the ray
   double t = t1;
   if (t < 0) {
-    t = t2;  // If t1 is behind the ray, try t2
+    t = t2;
     if (t < 0) {
-      return std::nullopt;  // Both intersections are behind the ray
+      return std::nullopt;
     }
   }
 
-  // Calculate the intersection point in local space
   Vector3D localIntersectionPoint = localRay.pointAt(t);
 
-  // Calculate the normal in local space
   Vector3D localNormal = (localIntersectionPoint - _center).normalized();
 
-  // Transform the intersection point and normal to world space
   Vector3D worldIntersectionPoint =
       _transform.applyToPoint(localIntersectionPoint);
 
-  // Pour la normale, nous devons calculer la distance du point d'intersection
-  // à la caméra dans l'espace monde car la paramètre t est basé sur le rayon local
   double worldDistance =
       (worldIntersectionPoint - ray.getOrigin()).getMagnitude();
 
   Vector3D worldNormal = _transform.applyToVector(localNormal).normalized();
 
-  // Créer et retourner les données d'intersection
   Intersection intersection;
-  intersection.distance = worldDistance;  // Utiliser la distance monde
+  intersection.distance = worldDistance;
   intersection.point = worldIntersectionPoint;
   intersection.normal = worldNormal;
   intersection.color = _color;
@@ -121,13 +105,10 @@ Color Sphere::getColor() const {
 }
 
 Vector3D Sphere::getNormalAt(const Vector3D& point) const {
-  // Transform the world point to local space
   Vector3D localPoint = _transform.inverse().applyToPoint(point);
 
-  // Calculate the normal in local space (direction from center to point)
   Vector3D localNormal = (localPoint - _center).normalized();
 
-  // Transform the normal back to world space
   Vector3D worldNormal = _transform.applyToVector(localNormal).normalized();
 
   return worldNormal;

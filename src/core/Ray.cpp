@@ -11,16 +11,13 @@
 
 namespace RayTracer {
 
-Ray::Ray() : _origin(0, 0, 0), _direction(0, 0, 1) {
-}
+Ray::Ray() : _origin(0, 0, 0), _direction(0, 0, 1) {}
 
 Ray::Ray(const Vector3D& origin, const Vector3D& direction)
-    : _origin(origin), _direction(direction.normalized()) {
-}
+    : _origin(origin), _direction(direction.normalized()) {}
 
 Ray::Ray(const Ray& other)
-    : _origin(other._origin), _direction(other._direction) {
-}
+    : _origin(other._origin), _direction(other._direction) {}
 
 Ray& Ray::operator=(const Ray& other) {
   if (this != &other) {
@@ -30,8 +27,7 @@ Ray& Ray::operator=(const Ray& other) {
   return *this;
 }
 
-Ray::~Ray() {
-}
+Ray::~Ray() {}
 
 Vector3D Ray::getOrigin() const {
   return _origin;

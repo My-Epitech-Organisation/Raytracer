@@ -84,69 +84,43 @@ double Camera::getFieldOfView() const {
 }
 
 Ray Camera::generateRay(int x, int y) const {
-  // Ensure pixel coordinates are within bounds
   if (x < 0 || x >= _width || y < 0 || y >= _height) {
     throw std::runtime_error("Pixel coordinates out of bounds");
   }
 
-  // Calculate normalized device coordinates (NDC)
-  // Convert pixel coordinates to range [-1, 1]
-  double ndcX = (2.0 * x / (_width - 1)) - 1.0;  // Exact corner values
-  double ndcY =
-      1.0 -
-      (2.0 * y /
-       (_height - 1));  // Flip Y to match image coordinates (0,0 at top-left)
+  double ndcX = (2.0 * x / (_width - 1)) - 1.0;
+  double ndcY = 1.0 - (2.0 * y / (_height - 1));
 
-  // Calculate the aspect ratio to maintain proper perspective
   double aspectRatio = static_cast<double>(_width) / _height;
 
-  // Calculate the camera's field of view in radians
   double fovRadians = (_fieldOfView * M_PI) / 180.0;
 
-  // Calculate the camera plane distance from the camera position
   double tanHalfFov = tan(fovRadians / 2.0);
 
-  // Calculate the ray direction in camera space
   Vector3D rayDirection(ndcX * aspectRatio * tanHalfFov, ndcY * tanHalfFov,
                         -1.0);
 
-  // Normalize the direction
   rayDirection = rayDirection.normalized();
 
-  // Apply only the rotation part of the transform to the direction
   Vector3D worldDirection = _transform.applyToVector(rayDirection);
 
-  // The ray origin is simply the camera position
   Vector3D worldOrigin = _position;
 
-  // Create the ray directly in world space
   return Ray(worldOrigin, worldDirection);
 }
 
 void Camera::updateTransform() {
-  // Pour une caméra, nous avons besoin de créer une matrice de transformation view-to-world
-
-  // Commencer par une transformation identité
   _transform = Transform();
 
-  // L'ordre et la direction des rotations sont critiques
-  // Pour une caméra avec rotation (φ, θ, ψ) nous devons appliquer
-  // les rotations inverses (-φ, -θ, -ψ) dans l'ordre inverse (Z, Y, X)
-
-  // Calculer la transformation de la vue (view transform)
   Transform viewTransform;
 
-  // Appliquer les rotations en ordre inverse (Z, Y, X) et avec les angles inversés
   viewTransform.rotateX(-_rotation.getX());
   viewTransform.rotateY(-_rotation.getY());
   viewTransform.rotateZ(-_rotation.getZ());
 
-  // Appliquer la translation inverse (-position)
   viewTransform.translate(-_position.getX(), -_position.getY(),
                           -_position.getZ());
 
-  // La transformation de la caméra est la même que la transformation de la vue
-  // puisque nous transformons de l'espace caméra vers l'espace monde
   _transform = viewTransform;
 }
 
