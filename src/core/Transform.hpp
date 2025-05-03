@@ -19,140 +19,141 @@ namespace RayTracer {
 class Transform {
  public:
   /**
-     * @brief Default constructor
-     * Creates an identity transformation
-     */
+   * @brief Default constructor
+   * Creates an identity transformation
+   */
   Transform();
 
   /**
-     * @brief Copy constructor
-     * @param other The transformation to copy
-     */
+   * @brief Copy constructor
+   * @param other The transformation to copy
+   */
   Transform(const Transform& other);
 
   /**
-     * @brief Assignment operator
-     * @param other The transformation to assign from
-     * @return Reference to this transformation after assignment
-     */
+   * @brief Assignment operator
+   * @param other The transformation to assign from
+   * @return Reference to this transformation after assignment
+   */
   Transform& operator=(const Transform& other);
 
   /**
-     * @brief Equality operator
-     * @param other The transformation to compare with
-     * @return true if the transformations are equal, false otherwise
-     */
+   * @brief Equality operator
+   * @param other The transformation to compare with
+   * @return true if the transformations are equal, false otherwise
+   */
   bool operator==(const Transform& other) const;
 
   /**
-     * @brief Destructor
-     */
+   * @brief Destructor
+   */
   ~Transform();
 
   /**
-     * @brief Apply a translation
-     * @param x Translation along x-axis
-     * @param y Translation along y-axis
-     * @param z Translation along z-axis
-     * @return Reference to this transform
-     */
+   * @brief Apply a translation
+   * @param x Translation along x-axis
+   * @param y Translation along y-axis
+   * @param z Translation along z-axis
+   * @return Reference to this transform
+   */
   Transform& translate(double x, double y, double z);
 
   /**
-     * @brief Apply a rotation around the X axis
-     * @param angleDegrees Angle in degrees
-     * @return Reference to this transform
-     */
+   * @brief Apply a rotation around the X axis
+   * @param angleDegrees Angle in degrees
+   * @return Reference to this transform
+   */
   Transform& rotateX(double angleDegrees);
 
   /**
-     * @brief Apply a rotation around the Y axis
-     * @param angleDegrees Angle in degrees
-     * @return Reference to this transform
-     */
+   * @brief Apply a rotation around the Y axis
+   * @param angleDegrees Angle in degrees
+   * @return Reference to this transform
+   */
   Transform& rotateY(double angleDegrees);
 
   /**
-     * @brief Apply a rotation around the Z axis
-     * @param angleDegrees Angle in degrees
-     * @return Reference to this transform
-     */
+   * @brief Apply a rotation around the Z axis
+   * @param angleDegrees Angle in degrees
+   * @return Reference to this transform
+   */
   Transform& rotateZ(double angleDegrees);
 
   /**
-     * @brief Apply scaling
-     * @param x Scale factor along x-axis
-     * @param y Scale factor along y-axis
-     * @param z Scale factor along z-axis
-     * @return Reference to this transform
-     */
+   * @brief Apply scaling
+   * @param x Scale factor along x-axis
+   * @param y Scale factor along y-axis
+   * @param z Scale factor along z-axis
+   * @return Reference to this transform
+   */
   Transform& scale(double x, double y, double z);
 
   /**
-     * @brief Apply uniform scaling
-     * @param factor Scale factor for all axes
-     * @return Reference to this transform
-     */
+   * @brief Apply uniform scaling
+   * @param factor Scale factor for all axes
+   * @return Reference to this transform
+   */
   Transform& scale(double factor);
 
   /**
-     * @brief Combine this transform with another
-     * @param other The transform to combine with
-     * @return Reference to this transform
-     */
+   * @brief Combine this transform with another
+   * @param other The transform to combine with
+   * @return Reference to this transform
+   */
   Transform& combine(const Transform& other);
 
   /**
-     * @brief Get inverse of this transformation
-     * This method returns a new Transform object where the main matrix (_matrix)
-     * and the inverse matrix (_inverseMatrix) are swapped. This allows the
-     * resulting Transform to represent the inverse transformation efficiently.
-     *
-     * Note that this method does not perform a mathematical inversion of the matrix;
-     * it relies on the assumption that the inverse matrix is already maintained
-     * correctly during transformations via the updateInverseMatrix() method.
-     *
-     * @return A new Transform representing the inverse of this transformation
-     * @throws std::runtime_error if the matrix cannot be inverted
-     */
+   * @brief Get inverse of this transformation
+   * This method returns a new Transform object where the main matrix (_matrix)
+   * and the inverse matrix (_inverseMatrix) are swapped. This allows the
+   * resulting Transform to represent the inverse transformation efficiently.
+   *
+   * Note that this method does not perform a mathematical inversion of the
+   * matrix; it relies on the assumption that the inverse matrix is already
+   * maintained correctly during transformations via the updateInverseMatrix()
+   * method.
+   *
+   * @return A new Transform representing the inverse of this transformation
+   * @throws std::runtime_error if the matrix cannot be inverted
+   */
   Transform inverse() const;
 
   /**
-     * @brief Apply transformation to a 3D point
-     * @param point The point to transform
-     * @return The transformed point
-     */
+   * @brief Apply transformation to a 3D point
+   * @param point The point to transform
+   * @return The transformed point
+   */
   Vector3D applyToPoint(const Vector3D& point) const;
 
   /**
-     * @brief Apply transformation to a 3D vector (direction)
-     * @param vector The vector to transform
-     * @return The transformed vector
-     */
+   * @brief Apply transformation to a 3D vector (direction)
+   * @param vector The vector to transform
+   * @return The transformed vector
+   */
   Vector3D applyToVector(const Vector3D& vector) const;
 
   /**
-     * @brief Apply transformation to a surface normal vector
-     *
-     * This method transforms a normal vector correctly by applying the transpose
-     * of the inverse of the transformation matrix. This is necessary for
-     * non-uniform scaling transformations to maintain perpendicularity.
-     *
-     * @param normal The normal vector to transform
-     * @return The correctly transformed normal vector
-     */
+   * @brief Apply transformation to a surface normal vector
+   *
+   * This method transforms a normal vector correctly by applying the transpose
+   * of the inverse of the transformation matrix. This is necessary for
+   * non-uniform scaling transformations to maintain perpendicularity.
+   *
+   * @param normal The normal vector to transform
+   * @return The correctly transformed normal vector
+   */
   Vector3D applyToNormal(const Vector3D& normal) const;
 
   /**
-     * @brief Get the transformation matrix
-     * @return The 4x4 transformation matrix
-     */
+   * @brief Get the transformation matrix
+   * @return The 4x4 transformation matrix
+   */
   Matrix getMatrix() const;
 
   /**
-     * @brief Get the inverse transformation matrix
-     * @return The 4x4 inverse transformation matrix
-     */
+   * @brief Get the inverse transformation matrix
+   * @return The 4x4 inverse transformation matrix
+   */
   Matrix getInverseMatrix() const;
 
  private:
