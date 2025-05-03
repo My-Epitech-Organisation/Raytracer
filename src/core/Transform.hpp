@@ -38,6 +38,13 @@ class Transform {
   Transform& operator=(const Transform& other);
 
   /**
+     * @brief Equality operator
+     * @param other The transformation to compare with
+     * @return true if the transformations are equal, false otherwise
+     */
+  bool operator==(const Transform& other) const;
+
+  /**
      * @brief Destructor
      */
   ~Transform();

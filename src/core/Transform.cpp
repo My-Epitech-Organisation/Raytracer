@@ -29,6 +29,10 @@ Transform& Transform::operator=(const Transform& other) {
   return *this;
 }
 
+bool Transform::operator==(const Transform& other) const {
+  return _matrix == other._matrix && _inverseMatrix == other._inverseMatrix;
+}
+
 Transform::~Transform() {
   // Destructor - nothing special to do
 }
