@@ -15,11 +15,9 @@ Matrix::Matrix() {
   setIdentity();
 }
 
-Matrix::Matrix(const std::array<double, 16>& values) : _data(values) {
-}
+Matrix::Matrix(const std::array<double, 16>& values) : _data(values) {}
 
-Matrix::Matrix(const Matrix& other) : _data(other._data) {
-}
+Matrix::Matrix(const Matrix& other) : _data(other._data) {}
 
 Matrix& Matrix::operator=(const Matrix& other) {
   if (this != &other) {
@@ -28,8 +26,7 @@ Matrix& Matrix::operator=(const Matrix& other) {
   return *this;
 }
 
-Matrix::~Matrix() {
-}
+Matrix::~Matrix() {}
 
 double& Matrix::at(int row, int col) {
   if (row < 0 || row > 3 || col < 0 || col > 3) {
