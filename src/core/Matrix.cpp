@@ -78,6 +78,15 @@ Matrix& Matrix::operator*=(const Matrix& other) {
   return *this;
 }
 
+bool Matrix::operator==(const Matrix& other) const {
+  for (int i = 0; i < 16; ++i) {
+    if (std::abs(_data[i] - other._data[i]) > 1e-10) {
+      return false;
+    }
+  }
+  return true;
+}
+
 double Matrix::minor(int row, int col) const {
   // Calculate the determinant of the 3x3 submatrix
   double submatrix[9];
