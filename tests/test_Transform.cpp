@@ -205,7 +205,8 @@ TEST(TransformTest, TransformationOrder) {
 
   // Results should be different due to order of operations
   // rotateFirst: origin -> (0,0,0) -> rotate -> (0,0,0) -> translate -> (1,0,0)
-  // translateFirst: origin -> (0,0,0) -> translate -> (1,0,0) -> rotate -> (0,1,0)
+  // translateFirst: origin -> (0,0,0) -> translate -> (1,0,0) -> rotate ->
+  // (0,1,0)
   EXPECT_NEAR(result1.getX(), 1.0, 1e-10);
   EXPECT_NEAR(result1.getY(), 0.0, 1e-10);
 
@@ -218,25 +219,25 @@ TEST(TransformTest, TransformationOrder) {
 //   Transform transformA;
 //   transformA.translate(1.0, 2.0, 3.0);
 
-//   Transform transformB;
-//   transformB.rotateZ(90.0);
+// Transform transformB;
+// transformB.rotateZ(90.0);
 
-//   // Combine A with B (B is applied first, then A)
-//   Transform combined = transformA;
-//   combined.combine(transformB);
+// // Combine A with B (B is applied first, then A)
+// Transform combined = transformA;
+// combined.combine(transformB);
 
-//   Vector3D point(1.0, 0.0, 0.0);
+// Vector3D point(1.0, 0.0, 0.0);
 
-//   // Apply each transform sequentially
-//   Vector3D expected = transformA.applyToPoint(transformB.applyToPoint(point));
+// // Apply each transform sequentially
+// Vector3D expected = transformA.applyToPoint(transformB.applyToPoint(point));
 
-//   // Apply combined transform
-//   Vector3D result = combined.applyToPoint(point);
+// // Apply combined transform
+// Vector3D result = combined.applyToPoint(point);
 
-//   // Results should match
-//   EXPECT_NEAR(result.getX(), expected.getX(), 1e-10);
-//   EXPECT_NEAR(result.getY(), expected.getY(), 1e-10);
-//   EXPECT_NEAR(result.getZ(), expected.getZ(), 1e-10);
+// // Results should match
+// EXPECT_NEAR(result.getX(), expected.getX(), 1e-10);
+// EXPECT_NEAR(result.getY(), expected.getY(), 1e-10);
+// EXPECT_NEAR(result.getZ(), expected.getZ(), 1e-10);
 // }
 
 // Test the inverse transformation
@@ -251,7 +252,8 @@ TEST(TransformTest, Inverse) {
   Transform inverse = transform.inverse();
   Vector3D restored = inverse.applyToPoint(transformed);
 
-  // Check that we get back the original point (allowing for floating-point errors)
+  // Check that we get back the original point (allowing for floating-point
+  // errors)
   EXPECT_NEAR(restored.getX(), point.getX(), 1e-10);
   EXPECT_NEAR(restored.getY(), point.getY(), 1e-10);
   EXPECT_NEAR(restored.getZ(), point.getZ(), 1e-10);

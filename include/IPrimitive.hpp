@@ -34,52 +34,52 @@ struct Intersection {
 class IPrimitive {
  public:
   /**
-     * @brief Virtual destructor
-     */
+   * @brief Virtual destructor
+   */
   virtual ~IPrimitive() = default;
 
   /**
-     * @brief Check if a ray intersects this primitive
-     * @param ray The ray to check
-     * @return Intersection data if hit, std::nullopt otherwise
-     */
+   * @brief Check if a ray intersects this primitive
+   * @param ray The ray to check
+   * @return Intersection data if hit, std::nullopt otherwise
+   */
   virtual std::optional<Intersection> intersect(const Ray& ray) const = 0;
 
   /**
-     * @brief Set the transformation matrix for this primitive
-     * @param transform The transformation to apply
-     */
+   * @brief Set the transformation matrix for this primitive
+   * @param transform The transformation to apply
+   */
   virtual void setTransform(const Transform& transform) = 0;
 
   /**
-     * @brief Get the transformation of this primitive
-     * @return The current transformation
-     */
+   * @brief Get the transformation of this primitive
+   * @return The current transformation
+   */
   virtual Transform getTransform() const = 0;
 
   /**
-     * @brief Set the color of this primitive
-     * @param color The color to set
-     */
+   * @brief Set the color of this primitive
+   * @param color The color to set
+   */
   virtual void setColor(const Color& color) = 0;
 
   /**
-     * @brief Get the color of this primitive
-     * @return The current color
-     */
+   * @brief Get the color of this primitive
+   * @return The current color
+   */
   virtual Color getColor() const = 0;
 
   /**
-     * @brief Get the normal at a specific point on the primitive
-     * @param point The point in world space
-     * @return The normal vector at that point
-     */
+   * @brief Get the normal at a specific point on the primitive
+   * @param point The point in world space
+   * @return The normal vector at that point
+   */
   virtual Vector3D getNormalAt(const Vector3D& point) const = 0;
 
   /**
-     * @brief Clone this primitive
-     * @return A new instance of this primitive
-     */
+   * @brief Clone this primitive
+   * @return A new instance of this primitive
+   */
   virtual std::shared_ptr<IPrimitive> clone() const = 0;
 };
 

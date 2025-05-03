@@ -276,8 +276,9 @@ TEST(SphereTest, NormalOnTransformedSphere) {
   Vector3D normal = sphere.getNormalAt(point);
 
   // Expected normal after transformation
-  // For a point on the z-axis (0,0,1), scaling by (1,0.5,1) would make the normal (0,0,1)
-  // When transformed by the transpose of the inverse of the transform
+  // For a point on the z-axis (0,0,1), scaling by (1,0.5,1) would make the
+  // normal (0,0,1) When transformed by the transpose of the inverse of the
+  // transform
   EXPECT_TRUE(
       vectorsNearlyEqual_Sphere(normal.normalized(), Vector3D(0, 0, 1)));
 }
