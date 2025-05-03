@@ -174,8 +174,12 @@ Color Color::blend(const Color& other, double t) const {
   t = clamp(t);
   double invT = 1.0 - t;
 
-  return Color(_r * invT + other._r * t, _g * invT + other._g * t,
-               _b * invT + other._b * t);
+  // Utilisez les versions flottantes pour une interpolation plus précise
+  double r = getRf() * invT + other.getRf() * t;
+  double g = getGf() * invT + other.getGf() * t;
+  double b = getBf() * invT + other.getBf() * t;
+
+  return Color(r, g, b);
 }
 
 Color Color::toGrayscale() const {
