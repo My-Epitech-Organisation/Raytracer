@@ -109,6 +109,14 @@ bool Vector3D::isEqual(const Vector3D& other, double epsilon) const {
           std::abs(_z - other._z) < epsilon);
 }
 
+bool Vector3D::operator==(const Vector3D& other) const {
+  return isEqual(other);
+}
+
+bool Vector3D::operator!=(const Vector3D& other) const {
+  return !(*this == other);
+}
+
 std::ostream& operator<<(std::ostream& os, const Vector3D& vector) {
   os << "Vector3D(" << vector.getX() << ", " << vector.getY() << ", "
      << vector.getZ() << ")";

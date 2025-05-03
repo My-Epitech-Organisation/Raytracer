@@ -242,3 +242,31 @@ TEST(Vector3DTest, NormalizationPreservesDirection) {
 
   EXPECT_TRUE(original.isEqual(scaledNormalized, 1e-10));
 }
+
+// Test equality operator
+TEST(Vector3DTest, EqualityOperator) {
+  Vector3D vec1(1.0, 2.0, 3.0);
+  Vector3D vec2(1.0, 2.0, 3.0);
+  Vector3D vec3(1.001, 2.0, 3.0);
+
+  EXPECT_TRUE(vec1 == vec2);
+  EXPECT_FALSE(vec1 == vec3);
+
+  // Test that the behavior matches isEqual with default epsilon
+  EXPECT_EQ(vec1 == vec2, vec1.isEqual(vec2));
+  EXPECT_EQ(vec1 == vec3, vec1.isEqual(vec3));
+}
+
+// Test inequality operator
+TEST(Vector3DTest, InequalityOperator) {
+  Vector3D vec1(1.0, 2.0, 3.0);
+  Vector3D vec2(1.0, 2.0, 3.0);
+  Vector3D vec3(1.001, 2.0, 3.0);
+
+  EXPECT_FALSE(vec1 != vec2);
+  EXPECT_TRUE(vec1 != vec3);
+
+  // Test that the behavior is the opposite of equality
+  EXPECT_EQ(vec1 != vec2, !(vec1 == vec2));
+  EXPECT_EQ(vec1 != vec3, !(vec1 == vec3));
+}
