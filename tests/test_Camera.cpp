@@ -142,9 +142,6 @@ TEST(CameraTest, OffsetPositionRayGeneration) {
   Ray centerRay =
       camera.generateRay(camera.getWidth() / 2, camera.getHeight() / 2);
 
-  // display the ray direction
-  std::cout << "Ray Direction: " << centerRay.getDirection() << std::endl;
-
   EXPECT_TRUE(vectorsNearlyEqual_Camera(centerRay.getOrigin(), position));
   EXPECT_TRUE(vectorsNearlyEqual_Camera(centerRay.getDirection(), Vector3D(0, 0, -1)));
 }
@@ -161,10 +158,6 @@ TEST(CameraTest, RotatedCameraRayGeneration) {
   Ray centerRay =
       camera.generateRay(camera.getWidth() / 2, camera.getHeight() / 2);
 
-  // display the ray direction
-  std::cout << "Ray Direction: " << centerRay.getDirection() << std::endl;
-
-
   EXPECT_TRUE(vectorsNearlyEqual_Camera(centerRay.getOrigin(), Vector3D(0, 0, 0)));
   EXPECT_TRUE(
       vectorsNearlyEqual_Camera(centerRay.getDirection(), Vector3D(1, 0, 0)));
@@ -172,9 +165,6 @@ TEST(CameraTest, RotatedCameraRayGeneration) {
   // Rotate the camera 90 degrees around X axis (looking down)
   camera.setRotation(Vector3D(90, 0, 0));
   centerRay = camera.generateRay(camera.getWidth() / 2, camera.getHeight() / 2);
-
-  // display the ray direction
-  std::cout << "Ray Direction: " << centerRay.getDirection() << std::endl;
 
   EXPECT_TRUE(vectorsNearlyEqual_Camera(centerRay.getOrigin(), Vector3D(0, 0, 0)));
   EXPECT_TRUE(
