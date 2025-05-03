@@ -1,8 +1,11 @@
 set(TEST_SOURCES
-    test_Vector3D.cpp
-    test_Ray.cpp
-    test_Transform.cpp
+    test_Camera.cpp
+    test_Color.cpp
     test_parser.cpp
+    test_Ray.cpp
+    test_Sphere.cpp
+    test_Transform.cpp
+    test_Vector3D.cpp
 )
 
 # Test executable
