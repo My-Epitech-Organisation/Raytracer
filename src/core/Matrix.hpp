@@ -44,6 +44,13 @@ class Matrix {
   Matrix& operator=(const Matrix& other);
 
   /**
+     * @brief Equality operator
+     * @param other The matrix to compare with
+     * @return true if the matrices are equal, false otherwise
+     */
+  bool operator==(const Matrix& other) const;
+
+  /**
      * @brief Destructor
      */
   ~Matrix();

@@ -11,18 +11,12 @@
 
 namespace RayTracer {
 
-Vector3D::Vector3D() : _x(0.0), _y(0.0), _z(0.0) {
-  // Default constructor initializes vector to (0,0,0)
-}
+Vector3D::Vector3D() : _x(0.0), _y(0.0), _z(0.0) {}
 
-Vector3D::Vector3D(double x, double y, double z) : _x(x), _y(y), _z(z) {
-  // Constructor with coordinates
-}
+Vector3D::Vector3D(double x, double y, double z) : _x(x), _y(y), _z(z) {}
 
 Vector3D::Vector3D(const Vector3D& other)
-    : _x(other._x), _y(other._y), _z(other._z) {
-  // Copy constructor
-}
+    : _x(other._x), _y(other._y), _z(other._z) {}
 
 Vector3D& Vector3D::operator=(const Vector3D& other) {
   if (this != &other) {
@@ -33,9 +27,7 @@ Vector3D& Vector3D::operator=(const Vector3D& other) {
   return *this;
 }
 
-Vector3D::~Vector3D() {
-  // Destructor (nothing to clean up for simple POD types)
-}
+Vector3D::~Vector3D() {}
 
 double Vector3D::getX() const {
   return _x;
@@ -115,6 +107,14 @@ bool Vector3D::isEqual(const Vector3D& other, double epsilon) const {
   return (std::abs(_x - other._x) < epsilon &&
           std::abs(_y - other._y) < epsilon &&
           std::abs(_z - other._z) < epsilon);
+}
+
+bool Vector3D::operator==(const Vector3D& other) const {
+  return isEqual(other);
+}
+
+bool Vector3D::operator!=(const Vector3D& other) const {
+  return !(*this == other);
 }
 
 std::ostream& operator<<(std::ostream& os, const Vector3D& vector) {

@@ -15,13 +15,9 @@ Matrix::Matrix() {
   setIdentity();
 }
 
-Matrix::Matrix(const std::array<double, 16>& values) : _data(values) {
-  // Initializes with provided values
-}
+Matrix::Matrix(const std::array<double, 16>& values) : _data(values) {}
 
-Matrix::Matrix(const Matrix& other) : _data(other._data) {
-  // Copy constructor
-}
+Matrix::Matrix(const Matrix& other) : _data(other._data) {}
 
 Matrix& Matrix::operator=(const Matrix& other) {
   if (this != &other) {
@@ -30,9 +26,7 @@ Matrix& Matrix::operator=(const Matrix& other) {
   return *this;
 }
 
-Matrix::~Matrix() {
-  // Destructor - nothing to clean up for std::array
-}
+Matrix::~Matrix() {}
 
 double& Matrix::at(int row, int col) {
   if (row < 0 || row > 3 || col < 0 || col > 3) {
@@ -78,8 +72,16 @@ Matrix& Matrix::operator*=(const Matrix& other) {
   return *this;
 }
 
+bool Matrix::operator==(const Matrix& other) const {
+  for (int i = 0; i < 16; ++i) {
+    if (std::abs(_data[i] - other._data[i]) > 1e-10) {
+      return false;
+    }
+  }
+  return true;
+}
+
 double Matrix::minor(int row, int col) const {
-  // Calculate the determinant of the 3x3 submatrix
   double submatrix[9];
   int index = 0;
 
@@ -95,7 +97,6 @@ double Matrix::minor(int row, int col) const {
     }
   }
 
-  // Compute the determinant of the 3x3 submatrix
   return submatrix[0] *
              (submatrix[4] * submatrix[8] - submatrix[5] * submatrix[7]) -
          submatrix[1] *
@@ -112,7 +113,6 @@ double Matrix::cofactor(int row, int col) const {
 double Matrix::determinant() const {
   double det = 0.0;
 
-  // Compute determinant using cofactor expansion along the first row
   for (int col = 0; col < 4; ++col) {
     det += at(0, col) * cofactor(0, col);
   }
@@ -130,10 +130,8 @@ Matrix Matrix::inverse() const {
 
   Matrix result;
 
-  // Compute the adjugate (transpose of cofactor matrix) divided by determinant
   for (int row = 0; row < 4; ++row) {
     for (int col = 0; col < 4; ++col) {
-      // Note: we transpose by swapping row/col in the result
       result.at(col, row) = cofactor(row, col) / det;
     }
   }
@@ -142,11 +140,6 @@ Matrix Matrix::inverse() const {
 }
 
 Matrix Matrix::createTranslation(double x, double y, double z) {
-  // Create a translation matrix:
-  // 1 0 0 x
-  // 0 1 0 y
-  // 0 0 1 z
-  // 0 0 0 1
   Matrix result;
 
   result.at(0, 3) = x;
@@ -157,16 +150,10 @@ Matrix Matrix::createTranslation(double x, double y, double z) {
 }
 
 Matrix Matrix::createRotationX(double angleDegrees) {
-  // Convert to radians
   double angleRadians = angleDegrees * M_PI / 180.0;
   double cosAngle = std::cos(angleRadians);
   double sinAngle = std::sin(angleRadians);
 
-  // Create a rotation matrix around X axis:
-  // 1 0      0       0
-  // 0 cos(θ) -sin(θ) 0
-  // 0 sin(θ) cos(θ)  0
-  // 0 0      0       1
   Matrix result;
 
   result.at(1, 1) = cosAngle;
@@ -178,16 +165,10 @@ Matrix Matrix::createRotationX(double angleDegrees) {
 }
 
 Matrix Matrix::createRotationY(double angleDegrees) {
-  // Convert to radians
   double angleRadians = angleDegrees * M_PI / 180.0;
   double cosAngle = std::cos(angleRadians);
   double sinAngle = std::sin(angleRadians);
 
-  // Create a rotation matrix around Y axis:
-  // cos(θ)  0 sin(θ) 0
-  // 0       1 0      0
-  // -sin(θ) 0 cos(θ) 0
-  // 0       0 0      1
   Matrix result;
 
   result.at(0, 0) = cosAngle;
@@ -199,16 +180,10 @@ Matrix Matrix::createRotationY(double angleDegrees) {
 }
 
 Matrix Matrix::createRotationZ(double angleDegrees) {
-  // Convert to radians
   double angleRadians = angleDegrees * M_PI / 180.0;
   double cosAngle = std::cos(angleRadians);
   double sinAngle = std::sin(angleRadians);
 
-  // Create a rotation matrix around Z axis:
-  // cos(θ) -sin(θ) 0 0
-  // sin(θ) cos(θ)  0 0
-  // 0      0       1 0
-  // 0      0       0 1
   Matrix result;
 
   result.at(0, 0) = cosAngle;
@@ -220,11 +195,6 @@ Matrix Matrix::createRotationZ(double angleDegrees) {
 }
 
 Matrix Matrix::createScaling(double x, double y, double z) {
-  // Create a scaling matrix:
-  // x 0 0 0
-  // 0 y 0 0
-  // 0 0 z 0
-  // 0 0 0 1
   Matrix result;
 
   result.at(0, 0) = x;

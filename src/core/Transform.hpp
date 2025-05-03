@@ -38,6 +38,13 @@ class Transform {
   Transform& operator=(const Transform& other);
 
   /**
+     * @brief Equality operator
+     * @param other The transformation to compare with
+     * @return true if the transformations are equal, false otherwise
+     */
+  bool operator==(const Transform& other) const;
+
+  /**
      * @brief Destructor
      */
   ~Transform();
@@ -123,6 +130,18 @@ class Transform {
      * @return The transformed vector
      */
   Vector3D applyToVector(const Vector3D& vector) const;
+
+  /**
+     * @brief Apply transformation to a surface normal vector
+     *
+     * This method transforms a normal vector correctly by applying the transpose
+     * of the inverse of the transformation matrix. This is necessary for
+     * non-uniform scaling transformations to maintain perpendicularity.
+     *
+     * @param normal The normal vector to transform
+     * @return The correctly transformed normal vector
+     */
+  Vector3D applyToNormal(const Vector3D& normal) const;
 
   /**
      * @brief Get the transformation matrix

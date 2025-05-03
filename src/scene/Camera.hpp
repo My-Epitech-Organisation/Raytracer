@@ -8,7 +8,6 @@
 #ifndef CAMERA_HPP_
 #define CAMERA_HPP_
 
-#include <cmath>
 #include "../core/Ray.hpp"
 #include "../core/Transform.hpp"
 #include "../core/Vector3D.hpp"

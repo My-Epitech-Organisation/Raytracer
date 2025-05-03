@@ -161,6 +161,20 @@ class Vector3D {
      */
   bool isEqual(const Vector3D& other, double epsilon = 1e-10) const;
 
+  /**
+     * @brief Equality operator
+     * @param other The vector to compare with
+     * @return True if vectors are equal (uses default epsilon from isEqual)
+     */
+  bool operator==(const Vector3D& other) const;
+
+  /**
+     * @brief Inequality operator
+     * @param other The vector to compare with
+     * @return True if vectors are not equal (uses default epsilon from isEqual)
+     */
+  bool operator!=(const Vector3D& other) const;
+
  private:
   double _x;  ///< The X coordinate
   double _y;  ///< The Y coordinate
