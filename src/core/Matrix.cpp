@@ -16,11 +16,9 @@ Matrix::Matrix() {
 }
 
 Matrix::Matrix(const std::array<double, 16>& values) : _data(values) {
-  // Initializes with provided values
 }
 
 Matrix::Matrix(const Matrix& other) : _data(other._data) {
-  // Copy constructor
 }
 
 Matrix& Matrix::operator=(const Matrix& other) {
@@ -31,7 +29,6 @@ Matrix& Matrix::operator=(const Matrix& other) {
 }
 
 Matrix::~Matrix() {
-  // Destructor - nothing to clean up for std::array
 }
 
 double& Matrix::at(int row, int col) {
