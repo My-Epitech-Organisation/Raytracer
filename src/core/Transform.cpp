@@ -125,6 +125,21 @@ Vector3D Transform::applyToVector(const Vector3D& vector) const {
   return Vector3D(newX, newY, newZ);
 }
 
+Vector3D Transform::applyToNormal(const Vector3D& normal) const {
+  double x = normal.getX();
+  double y = normal.getY();
+  double z = normal.getZ();
+
+  double newX = _inverseMatrix.at(0, 0) * x + _inverseMatrix.at(1, 0) * y +
+                _inverseMatrix.at(2, 0) * z;
+  double newY = _inverseMatrix.at(0, 1) * x + _inverseMatrix.at(1, 1) * y +
+                _inverseMatrix.at(2, 1) * z;
+  double newZ = _inverseMatrix.at(0, 2) * x + _inverseMatrix.at(1, 2) * y +
+                _inverseMatrix.at(2, 2) * z;
+
+  return Vector3D(newX, newY, newZ);
+}
+
 Matrix Transform::getMatrix() const {
   return _matrix;
 }

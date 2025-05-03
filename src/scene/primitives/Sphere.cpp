@@ -76,7 +76,7 @@ std::optional<Intersection> Sphere::intersect(const Ray& ray) const {
   double worldDistance =
       (worldIntersectionPoint - ray.getOrigin()).getMagnitude();
 
-  Vector3D worldNormal = _transform.applyToVector(localNormal).normalized();
+  Vector3D worldNormal = _transform.applyToNormal(localNormal).normalized();
 
   Intersection intersection;
   intersection.distance = worldDistance;
@@ -109,7 +109,8 @@ Vector3D Sphere::getNormalAt(const Vector3D& point) const {
 
   Vector3D localNormal = (localPoint - _center).normalized();
 
-  Vector3D worldNormal = _transform.applyToVector(localNormal).normalized();
+  // Use the new applyToNormal method which properly handles non-uniform scaling
+  Vector3D worldNormal = _transform.applyToNormal(localNormal).normalized();
 
   return worldNormal;
 }
