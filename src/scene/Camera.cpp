@@ -91,9 +91,8 @@ Ray Camera::generateRay(int x, int y) const {
 
   // Calculate normalized device coordinates (NDC)
   // Convert pixel coordinates to range [-1, 1]
-  // For corner rays, we need exact values at the pixel centers
-  double ndcX = (2.0 * (x + 0.5) / _width) - 1.0;
-  double ndcY = 1.0 - (2.0 * (y + 0.5) / _height); // Flip Y to match image coordinates (0,0 at top-left)
+  double ndcX = (2.0 * x / (_width - 1)) - 1.0;  // Exact corner values
+  double ndcY = 1.0 - (2.0 * y / (_height - 1)); // Flip Y to match image coordinates (0,0 at top-left)
 
   // Calculate the aspect ratio to maintain proper perspective
   double aspectRatio = static_cast<double>(_width) / _height;
@@ -102,16 +101,16 @@ Ray Camera::generateRay(int x, int y) const {
   double fovRadians = (_fieldOfView * M_PI) / 180.0;
   
   // Calculate the camera plane distance from the camera position
-  // (assuming the camera points along negative Z and the plane is at Z=-1)
   double tanHalfFov = tan(fovRadians / 2.0);
 
   // Calculate the ray direction in camera space
-  // The ray originates at the camera position and passes through the pixel
-  // on the virtual screen at z = -1
   Vector3D rayDirection(
       ndcX * aspectRatio * tanHalfFov,
       ndcY * tanHalfFov,
       -1.0);
+  
+  // Normalize the direction
+  rayDirection = rayDirection.normalized();
 
   // Create the ray in camera space
   Ray ray(Vector3D(0, 0, 0), rayDirection);
@@ -124,12 +123,15 @@ void Camera::updateTransform() {
   // Start with identity transform
   _transform = Transform();
 
-  // Apply rotation (in the order X, Y, Z)
-  _transform.rotateX(_rotation.getX());
-  _transform.rotateY(_rotation.getY());
+  // Pour une caméra, nous devons d'abord positionner la caméra, puis l'orienter
+  // C'est l'inverse de l'ordre habituel pour les objets
+
+  // D'abord, nous appliquons la rotation (dans l'ordre Z, Y, X pour une séquence Euler yaw-pitch-roll)
   _transform.rotateZ(_rotation.getZ());
+  _transform.rotateY(_rotation.getY());
+  _transform.rotateX(_rotation.getX());
   
-  // Apply translation
+  // Ensuite, nous appliquons la translation
   _transform.translate(_position.getX(), _position.getY(), _position.getZ());
 }
 
