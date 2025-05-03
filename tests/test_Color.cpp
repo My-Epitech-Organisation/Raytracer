@@ -6,6 +6,7 @@
 */
 
 #include <gtest/gtest.h>
+#include <cmath>
 #include "../src/core/Color.hpp"
 
 using namespace RayTracer;
@@ -19,7 +20,8 @@ TEST(ColorTest, DefaultConstructor) {
 }
 
 TEST(ColorTest, IntegerConstructor) {
-  Color color(128, 64, 32);
+  Color color(static_cast<uint8_t>(128), static_cast<uint8_t>(64),
+              static_cast<uint8_t>(32));
   EXPECT_EQ(color.getR(), 128);
   EXPECT_EQ(color.getG(), 64);
   EXPECT_EQ(color.getB(), 32);
@@ -33,7 +35,8 @@ TEST(ColorTest, FloatConstructor) {
 }
 
 TEST(ColorTest, CopyConstructor) {
-  Color original(128, 64, 32);
+  Color original(static_cast<uint8_t>(128), static_cast<uint8_t>(64),
+                 static_cast<uint8_t>(32));
   Color copy(original);
   EXPECT_EQ(copy.getR(), 128);
   EXPECT_EQ(copy.getG(), 64);
@@ -42,7 +45,8 @@ TEST(ColorTest, CopyConstructor) {
 
 // Test getters/setters
 TEST(ColorTest, Getters) {
-  Color color(128, 64, 32);
+  Color color(static_cast<uint8_t>(128), static_cast<uint8_t>(64),
+              static_cast<uint8_t>(32));
   EXPECT_EQ(color.getR(), 128);
   EXPECT_EQ(color.getG(), 64);
   EXPECT_EQ(color.getB(), 32);
@@ -83,8 +87,10 @@ TEST(ColorTest, FloatSettersClamp) {
 
 // Test operators
 TEST(ColorTest, AdditionOperator) {
-  Color a(100, 150, 200);
-  Color b(50, 75, 100);
+  Color a(static_cast<uint8_t>(100), static_cast<uint8_t>(150),
+          static_cast<uint8_t>(200));
+  Color b(static_cast<uint8_t>(50), static_cast<uint8_t>(75),
+          static_cast<uint8_t>(100));
   Color result = a + b;
   EXPECT_EQ(result.getR(), 150);
   EXPECT_EQ(result.getG(), 225);
@@ -92,8 +98,10 @@ TEST(ColorTest, AdditionOperator) {
 }
 
 TEST(ColorTest, AdditionAssignmentOperator) {
-  Color a(100, 150, 200);
-  Color b(50, 75, 100);
+  Color a(static_cast<uint8_t>(100), static_cast<uint8_t>(150),
+          static_cast<uint8_t>(200));
+  Color b(static_cast<uint8_t>(50), static_cast<uint8_t>(75),
+          static_cast<uint8_t>(100));
   a += b;
   EXPECT_EQ(a.getR(), 150);
   EXPECT_EQ(a.getG(), 225);
@@ -101,7 +109,8 @@ TEST(ColorTest, AdditionAssignmentOperator) {
 }
 
 TEST(ColorTest, MultiplicationOperator) {
-  Color color(128, 64, 32);
+  Color color(static_cast<uint8_t>(128), static_cast<uint8_t>(64),
+              static_cast<uint8_t>(32));
   Color result = color * 0.5;
   EXPECT_EQ(result.getR(), 64);
   EXPECT_EQ(result.getG(), 32);
@@ -109,7 +118,8 @@ TEST(ColorTest, MultiplicationOperator) {
 }
 
 TEST(ColorTest, MultiplicationAssignmentOperator) {
-  Color color(128, 64, 32);
+  Color color(static_cast<uint8_t>(128), static_cast<uint8_t>(64),
+              static_cast<uint8_t>(32));
   color *= 0.5;
   EXPECT_EQ(color.getR(), 64);
   EXPECT_EQ(color.getG(), 32);
@@ -117,8 +127,10 @@ TEST(ColorTest, MultiplicationAssignmentOperator) {
 }
 
 TEST(ColorTest, ColorMultiplicationOperator) {
-  Color a(128, 64, 32);
-  Color b(128, 128, 128);
+  Color a(static_cast<uint8_t>(128), static_cast<uint8_t>(64),
+          static_cast<uint8_t>(32));
+  Color b(static_cast<uint8_t>(128), static_cast<uint8_t>(128),
+          static_cast<uint8_t>(128));
   Color result = a * b;
   // Expected: (128/255 * 128/255, 64/255 * 128/255, 32/255 * 128/255) * 255
   EXPECT_EQ(result.getR(), 64);
@@ -127,8 +139,10 @@ TEST(ColorTest, ColorMultiplicationOperator) {
 }
 
 TEST(ColorTest, ColorMultiplicationAssignmentOperator) {
-  Color a(128, 64, 32);
-  Color b(128, 128, 128);
+  Color a(static_cast<uint8_t>(128), static_cast<uint8_t>(64),
+          static_cast<uint8_t>(32));
+  Color b(static_cast<uint8_t>(128), static_cast<uint8_t>(128),
+          static_cast<uint8_t>(128));
   a *= b;
   EXPECT_EQ(a.getR(), 64);
   EXPECT_EQ(a.getG(), 32);
@@ -136,33 +150,44 @@ TEST(ColorTest, ColorMultiplicationAssignmentOperator) {
 }
 
 TEST(ColorTest, EqualityOperator) {
-  Color a(100, 150, 200);
-  Color b(100, 150, 200);
-  Color c(100, 150, 201);
+  Color a(static_cast<uint8_t>(100), static_cast<uint8_t>(150),
+          static_cast<uint8_t>(200));
+  Color b(static_cast<uint8_t>(100), static_cast<uint8_t>(150),
+          static_cast<uint8_t>(200));
+  Color c(static_cast<uint8_t>(100), static_cast<uint8_t>(150),
+          static_cast<uint8_t>(201));
   EXPECT_TRUE(a == b);
   EXPECT_FALSE(a == c);
 }
 
 TEST(ColorTest, InequalityOperator) {
-  Color a(100, 150, 200);
-  Color b(100, 150, 200);
-  Color c(100, 150, 201);
+  Color a(static_cast<uint8_t>(100), static_cast<uint8_t>(150),
+          static_cast<uint8_t>(200));
+  Color b(static_cast<uint8_t>(100), static_cast<uint8_t>(150),
+          static_cast<uint8_t>(200));
+  Color c(static_cast<uint8_t>(100), static_cast<uint8_t>(150),
+          static_cast<uint8_t>(201));
   EXPECT_FALSE(a != b);
   EXPECT_TRUE(a != c);
 }
 
 TEST(ColorTest, IsEqual) {
-  Color a(100, 150, 200);
-  Color b(101, 151, 201);         // Difference of 1 in each component
-  Color c(110, 160, 210);         // Difference of 10 in each component
-  EXPECT_TRUE(a.isEqual(b, 1));   // Within tolerance
-  EXPECT_FALSE(a.isEqual(c, 5));  // Outside tolerance
+  Color a(static_cast<uint8_t>(100), static_cast<uint8_t>(150),
+          static_cast<uint8_t>(200));
+  Color b(static_cast<uint8_t>(101), static_cast<uint8_t>(151),
+          static_cast<uint8_t>(201));  // Difference of 1 in each component
+  Color c(static_cast<uint8_t>(110), static_cast<uint8_t>(160),
+          static_cast<uint8_t>(210));  // Difference of 10 in each component
+  EXPECT_TRUE(a.isEqual(b, 1));        // Within tolerance
+  EXPECT_FALSE(a.isEqual(c, 5));       // Outside tolerance
 }
 
 // Test utility functions
 TEST(ColorTest, Blend) {
-  Color a(100, 100, 100);
-  Color b(200, 200, 200);
+  Color a(static_cast<uint8_t>(100), static_cast<uint8_t>(100),
+          static_cast<uint8_t>(100));
+  Color b(static_cast<uint8_t>(200), static_cast<uint8_t>(200),
+          static_cast<uint8_t>(200));
 
   // 25% blend
   Color blend1 = a.blend(b, 0.25);
@@ -178,7 +203,8 @@ TEST(ColorTest, Blend) {
 }
 
 TEST(ColorTest, ToGrayscale) {
-  Color color(255, 0, 0);  // Pure red
+  Color color(static_cast<uint8_t>(255), static_cast<uint8_t>(0),
+              static_cast<uint8_t>(0));  // Pure red
   Color gray = color.toGrayscale();
 
   // Using standard luminance formula: Y = 0.2126*R + 0.7152*G + 0.0722*B
@@ -193,7 +219,8 @@ TEST(ColorTest, ToGrayscale) {
 }
 
 TEST(ColorTest, ToRGB) {
-  Color color(255, 128, 64);
+  Color color(static_cast<uint8_t>(255), static_cast<uint8_t>(128),
+              static_cast<uint8_t>(64));
   uint32_t rgb = color.toRGB();
   EXPECT_EQ(rgb, 0xFF8040);
 }
@@ -207,13 +234,30 @@ TEST(ColorTest, FromRGB) {
 
 // Test predefined colors
 TEST(ColorTest, PredefinedColors) {
-  EXPECT_EQ(Color::BLACK, Color(0, 0, 0));
-  EXPECT_EQ(Color::WHITE, Color(255, 255, 255));
-  EXPECT_EQ(Color::RED, Color(255, 0, 0));
-  EXPECT_EQ(Color::GREEN, Color(0, 255, 0));
-  EXPECT_EQ(Color::BLUE, Color(0, 0, 255));
-  EXPECT_EQ(Color::YELLOW, Color(255, 255, 0));
-  EXPECT_EQ(Color::CYAN, Color(0, 255, 255));
-  EXPECT_EQ(Color::MAGENTA, Color(255, 0, 255));
-  EXPECT_EQ(Color::GRAY, Color(128, 128, 128));
+  EXPECT_EQ(Color::BLACK,
+            Color(static_cast<uint8_t>(0), static_cast<uint8_t>(0),
+                  static_cast<uint8_t>(0)));
+  EXPECT_EQ(Color::WHITE,
+            Color(static_cast<uint8_t>(255), static_cast<uint8_t>(255),
+                  static_cast<uint8_t>(255)));
+  EXPECT_EQ(Color::RED,
+            Color(static_cast<uint8_t>(255), static_cast<uint8_t>(0),
+                  static_cast<uint8_t>(0)));
+  EXPECT_EQ(Color::GREEN,
+            Color(static_cast<uint8_t>(0), static_cast<uint8_t>(255),
+                  static_cast<uint8_t>(0)));
+  EXPECT_EQ(Color::BLUE, Color(static_cast<uint8_t>(0), static_cast<uint8_t>(0),
+                               static_cast<uint8_t>(255)));
+  EXPECT_EQ(Color::YELLOW,
+            Color(static_cast<uint8_t>(255), static_cast<uint8_t>(255),
+                  static_cast<uint8_t>(0)));
+  EXPECT_EQ(Color::CYAN,
+            Color(static_cast<uint8_t>(0), static_cast<uint8_t>(255),
+                  static_cast<uint8_t>(255)));
+  EXPECT_EQ(Color::MAGENTA,
+            Color(static_cast<uint8_t>(255), static_cast<uint8_t>(0),
+                  static_cast<uint8_t>(255)));
+  EXPECT_EQ(Color::GRAY,
+            Color(static_cast<uint8_t>(128), static_cast<uint8_t>(128),
+                  static_cast<uint8_t>(128)));
 }
