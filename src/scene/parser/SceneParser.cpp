@@ -18,24 +18,31 @@ Camera SceneParser::parseCamera(const Setting& cameraSetting) {
     const Setting& res = cameraSetting["resolution"];
     const Setting& pos = cameraSetting["position"];
     const Setting& rot = cameraSetting["rotation"];
-    float fov = cameraSetting["fieldOfView"];
+    const Setting& fovSetting = cameraSetting["fieldOfView"];
 
-    int width = res["width"];
-    int height = res["height"];
-    
-    float posX = pos["x"];
-    float posY = pos["y"];
-    float posZ = pos["z"];
-    
-    float rotX = rot["x"];
-    float rotY = rot["y"];
-    float rotZ = rot["z"];
-    
-    // Create the camera with the proper constructor
+    int width, height;
+    res.lookupValue("width", width);
+    res.lookupValue("height", height);
+
+    int posX, posY, posZ;
+    pos.lookupValue("x", posX);
+    pos.lookupValue("y", posY);
+    pos.lookupValue("z", posZ);
+
+    int rotX, rotY, rotZ;
+    rot.lookupValue("x", rotX);
+    rot.lookupValue("y", rotY);
+    rot.lookupValue("z", rotZ);
+
+    float fov;
+    if (fovSetting.isNumber())
+      fov = static_cast<float>(fovSetting);
+    else
+      throw std::runtime_error("Field of view must be a number");
+
     Camera camera(Vector3D(posX, posY, posZ), width, height, fov);
-    // Set the rotation separately
     camera.setRotation(Vector3D(rotX, rotY, rotZ));
-    
+
     return camera;
   } catch (const SettingNotFoundException& e) {
     throw std::runtime_error(std::string("Setting not found: ") + e.what());
