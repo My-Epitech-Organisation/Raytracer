@@ -8,7 +8,6 @@
 #ifndef CAMERA_HPP_
 #define CAMERA_HPP_
 
-#include <cmath>
 #include "../core/Ray.hpp"
 #include "../core/Transform.hpp"
 #include "../core/Vector3D.hpp"
@@ -18,14 +17,15 @@ namespace RayTracer {
 /**
  * @brief Camera class for ray generation
  *
- * This class handles the creation of primary rays for each pixel in the rendered image
- * based on the camera's position, rotation, and field of view.
+ * This class handles the creation of primary rays for each pixel in the
+ * rendered image based on the camera's position, rotation, and field of view.
  */
 class Camera {
  public:
   /**
    * @brief Default constructor
-   * Creates a camera at origin (0,0,0) looking along negative Z with default parameters
+   * Creates a camera at origin (0,0,0) looking along negative Z with default
+   * parameters
    */
   Camera();
 

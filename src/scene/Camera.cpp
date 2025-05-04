@@ -88,8 +88,8 @@ Ray Camera::generateRay(int x, int y) const {
     throw std::runtime_error("Pixel coordinates out of bounds");
   }
 
-  double ndcX = (2.0 * x / _width) - 1.0;
-  double ndcY = 1.0 - (2.0 * y / _height);
+  double ndcX = (2.0 * x / (_width - 1)) - 1.0;
+  double ndcY = 1.0 - (2.0 * y / (_height - 1));
 
   double aspectRatio = static_cast<double>(_width) / _height;
 
@@ -100,19 +100,28 @@ Ray Camera::generateRay(int x, int y) const {
   Vector3D rayDirection(ndcX * aspectRatio * tanHalfFov, ndcY * tanHalfFov,
                         -1.0);
 
-  Ray ray(Vector3D(0, 0, 0), rayDirection);
+  rayDirection = rayDirection.normalized();
 
-  return ray.transform(_transform);
+  Vector3D worldDirection = _transform.applyToVector(rayDirection);
+
+  Vector3D worldOrigin = _position;
+
+  return Ray(worldOrigin, worldDirection);
 }
 
 void Camera::updateTransform() {
   _transform = Transform();
 
-  _transform.rotateX(_rotation.getX());
-  _transform.rotateY(_rotation.getY());
-  _transform.rotateZ(_rotation.getZ());
+  Transform viewTransform;
 
-  _transform.translate(_position.getX(), _position.getY(), _position.getZ());
+  viewTransform.rotateX(-_rotation.getX());
+  viewTransform.rotateY(-_rotation.getY());
+  viewTransform.rotateZ(-_rotation.getZ());
+
+  viewTransform.translate(-_position.getX(), -_position.getY(),
+                          -_position.getZ());
+
+  _transform = viewTransform;
 }
 
 }  // namespace RayTracer
