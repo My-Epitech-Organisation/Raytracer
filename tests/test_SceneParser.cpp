@@ -7,6 +7,7 @@
 
 #include <gtest/gtest.h>
 #include <libconfig.h++>
+#include "../src/core/Color.hpp"
 #include "../src/scene/parser/SceneParser.hpp"
 
 using namespace RayTracer;
@@ -39,7 +40,68 @@ TEST(SceneParserTest, ParseCamera) {
     EXPECT_FLOAT_EQ(result.getFieldOfView(), 72.0f);
 
   } catch (const std::exception& e) {
-    std::cerr << "⚠️ Error loading config: " << e.what() << "\n";
+    std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
     FAIL() << "Exception thrown during camera parsing: " << e.what();
+  }
+}
+
+TEST(SceneParserTest, ParseOneSphere) {
+  Config cfg;
+  const char* cfgText = R"(
+  spheres = (
+    { x = 60; y = 5; z = 40; r = 25; color = { r = 255; g = 64; b = 64; }; }
+  );
+  )";
+
+  try {
+    cfg.readString(cfgText);
+    const Setting& sphereSetting = cfg.lookup("spheres")[0];
+
+    SceneParser parser;
+    Sphere result = parser.parseSphere(sphereSetting);
+
+    EXPECT_TRUE(result.getCenter().isEqual(Vector3D(60, 5, 40)));
+    EXPECT_DOUBLE_EQ(result.getRadius(), 25.0);
+    EXPECT_TRUE(result.getColor().isEqual(Color(static_cast<uint8_t>(255),
+                                                static_cast<uint8_t>(64),
+                                                static_cast<uint8_t>(64))));
+
+  } catch (const std::exception& e) {
+    std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
+    FAIL() << "Exception thrown during sphere parsing: " << e.what();
+  }
+}
+
+TEST(SceneParserTest, ParseMultipleSpheres) {
+  Config cfg;
+  const char* cfgText = R"(
+  spheres = (
+    { x = 60; y = 5; z = 40; r = 25; color = { r = 255; g = 64; b = 64; }; },
+    { x = -40; y = 20; z = -10; r = 35; color = { r = 64; g = 255; b = 64; }; }
+  ))";
+
+  try {
+    cfg.readString(cfgText);
+    const Setting& spheresSetting = cfg.lookup("spheres");
+
+    SceneParser parser;
+    std::vector<Sphere> spheres = parser.parseSpheres(spheresSetting);
+
+    ASSERT_EQ(spheres.size(), 2);
+
+    EXPECT_TRUE(spheres[0].getCenter().isEqual(Vector3D(60, 5, 40)));
+    EXPECT_DOUBLE_EQ(spheres[0].getRadius(), 25.0);
+    EXPECT_TRUE(spheres[0].getColor().isEqual(
+        Color((uint8_t)255, (uint8_t)64, (uint8_t)64)));
+
+    EXPECT_TRUE(spheres[1].getCenter().isEqual(Vector3D(-40, 20, -10)));
+    EXPECT_DOUBLE_EQ(spheres[1].getRadius(), 35.0);
+    EXPECT_TRUE(spheres[1].getColor().isEqual(
+        Color((uint8_t)64, (uint8_t)255, (uint8_t)64)));
+
+    std::cout << "All spheres parsed successfully!\n";
+  } catch (const std::exception& e) {
+    std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
+    FAIL() << "Exception thrown during multiple sphere parsing: " << e.what();
   }
 }

@@ -53,4 +53,42 @@ Camera SceneParser::parseCamera(const Setting& cameraSetting) {
   }
 }
 
+Sphere SceneParser::parseSphere(const Setting& sphereSetting) {
+  try {
+    int x, y, z, r;
+    sphereSetting.lookupValue("x", x);
+    sphereSetting.lookupValue("y", y);
+    sphereSetting.lookupValue("z", z);
+    sphereSetting.lookupValue("r", r);
+
+    const Setting& colorSetting = sphereSetting["color"];
+    int red, green, blue;
+    colorSetting.lookupValue("r", red);
+    colorSetting.lookupValue("g", green);
+    colorSetting.lookupValue("b", blue);
+
+    Color color(static_cast<uint8_t>(red), static_cast<uint8_t>(green),
+                static_cast<uint8_t>(blue));
+    Sphere sphere(Vector3D(x, y, z), r, color);
+
+    return sphere;
+  } catch (const SettingNotFoundException& e) {
+    throw std::runtime_error(std::string("Setting not found: ") + e.what());
+  } catch (const SettingTypeException& e) {
+    throw std::runtime_error(std::string("Setting type error: ") + e.what());
+  } catch (const std::exception& e) {
+    throw std::runtime_error(std::string("Error parsing sphere: ") + e.what());
+  }
+}
+
+std::vector<Sphere> SceneParser::parseSpheres(const Setting& setting) {
+  std::vector<Sphere> spheres;
+
+  for (int i = 0; i < setting.getLength(); ++i) {
+    spheres.push_back(parseSphere(setting[i]));
+  }
+
+  return spheres;
+}
+
 };  // namespace RayTracer
