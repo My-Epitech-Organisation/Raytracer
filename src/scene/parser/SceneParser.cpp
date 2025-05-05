@@ -91,4 +91,57 @@ std::vector<Sphere> SceneParser::parseSpheres(const Setting& setting) {
   return spheres;
 }
 
+Plane SceneParser::parsePlane(const Setting& planeSetting) {
+  try {
+    char axis = 'x';
+    std::string axisStr;
+
+    if (planeSetting.lookupValue("axis", axisStr)) {
+      if (!axisStr.empty()) {
+        axis = axisStr[0];
+      }
+    }
+
+    float pos = 0.0f;
+    const Setting& posSetting = planeSetting.lookup("position");
+
+    if (posSetting.getType() == Setting::TypeFloat) {
+      pos = posSetting;
+    } else if (posSetting.getType() == Setting::TypeInt) {
+      pos = static_cast<float>(int(posSetting));
+    } else {
+      throw std::runtime_error(
+          "Position has invalid type (expected int or float)");
+    }
+
+    const Setting& colorSetting = planeSetting["color"];
+    int red, green, blue;
+    colorSetting.lookupValue("r", red);
+    colorSetting.lookupValue("g", green);
+    colorSetting.lookupValue("b", blue);
+
+    Color color(static_cast<uint8_t>(red), static_cast<uint8_t>(green),
+                static_cast<uint8_t>(blue));
+    Plane plane(axis, pos, color);
+
+    return plane;
+  } catch (const SettingNotFoundException& e) {
+    throw std::runtime_error(std::string("Setting not found: ") + e.what());
+  } catch (const SettingTypeException& e) {
+    throw std::runtime_error(std::string("Setting type error: ") + e.what());
+  } catch (const std::exception& e) {
+    throw std::runtime_error(std::string("Error parsing plane: ") + e.what());
+  }
+}
+
+std::vector<Plane> SceneParser::parsePlanes(const Setting& setting) {
+  std::vector<Plane> planes;
+
+  for (int i = 0; i < setting.getLength(); ++i) {
+    planes.push_back(parsePlane(setting[i]));
+  }
+
+  return planes;
+}
+
 };  // namespace RayTracer

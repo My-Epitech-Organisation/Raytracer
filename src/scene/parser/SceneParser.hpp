@@ -24,8 +24,8 @@ class SceneParser {
   Camera parseCamera(const libconfig::Setting& cameraSetting);
   Sphere parseSphere(const libconfig::Setting& sphereSetting);
   std::vector<Sphere> parseSpheres(const libconfig::Setting& setting);
-
- private:
+  Plane parsePlane(const libconfig::Setting& planeSetting);
+  std::vector<Plane> parsePlanes(const libconfig::Setting& setting);
 };
 
 }  // namespace RayTracer
