@@ -198,7 +198,7 @@ TEST(SceneParserTest, ParseLightsDebug) {
     SceneParser parser;
     parser.parseLights(lightsSetting);
 
-    std::cout << "Light config parsed!\n";
+    SUCCEED() << "Sphere parsed successfully!";
   } catch (const std::exception& e) {
     std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
     FAIL() << "Exception thrown during lights parsing: " << e.what();
