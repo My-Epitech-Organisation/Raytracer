@@ -175,3 +175,32 @@ TEST(SceneParserTest, ParseMultiplePlanes) {
     FAIL() << "Exception thrown during multiple plane parsing: " << e.what();
   }
 }
+
+TEST(SceneParserTest, ParseLightsDebug) {
+  Config cfg;
+  const char* cfgText = R"(
+    lights = {
+      ambient = 0.4;
+      diffuse = 0.6;
+      point = (
+        { x = 400; y = 100; z = 500; }
+      );
+      directional = (
+        { x = 0; y = 1; z = 0; }
+      );
+    };
+    )";
+
+  try {
+    cfg.readString(cfgText);
+    const Setting& lightsSetting = cfg.lookup("lights");
+
+    SceneParser parser;
+    parser.parseLights(lightsSetting);
+
+    std::cout << "Light config parsed!\n";
+  } catch (const std::exception& e) {
+    std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
+    FAIL() << "Exception thrown during lights parsing: " << e.what();
+  }
+}

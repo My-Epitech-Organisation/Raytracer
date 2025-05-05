@@ -144,4 +144,60 @@ std::vector<Plane> SceneParser::parsePlanes(const Setting& setting) {
   return planes;
 }
 
-};  // namespace RayTracer
+float getFlexibleFloat(const Setting& setting) {
+  switch (setting.getType()) {
+    case Setting::TypeInt:
+      return static_cast<float>(int(setting));
+    case Setting::TypeFloat:
+      return float(setting);
+    default:
+      throw std::runtime_error("Expected a numeric type (int or float)");
+  }
+}
+
+void SceneParser::parseLights(const Setting& lightsSetting) {
+  try {
+    float ambient = 0.0f, diffuse = 0.0f;
+    if (lightsSetting.exists("ambient"))
+      ambient = getFlexibleFloat(lightsSetting["ambient"]);
+    if (lightsSetting.exists("diffuse"))
+      diffuse = getFlexibleFloat(lightsSetting["diffuse"]);
+
+    const Setting& pointLights = lightsSetting["point"];
+    if (pointLights.getType() == Setting::TypeList) {
+      for (int i = 0; i < pointLights.getLength(); ++i) {
+        const Setting& light = pointLights[i];
+        if (light.getType() == Setting::TypeGroup) {
+          float x = getFlexibleFloat(light["x"]);
+          float y = getFlexibleFloat(light["y"]);
+          float z = getFlexibleFloat(light["z"]);
+        } else
+          fprintf(stderr, "Invalid point light at index %d\n", i);
+      }
+    } else
+      fprintf(stderr, "Point lights is not a list!\n");
+
+    const Setting& dirLights = lightsSetting["directional"];
+    if (dirLights.getType() == Setting::TypeList) {
+      for (int i = 0; i < dirLights.getLength(); ++i) {
+        const Setting& light = dirLights[i];
+        if (light.getType() == Setting::TypeGroup) {
+          float x = getFlexibleFloat(light["x"]);
+          float y = getFlexibleFloat(light["y"]);
+          float z = getFlexibleFloat(light["z"]);
+        } else
+          fprintf(stderr, "Invalid directional light at index %d\n", i);
+      }
+    } else
+      fprintf(stderr, "Directional lights is not a list!\n");
+
+  } catch (const SettingNotFoundException& e) {
+    fprintf(stderr, "Missing setting: %s\n", e.what());
+  } catch (const SettingTypeException& e) {
+    fprintf(stderr, "Type error: %s\n", e.what());
+  } catch (const std::exception& e) {
+    fprintf(stderr, "Parsing error: %s\n", e.what());
+  }
+}
+
+}  // namespace RayTracer
