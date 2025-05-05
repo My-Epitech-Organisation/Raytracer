@@ -172,10 +172,11 @@ void SceneParser::parseLights(const Setting& lightsSetting) {
           float y = getFlexibleFloat(light["y"]);
           float z = getFlexibleFloat(light["z"]);
         } else
-          fprintf(stderr, "Invalid point light at index %d\n", i);
+          throw std::runtime_error("Invalid point light at index " +
+                                   std::to_string(i));
       }
     } else
-      fprintf(stderr, "Point lights is not a list!\n");
+      throw std::runtime_error("Point lights is not a list!");
 
     const Setting& dirLights = lightsSetting["directional"];
     if (dirLights.getType() == Setting::TypeList) {
@@ -186,10 +187,11 @@ void SceneParser::parseLights(const Setting& lightsSetting) {
           float y = getFlexibleFloat(light["y"]);
           float z = getFlexibleFloat(light["z"]);
         } else
-          fprintf(stderr, "Invalid directional light at index %d\n", i);
+          throw std::runtime_error("Invalid directional light at index " +
+                                   std::to_string(i));
       }
     } else
-      fprintf(stderr, "Directional lights is not a list!\n");
+      throw std::runtime_error("Directional lights is not a list!");
 
   } catch (const SettingNotFoundException& e) {
     fprintf(stderr, "Missing setting: %s\n", e.what());
