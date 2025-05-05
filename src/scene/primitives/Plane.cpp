@@ -7,7 +7,7 @@
 
 #include "Plane.hpp"
 #include <cmath>
-#include <iostream>  // For std::cerr
+#include <iostream>
 #include <limits>
 
 namespace RayTracer {
@@ -29,14 +29,14 @@ std::optional<Intersection> Plane::intersect(const Ray& ray) const {
 
   double denominator = localRay.getDirection().dot(_normal);
 
-  if (std::abs(denominator) < 1e-6) {
+  if (std::abs(denominator) < EPSILON) {
     return std::nullopt;
   }
 
   Vector3D originToPoint = _point - localRay.getOrigin();
   double t = originToPoint.dot(_normal) / denominator;
 
-  if (t < 1e-6) {
+  if (t < EPSILON) {
     return std::nullopt;
   }
 

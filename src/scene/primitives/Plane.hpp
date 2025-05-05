@@ -18,6 +18,8 @@
 
 namespace RayTracer {
 
+constexpr double EPSILON = 1e-6;
+
 /**
  * @brief Represents an infinite plane primitive
  */
