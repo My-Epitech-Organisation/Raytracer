@@ -8,7 +8,6 @@
 #include "Plane.hpp"
 #include <cmath>
 #include <iostream>
-#include <limits>
 
 namespace RayTracer {
 
