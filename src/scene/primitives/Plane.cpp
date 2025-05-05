@@ -8,12 +8,26 @@
 #include "Plane.hpp"
 #include <cmath>
 #include <iostream>
+#include <stdexcept>
 
 namespace RayTracer {
 
-Plane::Plane(const Vector3D& point, const Vector3D& normal, const Color& color)
-    : _point(point), _normal(normal.normalized()), _color(color) {
-  _transform = Transform();
+Plane::Plane(const std::string& axis, double position, const Color& color)
+    : _position(position), _color(color), _transform() {
+  if (axis == "X" || axis == "x") {
+    _axis = 'X';
+    _normal = Vector3D(1, 0, 0);
+  } else if (axis == "Y" || axis == "y") {
+    _axis = 'Y';
+    _normal = Vector3D(0, 1, 0);
+  } else if (axis == "Z" || axis == "z") {
+    _axis = 'Z';
+    _normal = Vector3D(0, 0, 1);
+  } else {
+    throw std::invalid_argument(
+        "Invalid axis for Plane: must be 'X', 'Y', or 'Z'");
+  }
+
   try {
     _inverseTransform = _transform.inverse();
   } catch (const std::runtime_error& e) {
@@ -32,7 +46,16 @@ std::optional<Intersection> Plane::intersect(const Ray& ray) const {
     return std::nullopt;
   }
 
-  Vector3D originToPoint = _point - localRay.getOrigin();
+  Vector3D planePointOnAxis;
+  if (_axis == 'X') {
+    planePointOnAxis = Vector3D(_position, 0, 0);
+  } else if (_axis == 'Y') {
+    planePointOnAxis = Vector3D(0, _position, 0);
+  } else {  // _axis == 'Z'
+    planePointOnAxis = Vector3D(0, 0, _position);
+  }
+
+  Vector3D originToPoint = planePointOnAxis - localRay.getOrigin();
   double t = originToPoint.dot(_normal) / denominator;
 
   if (t < EPSILON) {
@@ -40,7 +63,6 @@ std::optional<Intersection> Plane::intersect(const Ray& ray) const {
   }
 
   Vector3D localIntersectionPoint = localRay.pointAt(t);
-
   Vector3D worldIntersectionPoint =
       _transform.applyToPoint(localIntersectionPoint);
   Vector3D worldNormal = _transform.applyToNormal(_normal).normalized();
@@ -90,7 +112,8 @@ Vector3D Plane::getNormalAt(const Vector3D& point) const {
 }
 
 std::shared_ptr<IPrimitive> Plane::clone() const {
-  auto clonedPlane = std::make_shared<Plane>(_point, _normal, _color);
+  std::string axisStr(1, _axis);
+  auto clonedPlane = std::make_shared<Plane>(axisStr, _position, _color);
   clonedPlane->setTransform(_transform);
   return clonedPlane;
 }

@@ -10,6 +10,7 @@
 
 #include <memory>
 #include <optional>
+#include <string>  // Added for std::string
 #include "../../../include/IPrimitive.hpp"
 #include "../../core/Color.hpp"
 #include "../../core/Ray.hpp"
@@ -26,12 +27,12 @@ constexpr double EPSILON = 1e-6;
 class Plane : public IPrimitive {
  public:
   /**
-   * @brief Constructor for a plane
-   * @param point A point on the plane
-   * @param normal The normal vector of the plane
+   * @brief Constructor for an axis-aligned plane
+   * @param axis The axis the plane is perpendicular to ('X', 'Y', or 'Z')
+   * @param position The position of the plane along the specified axis
    * @param color The color of the plane
    */
-  Plane(const Vector3D& point, const Vector3D& normal, const Color& color);
+  Plane(const std::string& axis, double position, const Color& color);
 
   /**
    * @brief Destructor
@@ -83,10 +84,11 @@ class Plane : public IPrimitive {
   std::shared_ptr<IPrimitive> clone() const override;
 
  private:
-  Vector3D _point;              ///< A point on the plane
-  Vector3D _normal;             ///< The normal vector of the plane
-  Color _color;                 ///< The color of the plane
-  Transform _transform;         ///< Transformation applied to the plane
+  Vector3D _normal;      ///< The normal vector of the plane (derived from axis)
+  double _position;      ///< Position along the axis
+  char _axis;            ///< Axis the plane is perpendicular to ('X', 'Y', 'Z')
+  Color _color;          ///< The color of the plane
+  Transform _transform;  ///< Transformation applied to the plane
   Transform _inverseTransform;  ///< Inverse transformation
 };
 
