@@ -6,6 +6,7 @@ set(TEST_SOURCES
     test_Sphere.cpp
     test_Transform.cpp
     test_Vector3D.cpp
+    test_Plane.cpp
 )
 
 # Test executable
