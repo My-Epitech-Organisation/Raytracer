@@ -72,19 +72,19 @@ bool intersectionsNearlyEqual_Plane(const Intersection& i1,
 // Test constructor
 TEST(PlaneTest, Constructor) {
   // Test X-axis plane
-  Plane planeX(Axis::X, 10.0, Color::RED);
+  Plane planeX('X', 10.0, Color::RED);
   EXPECT_VECTORS_NEARLY_EQUAL(planeX.getNormalAt(Vector3D(10, 5, 2)),
                               Vector3D(1, 0, 0), 1e-9);
   EXPECT_EQ(planeX.getColor(), Color::RED);
 
   // Test Y-axis plane
-  Plane planeY(Axis::Y, -5.0, Color::GREEN);
+  Plane planeY('Y', -5.0, Color::GREEN);
   EXPECT_VECTORS_NEARLY_EQUAL(planeY.getNormalAt(Vector3D(1, -5, 3)),
                               Vector3D(0, 1, 0), 1e-9);
   EXPECT_EQ(planeY.getColor(), Color::GREEN);
 
   // Test Z-axis plane
-  Plane planeZ(Axis::Z, 0.0, Color::BLUE);
+  Plane planeZ('Z', 0.0, Color::BLUE);
   EXPECT_VECTORS_NEARLY_EQUAL(planeZ.getNormalAt(Vector3D(2, 3, 0)),
                               Vector3D(0, 0, 1), 1e-9);
   EXPECT_EQ(planeZ.getColor(), Color::BLUE);
@@ -94,7 +94,7 @@ TEST(PlaneTest, Constructor) {
 
 // Test intersection with a ray hitting the plane
 TEST(PlaneTest, RayIntersectionHit) {
-  Plane plane(Axis::Z, 0.0, Color::BLUE);          // XY plane at z=0
+  Plane plane('Z', 0.0, Color::BLUE);              // XY plane at z=0
   Ray ray(Vector3D(0, 0, -5), Vector3D(0, 0, 1));  // Ray along +Z from below
 
   auto intersection = plane.intersect(ray);
@@ -110,7 +110,7 @@ TEST(PlaneTest, RayIntersectionHit) {
 
 // Test intersection with a ray hitting the plane from below
 TEST(PlaneTest, RayIntersectionHitFromBelow) {
-  Plane plane(Axis::Z, 0.0, Color::BLUE);          // XY plane at z=0
+  Plane plane('Z', 0.0, Color::BLUE);              // XY plane at z=0
   Ray ray(Vector3D(1, 2, 5), Vector3D(0, 0, -1));  // Ray along -Z from above
 
   auto intersection = plane.intersect(ray);
@@ -125,7 +125,7 @@ TEST(PlaneTest, RayIntersectionHitFromBelow) {
 
 // Test intersection with a ray parallel to the plane
 TEST(PlaneTest, RayIntersectionParallel) {
-  Plane plane(Axis::Z, 0.0, Color::BLUE);          // XY plane at z=0
+  Plane plane('Z', 0.0, Color::BLUE);              // XY plane at z=0
   Ray ray(Vector3D(0, 0, -5), Vector3D(1, 0, 0));  // Ray parallel to the plane
 
   auto intersection = plane.intersect(ray);
@@ -136,7 +136,7 @@ TEST(PlaneTest, RayIntersectionParallel) {
 // Test intersection with a ray starting on the plane (should not intersect due
 // to epsilon check)
 TEST(PlaneTest, RayIntersectionOnPlane) {
-  Plane plane(Axis::Y, 10.0, Color::GREEN);  // XZ plane at y=10
+  Plane plane('Y', 10.0, Color::GREEN);  // XZ plane at y=10
   Ray ray(Vector3D(1, 10, 2),
           Vector3D(1, 0, 0));  // Ray starts on the plane, moves parallel
 
@@ -156,7 +156,7 @@ TEST(PlaneTest, RayIntersectionOnPlane) {
 
 // Test intersection with a ray moving away from the plane
 TEST(PlaneTest, RayIntersectionMovingAway) {
-  Plane plane(Axis::X, -20.0, Color::RED);  // YZ plane at x=-20
+  Plane plane('X', -20.0, Color::RED);  // YZ plane at x=-20
   Ray ray(Vector3D(0, 0, 0),
           Vector3D(1, 0, 0));  // Ray starts at origin, moves away from plane
 
@@ -167,7 +167,7 @@ TEST(PlaneTest, RayIntersectionMovingAway) {
 
 // Test intersection with a transformed plane (rotated)
 TEST(PlaneTest, TransformedPlaneIntersectionRotated) {
-  Plane plane(Axis::Z, 0.0, Color::BLUE);  // XY plane at z=0 initially
+  Plane plane('Z', 0.0, Color::BLUE);  // XY plane at z=0 initially
   Transform transform;
   transform.rotateX(45.0);  // Rotate plane 45 degrees around X-axis
   plane.setTransform(transform);
@@ -200,7 +200,7 @@ TEST(PlaneTest, TransformedPlaneIntersectionRotated) {
 
 // Test intersection with a transformed plane (translated)
 TEST(PlaneTest, TransformedPlaneIntersectionTranslated) {
-  Plane plane(Axis::Z, 0.0, Color::BLUE);  // XY plane at z=0 initially
+  Plane plane('Z', 0.0, Color::BLUE);  // XY plane at z=0 initially
   Transform transform;
   transform.translate(0, 0, 10);  // Move plane up to z=10
   plane.setTransform(transform);
@@ -218,7 +218,7 @@ TEST(PlaneTest, TransformedPlaneIntersectionTranslated) {
 
 // Test getNormalAt method with transformation
 TEST(PlaneTest, GetNormalAtTransformed) {
-  Plane plane(Axis::Z, 0.0, Color::WHITE);  // XY plane at z=0
+  Plane plane('Z', 0.0, Color::WHITE);  // XY plane at z=0
   Transform transform;
   transform.rotateX(90.0);  // Rotate plane 90 degrees around X-axis -> becomes
                             // XZ plane at y=0
@@ -237,7 +237,7 @@ TEST(PlaneTest, GetNormalAtTransformed) {
 
 // Test setColor and getColor
 TEST(PlaneTest, SetGetColor) {
-  Plane plane(Axis::Y, 0, Color::RED);
+  Plane plane('Y', 0, Color::RED);
   EXPECT_EQ(plane.getColor(), Color::RED);
 
   plane.setColor(Color::GREEN);
@@ -246,7 +246,7 @@ TEST(PlaneTest, SetGetColor) {
 
 // Test setTransform and getTransform
 TEST(PlaneTest, SetGetTransform) {
-  Plane plane(Axis::Z, 10, Color::WHITE);
+  Plane plane('Z', 10, Color::WHITE);
   Transform t1;
   t1.translate(1, 2, 3);
   plane.setTransform(t1);
@@ -263,14 +263,13 @@ TEST(PlaneTest, SetGetTransform) {
 
 // Test clone method
 TEST(PlaneTest, Clone) {
-  Axis axis = Axis::X;
   double position = -5.5;
   Color color = Color::CYAN;
   Transform transform;
   transform.translate(1, 2, 3);
   transform.rotateZ(30);
 
-  Plane original(axis, position, color);
+  Plane original('X', position, color);
   original.setTransform(transform);
 
   std::shared_ptr<IPrimitive> cloneBase = original.clone();
