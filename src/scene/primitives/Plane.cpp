@@ -12,20 +12,15 @@
 
 namespace RayTracer {
 
-Plane::Plane(Axis axis, double position, const Color& color)
+Plane::Plane(char axis, double position, const Color& color)
     : _position(position), _color(color), _transform() {
-  if (axis == Axis::X) {
-    _axis = 'X';
+  _axis = getAxisFromChar(axis);
+  if (_axis == Axis::X) {
     _normal = Vector3D(1, 0, 0);
-  } else if (axis == Axis::Y) {
-    _axis = 'Y';
+  } else if (_axis == Axis::Y) {
     _normal = Vector3D(0, 1, 0);
-  } else if (axis == Axis::Z) {
-    _axis = 'Z';
-    _normal = Vector3D(0, 0, 1);
   } else {
-    throw std::invalid_argument(
-        "Invalid axis for Plane: must be 'X', 'Y', or 'Z'");
+    _normal = Vector3D(0, 0, 1);
   }
 
   try {
@@ -47,9 +42,9 @@ std::optional<Intersection> Plane::intersect(const Ray& ray) const {
   }
 
   Vector3D planePointOnAxis;
-  if (_axis == 'X') {
+  if (_axis == Axis::X) {
     planePointOnAxis = Vector3D(_position, 0, 0);
-  } else if (_axis == 'Y') {
+  } else if (_axis == Axis::Y) {
     planePointOnAxis = Vector3D(0, _position, 0);
   } else {
     planePointOnAxis = Vector3D(0, 0, _position);
@@ -112,17 +107,35 @@ Vector3D Plane::getNormalAt(const Vector3D& point) const {
 }
 
 std::shared_ptr<IPrimitive> Plane::clone() const {
-  Axis axisEnum;
-  if (_axis == 'X') {
-    axisEnum = Axis::X;
-  } else if (_axis == 'Y') {
-    axisEnum = Axis::Y;
-  } else {
-    axisEnum = Axis::Z;
-  }
+  char axisEnum = getCharFromAxis(_axis);
   auto clonedPlane = std::make_shared<Plane>(axisEnum, _position, _color);
   clonedPlane->setTransform(_transform);
   return clonedPlane;
+}
+
+Axis Plane::getAxisFromChar(char axis) const {
+  if (axis == 'X' || axis == 'x') {
+    return Axis::X;
+  } else if (axis == 'Y' || axis == 'y') {
+    return Axis::Y;
+  } else if (axis == 'Z' || axis == 'z') {
+    return Axis::Z;
+  } else {
+    throw std::invalid_argument("Invalid axis character");
+  }
+}
+
+char Plane::getCharFromAxis(Axis axis) const {
+  switch (axis) {
+    case Axis::X:
+      return 'X';
+    case Axis::Y:
+      return 'Y';
+    case Axis::Z:
+      return 'Z';
+    default:
+      throw std::invalid_argument("Invalid axis enum");
+  }
 }
 
 }  // namespace RayTracer

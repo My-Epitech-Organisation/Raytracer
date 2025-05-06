@@ -38,7 +38,7 @@ class Plane : public IPrimitive {
    * @param position The position of the plane along the specified axis
    * @param color The color of the plane
    */
-  explicit Plane(Axis axis, double position, const Color& color);
+  explicit Plane(char axis, double position, const Color& color);
 
   /**
    * @brief Destructor
@@ -90,9 +90,11 @@ class Plane : public IPrimitive {
   std::shared_ptr<IPrimitive> clone() const override;
 
  private:
+  Axis getAxisFromChar(char axis) const;
+  char getCharFromAxis(Axis axis) const;
   Vector3D _normal;      ///< The normal vector of the plane (derived from axis)
   double _position;      ///< Position along the axis
-  char _axis;            ///< Axis the plane is perpendicular to ('X', 'Y', 'Z')
+  Axis _axis;            ///< Axis the plane is perpendicular to (X, Y, Z)
   Color _color;          ///< The color of the plane
   Transform _transform;  ///< Transformation applied to the plane
   Transform _inverseTransform;  ///< Inverse transformation
