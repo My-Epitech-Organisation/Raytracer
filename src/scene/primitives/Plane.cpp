@@ -12,15 +12,15 @@
 
 namespace RayTracer {
 
-Plane::Plane(const std::string& axis, double position, const Color& color)
+Plane::Plane(Axis axis, double position, const Color& color)
     : _position(position), _color(color), _transform() {
-  if (axis == "X" || axis == "x") {
+  if (axis == Axis::X) {
     _axis = 'X';
     _normal = Vector3D(1, 0, 0);
-  } else if (axis == "Y" || axis == "y") {
+  } else if (axis == Axis::Y) {
     _axis = 'Y';
     _normal = Vector3D(0, 1, 0);
-  } else if (axis == "Z" || axis == "z") {
+  } else if (axis == Axis::Z) {
     _axis = 'Z';
     _normal = Vector3D(0, 0, 1);
   } else {
@@ -112,8 +112,15 @@ Vector3D Plane::getNormalAt(const Vector3D& point) const {
 }
 
 std::shared_ptr<IPrimitive> Plane::clone() const {
-  std::string axisStr(1, _axis);
-  auto clonedPlane = std::make_shared<Plane>(axisStr, _position, _color);
+  Axis axisEnum;
+  if (_axis == 'X') {
+    axisEnum = Axis::X;
+  } else if (_axis == 'Y') {
+    axisEnum = Axis::Y;
+  } else {
+    axisEnum = Axis::Z;
+  }
+  auto clonedPlane = std::make_shared<Plane>(axisEnum, _position, _color);
   clonedPlane->setTransform(_transform);
   return clonedPlane;
 }

@@ -10,7 +10,6 @@
 
 #include <memory>
 #include <optional>
-#include <string>  // Added for std::string
 #include "../../../include/IPrimitive.hpp"
 #include "../../core/Color.hpp"
 #include "../../core/Ray.hpp"
@@ -19,7 +18,14 @@
 
 namespace RayTracer {
 
+/**
+ * @brief Epsilon value for floating point comparisons
+ */
 constexpr double EPSILON = 1e-6;
+/**
+ * @brief Enum representing the axis of the plane
+ */
+enum class Axis { X, Y, Z };
 
 /**
  * @brief Represents an infinite plane primitive
@@ -32,7 +38,7 @@ class Plane : public IPrimitive {
    * @param position The position of the plane along the specified axis
    * @param color The color of the plane
    */
-  Plane(const std::string& axis, double position, const Color& color);
+  explicit Plane(Axis axis, double position, const Color& color);
 
   /**
    * @brief Destructor

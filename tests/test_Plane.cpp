@@ -46,6 +46,10 @@ using namespace RayTracer;
   }
 }
 
+// Macro for easier usage of the helper
+#define EXPECT_VECTORS_NEARLY_EQUAL(v1, v2, epsilon) \
+  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper, v1, v2, epsilon)
+
 // Keep the old helper for non-failing tests for brevity if needed
 bool vectorsNearlyEqualPlaneTest(const Vector3D& v1, const Vector3D& v2,
                                  double epsilon = 1e-5) {
@@ -55,73 +59,76 @@ bool vectorsNearlyEqualPlaneTest(const Vector3D& v1, const Vector3D& v2,
   return dx < epsilon && dy < epsilon && dz < epsilon;
 }
 
+// Helper function to compare Intersection with tolerance
+bool intersectionsNearlyEqual_Plane(const Intersection& i1,
+                                    const Intersection& i2,
+                                    double epsilon = 1e-5) {
+  return (std::abs(i1.distance - i2.distance) < epsilon &&
+          vectorsNearlyEqualPlaneTest(i1.point, i2.point, epsilon) &&
+          vectorsNearlyEqualPlaneTest(i1.normal, i2.normal, epsilon) &&
+          i1.color == i2.color);
+}
+
 // Test constructor
 TEST(PlaneTest, Constructor) {
-  Vector3D point(0, 0, 0);
-  Vector3D normal(0, 1, 0);      // Y-up plane
-  Color color(255.0, 0.0, 0.0);  // Red
-  Plane plane(point, normal, color);
+  // Test X-axis plane
+  Plane planeX(Axis::X, 10.0, Color::RED);
+  EXPECT_VECTORS_NEARLY_EQUAL(planeX.getNormalAt(Vector3D(10, 5, 2)),
+                              Vector3D(1, 0, 0), 1e-9);
+  EXPECT_EQ(planeX.getColor(), Color::RED);
 
-  // Use a dummy point for getNormalAt as it's ignored for Plane
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper,
-                      plane.getNormalAt({1, 1, 1}), Vector3D(0, 1, 0), 1e-5);
-  EXPECT_EQ(plane.getColor(), color);
-  // Check if the internal normal is normalized
-  EXPECT_NEAR(plane.getNormalAt({}).getMagnitude(), 1.0, 1e-9);
+  // Test Y-axis plane
+  Plane planeY(Axis::Y, -5.0, Color::GREEN);
+  EXPECT_VECTORS_NEARLY_EQUAL(planeY.getNormalAt(Vector3D(1, -5, 3)),
+                              Vector3D(0, 1, 0), 1e-9);
+  EXPECT_EQ(planeY.getColor(), Color::GREEN);
+
+  // Test Z-axis plane
+  Plane planeZ(Axis::Z, 0.0, Color::BLUE);
+  EXPECT_VECTORS_NEARLY_EQUAL(planeZ.getNormalAt(Vector3D(2, 3, 0)),
+                              Vector3D(0, 0, 1), 1e-9);
+  EXPECT_EQ(planeZ.getColor(), Color::BLUE);
+
+  // Invalid axis check removed as Axis is a scoped enum
 }
 
 // Test intersection with a ray hitting the plane
 TEST(PlaneTest, RayIntersectionHit) {
-  Vector3D point(0, 0, 0);
-  Vector3D normal(0, 1, 0);      // XY plane at y=0
-  Color color(0.0, 255.0, 0.0);  // Green
-  Plane plane(point, normal, color);
+  Plane plane(Axis::Z, 0.0, Color::BLUE);  // XY plane at z=0
+  Ray ray(Vector3D(0, 0, -5), Vector3D(0, 0, 1)); // Ray along +Z from below
 
-  Ray ray(Vector3D(0, 10, 0),
-          Vector3D(0, -1, 0));  // Ray pointing straight down along -Y
-  std::optional<Intersection> intersection = plane.intersect(ray);
+  auto intersection = plane.intersect(ray);
 
   ASSERT_TRUE(intersection.has_value());
-  EXPECT_NEAR(intersection->distance, 10.0, 1e-5);
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper, intersection->point,
-                      Vector3D(0, 0, 0), 1e-5);
-  // Normal should point opposite to the ray direction for a hit from above
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper, intersection->normal,
-                      Vector3D(0, 1, 0), 1e-5);
-  EXPECT_EQ(intersection->color, color);
+  EXPECT_DOUBLE_EQ(intersection->distance, 5.0);
+  EXPECT_VECTORS_NEARLY_EQUAL(intersection->point, Vector3D(0, 0, 0), 1e-9);
+  // Normal should point towards the ray origin
+  EXPECT_VECTORS_NEARLY_EQUAL(intersection->normal, Vector3D(0, 0, -1), 1e-9);
+  EXPECT_EQ(intersection->color, Color::BLUE);
   EXPECT_EQ(intersection->primitive, &plane);
 }
 
 // Test intersection with a ray hitting the plane from below
 TEST(PlaneTest, RayIntersectionHitFromBelow) {
-  Vector3D point(0, 0, 0);
-  Vector3D normal(0, 1, 0);      // XY plane at y=0, normal points up
-  Color color(0.0, 0.0, 255.0);  // Blue
-  Plane plane(point, normal, color);
+  Plane plane(Axis::Z, 0.0, Color::BLUE); // XY plane at z=0
+  Ray ray(Vector3D(1, 2, 5), Vector3D(0, 0, -1)); // Ray along -Z from above
 
-  Ray ray(Vector3D(0, -10, 0),
-          Vector3D(0, 1, 0));  // Ray pointing straight up along +Y
-  std::optional<Intersection> intersection = plane.intersect(ray);
+  auto intersection = plane.intersect(ray);
 
   ASSERT_TRUE(intersection.has_value());
-  EXPECT_NEAR(intersection->distance, 10.0, 1e-5);
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper, intersection->point,
-                      Vector3D(0, 0, 0), 1e-5);
-  // Normal should point opposite to the ray direction
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper, intersection->normal,
-                      Vector3D(0, -1, 0), 1e-5);
-  EXPECT_EQ(intersection->color, color);
+  EXPECT_DOUBLE_EQ(intersection->distance, 5.0);
+  EXPECT_VECTORS_NEARLY_EQUAL(intersection->point, Vector3D(1, 2, 0), 1e-9);
+  // Normal should point towards the ray origin
+  EXPECT_VECTORS_NEARLY_EQUAL(intersection->normal, Vector3D(0, 0, 1), 1e-9);
+  EXPECT_EQ(intersection->color, Color::BLUE);
 }
 
 // Test intersection with a ray parallel to the plane
 TEST(PlaneTest, RayIntersectionParallel) {
-  Vector3D point(0, 0, 0);
-  Vector3D normal(0, 1, 0);        // XY plane at y=0
-  Color color(255.0, 255.0, 0.0);  // Yellow
-  Plane plane(point, normal, color);
+  Plane plane(Axis::Z, 0.0, Color::BLUE); // XY plane at z=0
+  Ray ray(Vector3D(0, 0, -5), Vector3D(1, 0, 0)); // Ray parallel to the plane
 
-  Ray ray(Vector3D(0, 10, 0), Vector3D(1, 0, 0));  // Ray parallel to the plane
-  std::optional<Intersection> intersection = plane.intersect(ray);
+  auto intersection = plane.intersect(ray);
 
   EXPECT_FALSE(intersection.has_value());
 }
@@ -129,200 +136,162 @@ TEST(PlaneTest, RayIntersectionParallel) {
 // Test intersection with a ray starting on the plane (should not intersect due
 // to epsilon check)
 TEST(PlaneTest, RayIntersectionOnPlane) {
-  Vector3D point(0, 0, 0);
-  Vector3D normal(0, 1, 0);        // XY plane at y=0
-  Color color(255.0, 0.0, 255.0);  // Magenta
-  Plane plane(point, normal, color);
+  Plane plane(Axis::Y, 10.0, Color::GREEN); // XZ plane at y=10
+  Ray ray(Vector3D(1, 10, 2), Vector3D(1, 0, 0)); // Ray starts on the plane, moves parallel
 
-  Ray ray(Vector3D(1, 0, 1),
-          Vector3D(1, 0, 0));  // Ray starting on the plane, moving parallel
-  std::optional<Intersection> intersection = plane.intersect(ray);
-  EXPECT_FALSE(
-      intersection.has_value());  // t is near zero or denominator is zero
+  auto intersection = plane.intersect(ray);
 
-  Ray ray2(Vector3D(1, 0, 1),
-           Vector3D(0, 1,
-                    0));  // Ray starting on the plane, moving away along normal
-  intersection = plane.intersect(ray2);
-  EXPECT_FALSE(intersection.has_value());  // t is near zero
+  // Intersection at t=0 is usually ignored (or handled carefully)
+  // Depending on EPSILON, it might be detected or not.
+  // For simplicity, let's assume t near zero means no hit for practical rendering.
+   EXPECT_FALSE(intersection.has_value());
+
+  // Test ray starting on plane but moving towards it (should not hit)
+  Ray ray2(Vector3D(1, 10, 2), Vector3D(0, -1, 0));
+  auto intersection2 = plane.intersect(ray2);
+  EXPECT_FALSE(intersection2.has_value());
 }
 
 // Test intersection with a ray moving away from the plane
 TEST(PlaneTest, RayIntersectionMovingAway) {
-  Vector3D point(0, 0, 0);
-  Vector3D normal(0, 1, 0);        // XY plane at y=0
-  Color color(0.0, 255.0, 255.0);  // Cyan
-  Plane plane(point, normal, color);
+  Plane plane(Axis::X, -20.0, Color::RED); // YZ plane at x=-20
+  Ray ray(Vector3D(0, 0, 0), Vector3D(1, 0, 0)); // Ray starts at origin, moves away from plane
 
-  Ray ray(Vector3D(0, 10, 0),
-          Vector3D(0, 1, 0));  // Ray starting above, moving further up
-  std::optional<Intersection> intersection = plane.intersect(ray);
+  auto intersection = plane.intersect(ray);
 
-  EXPECT_FALSE(intersection.has_value());  // t would be negative
+  EXPECT_FALSE(intersection.has_value());
 }
 
 // Test intersection with a transformed plane (rotated)
 TEST(PlaneTest, TransformedPlaneIntersectionRotated) {
-  Vector3D point(0, 0, 0);
-  Vector3D normal(0, 1, 0);          // XY plane at y=0
-  Color color(128.0, 128.0, 128.0);  // Gray
-  Plane plane(point, normal, color);
+    Plane plane(Axis::Z, 0.0, Color::BLUE); // XY plane at z=0 initially
+    Transform transform;
+    transform.rotateX(45.0); // Rotate plane 45 degrees around X-axis
+    plane.setTransform(transform);
 
-  Transform transform;
-  transform.rotateZ(45.0);  // Use degrees instead of M_PI / 4.0
-  plane.setTransform(transform);
+    // Ray along -Y axis towards the rotated plane
+    Ray ray(Vector3D(0, 5, 0), Vector3D(0, -1, 0));
 
-  // Ray pointing straight down along -Y
-  Ray ray(Vector3D(0, 10, 0), Vector3D(0, -1, 0));
-  std::optional<Intersection> intersection = plane.intersect(ray);
+    auto intersection = plane.intersect(ray);
 
-  ASSERT_TRUE(intersection.has_value());
+    ASSERT_TRUE(intersection.has_value());
 
-  // Use helper for point comparison too, just in case
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper, intersection->point,
-                      Vector3D(0, 0, 0), 1e-5);
-  EXPECT_NEAR(intersection->distance, 10.0, 1e-5);
+    // Expected intersection point:
+    // The plane equation after rotation is roughly y - z = 0.
+    // Ray: P(t) = (0, 5, 0) + t*(0, -1, 0) = (0, 5-t, 0)
+    // Intersection: (5-t) - 0 = 0 => t = 5
+    // Point: (0, 5-5, 0) = (0, 0, 0)
+    EXPECT_NEAR(intersection->distance, 5.0, 1e-5);
+    EXPECT_VECTORS_NEARLY_EQUAL(intersection->point, Vector3D(0, 0, 0), 1e-5);
 
-  // Expected normal after rotation (rotated (0,1,0) by 45 deg around Z)
-  Vector3D expectedNormal =
-      Vector3D(-sin(M_PI / 4.0), cos(M_PI / 4.0), 0).normalized();
-
-  // Check normal from getNormalAt with detailed output
-  Vector3D rawWorldNormal = plane.getNormalAt({0, 0, 0});
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper, rawWorldNormal,
-                      expectedNormal, 1e-5);
-
-  // Check normal from intersect method with detailed output
-  // Based on previous analysis, intersection->normal should equal
-  // expectedNormal here
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper, intersection->normal,
-                      expectedNormal, 1e-5);
+    // Expected normal:
+    // Original normal (0, 0, 1). Rotated by 45 deg around X gives (0, -sin(45), cos(45)).
+    // Ray direction is (0, -1, 0).
+    // Dot product is sin(45) > 0, so the normal is flipped by intersect().
+    // Final normal should be -(0, -sin(45), cos(45)) = (0, sin45, -cos45).
+    double cos45 = std::cos(M_PI / 4.0);
+    double sin45 = std::sin(M_PI / 4.0);
+    EXPECT_VECTORS_NEARLY_EQUAL(intersection->normal, Vector3D(0, sin45, -cos45), 1e-5);
 }
 
 // Test intersection with a transformed plane (translated)
 TEST(PlaneTest, TransformedPlaneIntersectionTranslated) {
-  Vector3D point(0, 0, 0);
-  Vector3D normal(0, 1, 0);        // XY plane at y=0
-  Color color(255.0, 128.0, 0.0);  // Orange
-  Plane plane(point, normal, color);
-
+  Plane plane(Axis::Z, 0.0, Color::BLUE); // XY plane at z=0 initially
   Transform transform;
-  transform.translate(0, 5, 0);  // Move plane up by 5 units (now at y=5)
+  transform.translate(0, 0, 10); // Move plane up to z=10
   plane.setTransform(transform);
 
-  Ray ray(Vector3D(0, 10, 0),
-          Vector3D(0, -1, 0));  // Ray pointing straight down
-  std::optional<Intersection> intersection = plane.intersect(ray);
+  Ray ray(Vector3D(0, 0, 0), Vector3D(0, 0, 1)); // Ray along +Z from origin
+
+  auto intersection = plane.intersect(ray);
 
   ASSERT_TRUE(intersection.has_value());
-  EXPECT_NEAR(intersection->distance, 5.0, 1e-5);
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper, intersection->point,
-                      Vector3D(0, 5, 0), 1e-5);
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper, intersection->normal,
-                      Vector3D(0, 1, 0), 1e-5);
+  EXPECT_DOUBLE_EQ(intersection->distance, 10.0);
+  EXPECT_VECTORS_NEARLY_EQUAL(intersection->point, Vector3D(0, 0, 10), 1e-9);
+  // Normal should point towards ray origin (-Z direction)
+  EXPECT_VECTORS_NEARLY_EQUAL(intersection->normal, Vector3D(0, 0, -1), 1e-9);
 }
 
 // Test getNormalAt method with transformation
 TEST(PlaneTest, GetNormalAtTransformed) {
-  Vector3D point(0, 0, 0);
-  Vector3D normal(0, 0, 1);  // XY plane at z=0
-  Plane plane(point, normal, Color::WHITE);
+    Plane plane(Axis::Z, 0.0, Color::WHITE); // XY plane at z=0
+    Transform transform;
+    transform.rotateX(90.0); // Rotate plane 90 degrees around X-axis -> becomes XZ plane at y=0
+    plane.setTransform(transform);
 
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper,
-                      plane.getNormalAt(Vector3D(10, 20, 0)), Vector3D(0, 0, 1),
-                      1e-5);
+    // Original normal (0,0,1). Transformed normal should be (0,-1,0).
+    Vector3D expectedNormal(0, -1, 0);
 
-  Transform transform;
-  transform.rotateY(90.0);  // Use degrees instead of M_PI / 2.0
-  plane.setTransform(transform);
-
-  // The normal (0,0,1) rotated 90 deg around Y becomes (1,0,0)
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper,
-                      plane.getNormalAt(Vector3D(0, 5, 5)), Vector3D(1, 0, 0),
-                      1e-5);
+    // Test at a point that would be on the transformed plane (e.g., origin)
+    EXPECT_VECTORS_NEARLY_EQUAL(plane.getNormalAt(Vector3D(0, 0, 0)), expectedNormal, 1e-5);
+    // Test at another point
+    EXPECT_VECTORS_NEARLY_EQUAL(plane.getNormalAt(Vector3D(10, 0, 5)), expectedNormal, 1e-5);
 }
 
 // Test setColor and getColor
 TEST(PlaneTest, SetGetColor) {
-  Plane plane(Vector3D(0, 0, 0), Vector3D(0, 1, 0), Color::RED);
+  Plane plane(Axis::Y, 0, Color::RED);
   EXPECT_EQ(plane.getColor(), Color::RED);
-  plane.setColor(Color::BLUE);
-  EXPECT_EQ(plane.getColor(), Color::BLUE);
+
+  plane.setColor(Color::GREEN);
+  EXPECT_EQ(plane.getColor(), Color::GREEN);
 }
 
 // Test setTransform and getTransform
 TEST(PlaneTest, SetGetTransform) {
-  Plane plane(Vector3D(0, 0, 0), Vector3D(0, 1, 0), Color::WHITE);
-  Transform t;
-  t.translate(1, 2, 3);
-  t.rotateX(M_PI / 6.0);  // 30 degrees
-  plane.setTransform(t);
+  Plane plane(Axis::Z, 10, Color::WHITE);
+  Transform t1;
+  t1.translate(1, 2, 3);
+  plane.setTransform(t1);
+  // Compare matrices as Transform might not have operator==
+  EXPECT_EQ(plane.getTransform().getMatrix(), t1.getMatrix());
 
-  Transform retrieved = plane.getTransform();
-  Matrix mOriginal = t.getMatrix();
-  Matrix mRetrieved = retrieved.getMatrix();
-
-  // Check if the matrices are the same
-  for (int i = 0; i < 4; ++i) {
-    for (int j = 0; j < 4; ++j) {
-      EXPECT_DOUBLE_EQ(mRetrieved.at(i, j), mOriginal.at(i, j));
-    }
-  }
+  Transform t2;
+  t2.rotateY(45);
+  plane.setTransform(t2);
+  EXPECT_EQ(plane.getTransform().getMatrix(), t2.getMatrix());
+  EXPECT_NE(plane.getTransform().getMatrix(), t1.getMatrix()); // Ensure it actually changed
 }
 
 // Test clone method
 TEST(PlaneTest, Clone) {
-  Plane original(Vector3D(1, 2, 3), Vector3D(1, 0, 0), Color::GREEN);
-  Transform t;
-  t.scale(2.0, 0.5, 1.0);
-  t.translate(5, 0, -2);
-  original.setTransform(t);
+  Axis axis = Axis::X;
+  double position = -5.5;
+  Color color = Color::CYAN;
+  Transform transform;
+  transform.translate(1, 2, 3);
+  transform.rotateZ(30);
 
-  std::shared_ptr<IPrimitive> clonedBase = original.clone();
-  ASSERT_NE(clonedBase, nullptr);
+  Plane original(axis, position, color);
+  original.setTransform(transform);
 
-  // Try casting to Plane
-  std::shared_ptr<Plane> clonedPlane =
-      std::dynamic_pointer_cast<Plane>(clonedBase);
-  ASSERT_NE(clonedPlane, nullptr);
+  std::shared_ptr<IPrimitive> cloneBase = original.clone();
+  ASSERT_NE(cloneBase, nullptr);
 
-  // Ensure it's a different object in memory
-  EXPECT_NE(clonedPlane.get(), &original);
+  // Check if it's actually a Plane
+  std::shared_ptr<Plane> clone = std::dynamic_pointer_cast<Plane>(cloneBase);
+  ASSERT_NE(clone, nullptr);
 
-  // Check properties are the same
-  EXPECT_EQ(clonedPlane->getColor(), original.getColor());
-  // Need to compare internal point and normal? No, clone copies constructor
-  // args. Check transformed normal
-  EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper,
-                      clonedPlane->getNormalAt({}), original.getNormalAt({}),
-                      1e-5);
+  // Check if properties are copied
+  EXPECT_EQ(clone->getColor(), color);
+  // Compare matrices for transform equality
+  EXPECT_EQ(clone->getTransform().getMatrix(), transform.getMatrix());
 
-  // Check transform (compare matrices)
-  Matrix mOriginal = original.getTransform().getMatrix();
-  Matrix mCloned = clonedPlane->getTransform().getMatrix();
-  for (int i = 0; i < 4; ++i) {
-    for (int j = 0; j < 4; ++j) {
-      EXPECT_DOUBLE_EQ(mCloned.at(i, j), mOriginal.at(i, j));
-    }
+  // Check intersection behavior (indirectly checks axis/position)
+  Ray ray(Vector3D(0, 2, 3), Vector3D(-1, 0, 0)); // Ray towards the plane
+  auto originalIntersection = original.intersect(ray);
+  auto cloneIntersection = clone->intersect(ray);
+
+  ASSERT_EQ(originalIntersection.has_value(), cloneIntersection.has_value());
+  if (originalIntersection.has_value()) {
+    EXPECT_TRUE(intersectionsNearlyEqual_Plane(*originalIntersection, *cloneIntersection, 1e-5));
   }
 
-  // Verify intersection behavior is the same
-  Ray ray(Vector3D(10, 10, 10), Vector3D(-1, -1, -1));
-  std::optional<Intersection> intersectionOriginal = original.intersect(ray);
-  std::optional<Intersection> intersectionCloned = clonedPlane->intersect(ray);
+  // Ensure it's a deep copy (modifying clone doesn't affect original)
+  clone->setColor(Color::MAGENTA);
+  EXPECT_NE(original.getColor(), clone->getColor());
 
-  if (intersectionOriginal.has_value()) {
-    ASSERT_TRUE(intersectionCloned.has_value());
-    EXPECT_NEAR(intersectionCloned->distance, intersectionOriginal->distance,
-                1e-5);
-    EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper,
-                        intersectionCloned->point, intersectionOriginal->point,
-                        1e-5);
-    EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualHelper,
-                        intersectionCloned->normal,
-                        intersectionOriginal->normal, 1e-5);
-    EXPECT_EQ(intersectionCloned->color, intersectionOriginal->color);
-  } else {
-    EXPECT_FALSE(intersectionCloned.has_value());
-  }
+  Transform t2;
+  clone->setTransform(t2); // Reset transform
+  EXPECT_NE(original.getTransform().getMatrix(), clone->getTransform().getMatrix());
 }
