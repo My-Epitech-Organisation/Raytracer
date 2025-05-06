@@ -94,8 +94,8 @@ TEST(PlaneTest, Constructor) {
 
 // Test intersection with a ray hitting the plane
 TEST(PlaneTest, RayIntersectionHit) {
-  Plane plane(Axis::Z, 0.0, Color::BLUE);  // XY plane at z=0
-  Ray ray(Vector3D(0, 0, -5), Vector3D(0, 0, 1)); // Ray along +Z from below
+  Plane plane(Axis::Z, 0.0, Color::BLUE);          // XY plane at z=0
+  Ray ray(Vector3D(0, 0, -5), Vector3D(0, 0, 1));  // Ray along +Z from below
 
   auto intersection = plane.intersect(ray);
 
@@ -110,8 +110,8 @@ TEST(PlaneTest, RayIntersectionHit) {
 
 // Test intersection with a ray hitting the plane from below
 TEST(PlaneTest, RayIntersectionHitFromBelow) {
-  Plane plane(Axis::Z, 0.0, Color::BLUE); // XY plane at z=0
-  Ray ray(Vector3D(1, 2, 5), Vector3D(0, 0, -1)); // Ray along -Z from above
+  Plane plane(Axis::Z, 0.0, Color::BLUE);          // XY plane at z=0
+  Ray ray(Vector3D(1, 2, 5), Vector3D(0, 0, -1));  // Ray along -Z from above
 
   auto intersection = plane.intersect(ray);
 
@@ -125,8 +125,8 @@ TEST(PlaneTest, RayIntersectionHitFromBelow) {
 
 // Test intersection with a ray parallel to the plane
 TEST(PlaneTest, RayIntersectionParallel) {
-  Plane plane(Axis::Z, 0.0, Color::BLUE); // XY plane at z=0
-  Ray ray(Vector3D(0, 0, -5), Vector3D(1, 0, 0)); // Ray parallel to the plane
+  Plane plane(Axis::Z, 0.0, Color::BLUE);          // XY plane at z=0
+  Ray ray(Vector3D(0, 0, -5), Vector3D(1, 0, 0));  // Ray parallel to the plane
 
   auto intersection = plane.intersect(ray);
 
@@ -136,15 +136,17 @@ TEST(PlaneTest, RayIntersectionParallel) {
 // Test intersection with a ray starting on the plane (should not intersect due
 // to epsilon check)
 TEST(PlaneTest, RayIntersectionOnPlane) {
-  Plane plane(Axis::Y, 10.0, Color::GREEN); // XZ plane at y=10
-  Ray ray(Vector3D(1, 10, 2), Vector3D(1, 0, 0)); // Ray starts on the plane, moves parallel
+  Plane plane(Axis::Y, 10.0, Color::GREEN);  // XZ plane at y=10
+  Ray ray(Vector3D(1, 10, 2),
+          Vector3D(1, 0, 0));  // Ray starts on the plane, moves parallel
 
   auto intersection = plane.intersect(ray);
 
   // Intersection at t=0 is usually ignored (or handled carefully)
   // Depending on EPSILON, it might be detected or not.
-  // For simplicity, let's assume t near zero means no hit for practical rendering.
-   EXPECT_FALSE(intersection.has_value());
+  // For simplicity, let's assume t near zero means no hit for practical
+  // rendering.
+  EXPECT_FALSE(intersection.has_value());
 
   // Test ray starting on plane but moving towards it (should not hit)
   Ray ray2(Vector3D(1, 10, 2), Vector3D(0, -1, 0));
@@ -154,8 +156,9 @@ TEST(PlaneTest, RayIntersectionOnPlane) {
 
 // Test intersection with a ray moving away from the plane
 TEST(PlaneTest, RayIntersectionMovingAway) {
-  Plane plane(Axis::X, -20.0, Color::RED); // YZ plane at x=-20
-  Ray ray(Vector3D(0, 0, 0), Vector3D(1, 0, 0)); // Ray starts at origin, moves away from plane
+  Plane plane(Axis::X, -20.0, Color::RED);  // YZ plane at x=-20
+  Ray ray(Vector3D(0, 0, 0),
+          Vector3D(1, 0, 0));  // Ray starts at origin, moves away from plane
 
   auto intersection = plane.intersect(ray);
 
@@ -164,44 +167,45 @@ TEST(PlaneTest, RayIntersectionMovingAway) {
 
 // Test intersection with a transformed plane (rotated)
 TEST(PlaneTest, TransformedPlaneIntersectionRotated) {
-    Plane plane(Axis::Z, 0.0, Color::BLUE); // XY plane at z=0 initially
-    Transform transform;
-    transform.rotateX(45.0); // Rotate plane 45 degrees around X-axis
-    plane.setTransform(transform);
+  Plane plane(Axis::Z, 0.0, Color::BLUE);  // XY plane at z=0 initially
+  Transform transform;
+  transform.rotateX(45.0);  // Rotate plane 45 degrees around X-axis
+  plane.setTransform(transform);
 
-    // Ray along -Y axis towards the rotated plane
-    Ray ray(Vector3D(0, 5, 0), Vector3D(0, -1, 0));
+  // Ray along -Y axis towards the rotated plane
+  Ray ray(Vector3D(0, 5, 0), Vector3D(0, -1, 0));
 
-    auto intersection = plane.intersect(ray);
+  auto intersection = plane.intersect(ray);
 
-    ASSERT_TRUE(intersection.has_value());
+  ASSERT_TRUE(intersection.has_value());
 
-    // Expected intersection point:
-    // The plane equation after rotation is roughly y - z = 0.
-    // Ray: P(t) = (0, 5, 0) + t*(0, -1, 0) = (0, 5-t, 0)
-    // Intersection: (5-t) - 0 = 0 => t = 5
-    // Point: (0, 5-5, 0) = (0, 0, 0)
-    EXPECT_NEAR(intersection->distance, 5.0, 1e-5);
-    EXPECT_VECTORS_NEARLY_EQUAL(intersection->point, Vector3D(0, 0, 0), 1e-5);
+  // Expected intersection point:
+  // The plane equation after rotation is roughly y - z = 0.
+  // Ray: P(t) = (0, 5, 0) + t*(0, -1, 0) = (0, 5-t, 0)
+  // Intersection: (5-t) - 0 = 0 => t = 5
+  // Point: (0, 5-5, 0) = (0, 0, 0)
+  EXPECT_NEAR(intersection->distance, 5.0, 1e-5);
+  EXPECT_VECTORS_NEARLY_EQUAL(intersection->point, Vector3D(0, 0, 0), 1e-5);
 
-    // Expected normal:
-    // Original normal (0, 0, 1). Rotated by 45 deg around X gives (0, -sin(45), cos(45)).
-    // Ray direction is (0, -1, 0).
-    // Dot product is sin(45) > 0, so the normal is flipped by intersect().
-    // Final normal should be -(0, -sin(45), cos(45)) = (0, sin45, -cos45).
-    double cos45 = std::cos(M_PI / 4.0);
-    double sin45 = std::sin(M_PI / 4.0);
-    EXPECT_VECTORS_NEARLY_EQUAL(intersection->normal, Vector3D(0, sin45, -cos45), 1e-5);
+  // Expected normal:
+  // Original normal (0, 0, 1). Rotated by 45 deg around X gives (0, -sin(45),
+  // cos(45)). Ray direction is (0, -1, 0). Dot product is sin(45) > 0, so the
+  // normal is flipped by intersect(). Final normal should be -(0, -sin(45),
+  // cos(45)) = (0, sin45, -cos45).
+  double cos45 = std::cos(M_PI / 4.0);
+  double sin45 = std::sin(M_PI / 4.0);
+  EXPECT_VECTORS_NEARLY_EQUAL(intersection->normal, Vector3D(0, sin45, -cos45),
+                              1e-5);
 }
 
 // Test intersection with a transformed plane (translated)
 TEST(PlaneTest, TransformedPlaneIntersectionTranslated) {
-  Plane plane(Axis::Z, 0.0, Color::BLUE); // XY plane at z=0 initially
+  Plane plane(Axis::Z, 0.0, Color::BLUE);  // XY plane at z=0 initially
   Transform transform;
-  transform.translate(0, 0, 10); // Move plane up to z=10
+  transform.translate(0, 0, 10);  // Move plane up to z=10
   plane.setTransform(transform);
 
-  Ray ray(Vector3D(0, 0, 0), Vector3D(0, 0, 1)); // Ray along +Z from origin
+  Ray ray(Vector3D(0, 0, 0), Vector3D(0, 0, 1));  // Ray along +Z from origin
 
   auto intersection = plane.intersect(ray);
 
@@ -214,18 +218,21 @@ TEST(PlaneTest, TransformedPlaneIntersectionTranslated) {
 
 // Test getNormalAt method with transformation
 TEST(PlaneTest, GetNormalAtTransformed) {
-    Plane plane(Axis::Z, 0.0, Color::WHITE); // XY plane at z=0
-    Transform transform;
-    transform.rotateX(90.0); // Rotate plane 90 degrees around X-axis -> becomes XZ plane at y=0
-    plane.setTransform(transform);
+  Plane plane(Axis::Z, 0.0, Color::WHITE);  // XY plane at z=0
+  Transform transform;
+  transform.rotateX(90.0);  // Rotate plane 90 degrees around X-axis -> becomes
+                            // XZ plane at y=0
+  plane.setTransform(transform);
 
-    // Original normal (0,0,1). Transformed normal should be (0,-1,0).
-    Vector3D expectedNormal(0, -1, 0);
+  // Original normal (0,0,1). Transformed normal should be (0,-1,0).
+  Vector3D expectedNormal(0, -1, 0);
 
-    // Test at a point that would be on the transformed plane (e.g., origin)
-    EXPECT_VECTORS_NEARLY_EQUAL(plane.getNormalAt(Vector3D(0, 0, 0)), expectedNormal, 1e-5);
-    // Test at another point
-    EXPECT_VECTORS_NEARLY_EQUAL(plane.getNormalAt(Vector3D(10, 0, 5)), expectedNormal, 1e-5);
+  // Test at a point that would be on the transformed plane (e.g., origin)
+  EXPECT_VECTORS_NEARLY_EQUAL(plane.getNormalAt(Vector3D(0, 0, 0)),
+                              expectedNormal, 1e-5);
+  // Test at another point
+  EXPECT_VECTORS_NEARLY_EQUAL(plane.getNormalAt(Vector3D(10, 0, 5)),
+                              expectedNormal, 1e-5);
 }
 
 // Test setColor and getColor
@@ -250,7 +257,8 @@ TEST(PlaneTest, SetGetTransform) {
   t2.rotateY(45);
   plane.setTransform(t2);
   EXPECT_EQ(plane.getTransform().getMatrix(), t2.getMatrix());
-  EXPECT_NE(plane.getTransform().getMatrix(), t1.getMatrix()); // Ensure it actually changed
+  EXPECT_NE(plane.getTransform().getMatrix(),
+            t1.getMatrix());  // Ensure it actually changed
 }
 
 // Test clone method
@@ -278,13 +286,14 @@ TEST(PlaneTest, Clone) {
   EXPECT_EQ(clone->getTransform().getMatrix(), transform.getMatrix());
 
   // Check intersection behavior (indirectly checks axis/position)
-  Ray ray(Vector3D(0, 2, 3), Vector3D(-1, 0, 0)); // Ray towards the plane
+  Ray ray(Vector3D(0, 2, 3), Vector3D(-1, 0, 0));  // Ray towards the plane
   auto originalIntersection = original.intersect(ray);
   auto cloneIntersection = clone->intersect(ray);
 
   ASSERT_EQ(originalIntersection.has_value(), cloneIntersection.has_value());
   if (originalIntersection.has_value()) {
-    EXPECT_TRUE(intersectionsNearlyEqual_Plane(*originalIntersection, *cloneIntersection, 1e-5));
+    EXPECT_TRUE(intersectionsNearlyEqual_Plane(*originalIntersection,
+                                               *cloneIntersection, 1e-5));
   }
 
   // Ensure it's a deep copy (modifying clone doesn't affect original)
@@ -292,6 +301,7 @@ TEST(PlaneTest, Clone) {
   EXPECT_NE(original.getColor(), clone->getColor());
 
   Transform t2;
-  clone->setTransform(t2); // Reset transform
-  EXPECT_NE(original.getTransform().getMatrix(), clone->getTransform().getMatrix());
+  clone->setTransform(t2);  // Reset transform
+  EXPECT_NE(original.getTransform().getMatrix(),
+            clone->getTransform().getMatrix());
 }
