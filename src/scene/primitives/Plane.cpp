@@ -51,7 +51,7 @@ std::optional<Intersection> Plane::intersect(const Ray& ray) const {
     planePointOnAxis = Vector3D(_position, 0, 0);
   } else if (_axis == 'Y') {
     planePointOnAxis = Vector3D(0, _position, 0);
-  } else {  // _axis == 'Z'
+  } else {
     planePointOnAxis = Vector3D(0, 0, _position);
   }
 
