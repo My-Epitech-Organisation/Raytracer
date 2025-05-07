@@ -43,16 +43,16 @@ if(UNIX AND NOT APPLE)
     target_link_libraries(raytracer PRIVATE dl)
 endif()
 
-# Rechercher libconfig++ (utilisé pour le parsing de scène)
+# Find libconfig++ for configuration file parsing
 find_path(LIBCONFIG_INCLUDE_DIR libconfig.h++ /opt/homebrew/include)
 find_library(LIBCONFIG_LIBRARY NAMES config++ PATHS /opt/homebrew/lib)
 
-# Vérifie qu'on a bien trouvé
+# Check if libconfig++ is found
 if(NOT LIBCONFIG_INCLUDE_DIR OR NOT LIBCONFIG_LIBRARY)
     message(FATAL_ERROR "libconfig++ not found. Install it with brew install libconfig")
 endif()
 
-# Inclure les headers et linker la lib
+# Link libconfig++ to the raytracer executable
 target_include_directories(raytracer PRIVATE ${LIBCONFIG_INCLUDE_DIR})
 target_link_libraries(raytracer PRIVATE ${LIBCONFIG_LIBRARY})
 

@@ -2,34 +2,104 @@
 ** EPITECH PROJECT, 2025
 ** Raytracer
 ** File description:
-** Plane
+** Plane primitive header
 */
 
 #ifndef PLANE_HPP_
 #define PLANE_HPP_
 
+#include <memory>
+#include <optional>
+#include "../../../include/IPrimitive.hpp"
 #include "../../core/Color.hpp"
+#include "../../core/Ray.hpp"
+#include "../../core/Transform.hpp"
+#include "../../core/Vector3D.hpp"
 
 namespace RayTracer {
-class Plane {
+
+/**
+ * @brief Epsilon value for floating point comparisons
+ */
+constexpr double EPSILON = 1e-6;
+/**
+ * @brief Enum representing the axis of the plane
+ */
+enum class Axis { X, Y, Z };
+
+/**
+ * @brief Represents an infinite plane primitive
+ */
+class Plane : public IPrimitive {
  public:
-  Plane(char axis, float position, Color color)
-      : _axis(axis), _position(position), _color(color) {}
+  /**
+   * @brief Constructor for an axis-aligned plane
+   * @param axis The axis the plane is perpendicular to ('X', 'Y', or 'Z')
+   * @param position The position of the plane along the specified axis
+   * @param color The color of the plane
+   */
+  explicit Plane(char axis, double position, const Color& color);
 
-  char getAxis() const { return _axis; }
-  float getPosition() const { return _position; }
-  const Color& getColor() const { return _color; }
+  /**
+   * @brief Destructor
+   */
+  ~Plane() override = default;
 
-  bool operator==(const Plane& other) const {
-    return _axis == other._axis && _position == other._position &&
-           _color == other._color;
-  }
+  /**
+   * @brief Check if a ray intersects this plane
+   * @param ray The ray to check
+   * @return Intersection data if hit, std::nullopt otherwise
+   */
+  std::optional<Intersection> intersect(const Ray& ray) const override;
+
+  /**
+   * @brief Set the transformation matrix for this plane
+   * @param transform The transformation to apply
+   */
+  void setTransform(const Transform& transform) override;
+
+  /**
+   * @brief Get the transformation of this plane
+   * @return The current transformation
+   */
+  Transform getTransform() const override;
+
+  /**
+   * @brief Set the color of this plane
+   * @param color The color to set
+   */
+  void setColor(const Color& color) override;
+
+  /**
+   * @brief Get the color of this plane
+   * @return The current color
+   */
+  Color getColor() const override;
+
+  /**
+   * @brief Get the normal at a specific point on the plane
+   * @param point The point in world space
+   * @return The normal vector of the plane
+   */
+  Vector3D getNormalAt(const Vector3D& point) const override;
+
+  /**
+   * @brief Clone this plane
+   * @return A new instance of this plane
+   */
+  std::shared_ptr<IPrimitive> clone() const override;
 
  private:
-  char _axis;
-  float _position;
-  Color _color;
+  Axis getAxisFromChar(char axis) const;
+  char getCharFromAxis(Axis axis) const;
+  Vector3D _normal;      ///< The normal vector of the plane (derived from axis)
+  double _position;      ///< Position along the axis
+  Axis _axis;            ///< Axis the plane is perpendicular to (X, Y, Z)
+  Color _color;          ///< The color of the plane
+  Transform _transform;  ///< Transformation applied to the plane
+  Transform _inverseTransform;  ///< Inverse transformation
 };
+
 }  // namespace RayTracer
 
 #endif /* !PLANE_HPP_ */
