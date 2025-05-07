@@ -13,6 +13,9 @@ set(RAYTRACER_SOURCES
     scene/primitives/Plane.cpp
     scene/primitives/Cylinder.cpp
     scene/lights/DirectionalLight.cpp
+    scene/lights/AmbientLight.cpp
+    scene/lights/LightFactory.cpp
+    # scene/parser/SceneParser.cpp
 )
 
 # Create a library with the core functionality
