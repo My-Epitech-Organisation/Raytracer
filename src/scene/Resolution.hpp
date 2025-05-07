@@ -8,20 +8,53 @@
 #ifndef RESOLUTION_HPP_
 #define RESOLUTION_HPP_
 
+#include <iostream>
+
+namespace RayTracer {
+
+/**
+ * @brief Represents the resolution of an image
+ */
+
 class Resolution {
  public:
-  Resolution(int width, int height) : _width(width), _height(height) {}
+  /**
+   * @brief Default constructor
+   * Initializes resolution to 0x0
+   */
+  Resolution();
 
-  int getWidth() const { return _width; }
-  int getHeight() const { return _height; }
+  /**
+   * @brief Constructor with width and height
+   * @param width The width of the image
+   * @param height The height of the image
+   */
+  Resolution(int width, int height);
 
-  bool operator==(const Resolution& other) const {
-    return _width == other._width && _height == other._height;
-  }
+  /**
+   * @brief Set the width of the image
+   * @param width The new width of the image
+   */
+
+  int getWidth() const;
+  /**
+   * @brief Get the height of the image
+   * @return The height of the image
+   */
+  int getHeight() const;
+
+  /**
+   * @brief Assignment operator
+   * @param other The resolution to assign from
+   * @return Reference to this resolution after assignment
+   */
+  bool operator==(const Resolution& other) const;
 
  private:
   int _width;
   int _height;
 };
+
+}  // namespace RayTracer
 
 #endif /* !RESOLUTION_HPP_ */
