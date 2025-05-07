@@ -1,0 +1,205 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** SceneParser
+*/
+
+#include "SceneParser.hpp"
+#include <libconfig.h++>
+#include <stdexcept>
+
+using namespace libconfig;
+
+namespace RayTracer {
+
+Camera SceneParser::parseCamera(const Setting& cameraSetting) {
+  try {
+    const Setting& res = cameraSetting["resolution"];
+    const Setting& pos = cameraSetting["position"];
+    const Setting& rot = cameraSetting["rotation"];
+    const Setting& fovSetting = cameraSetting["fieldOfView"];
+
+    int width, height;
+    res.lookupValue("width", width);
+    res.lookupValue("height", height);
+
+    int posX, posY, posZ;
+    pos.lookupValue("x", posX);
+    pos.lookupValue("y", posY);
+    pos.lookupValue("z", posZ);
+
+    int rotX, rotY, rotZ;
+    rot.lookupValue("x", rotX);
+    rot.lookupValue("y", rotY);
+    rot.lookupValue("z", rotZ);
+
+    float fov;
+    if (fovSetting.isNumber())
+      fov = static_cast<float>(fovSetting);
+    else
+      throw std::runtime_error("Field of view must be a number");
+
+    Camera camera(Vector3D(posX, posY, posZ), width, height, fov);
+    camera.setRotation(Vector3D(rotX, rotY, rotZ));
+
+    return camera;
+  } catch (const SettingNotFoundException& e) {
+    throw std::runtime_error(std::string("Setting not found: ") + e.what());
+  } catch (const SettingTypeException& e) {
+    throw std::runtime_error(std::string("Setting type error: ") + e.what());
+  } catch (const std::exception& e) {
+    throw std::runtime_error(std::string("Error parsing camera: ") + e.what());
+  }
+}
+
+Sphere SceneParser::parseSphere(const Setting& sphereSetting) {
+  try {
+    int x, y, z, r;
+    sphereSetting.lookupValue("x", x);
+    sphereSetting.lookupValue("y", y);
+    sphereSetting.lookupValue("z", z);
+    sphereSetting.lookupValue("r", r);
+
+    const Setting& colorSetting = sphereSetting["color"];
+    int red, green, blue;
+    colorSetting.lookupValue("r", red);
+    colorSetting.lookupValue("g", green);
+    colorSetting.lookupValue("b", blue);
+
+    Color color(static_cast<uint8_t>(red), static_cast<uint8_t>(green),
+                static_cast<uint8_t>(blue));
+    Sphere sphere(Vector3D(x, y, z), r, color);
+
+    return sphere;
+  } catch (const SettingNotFoundException& e) {
+    throw std::runtime_error(std::string("Setting not found: ") + e.what());
+  } catch (const SettingTypeException& e) {
+    throw std::runtime_error(std::string("Setting type error: ") + e.what());
+  } catch (const std::exception& e) {
+    throw std::runtime_error(std::string("Error parsing sphere: ") + e.what());
+  }
+}
+
+std::vector<Sphere> SceneParser::parseSpheres(const Setting& setting) {
+  std::vector<Sphere> spheres;
+
+  for (int i = 0; i < setting.getLength(); ++i) {
+    spheres.push_back(parseSphere(setting[i]));
+  }
+
+  return spheres;
+}
+
+Plane SceneParser::parsePlane(const Setting& planeSetting) {
+  try {
+    char axis = 'x';
+    std::string axisStr;
+
+    if (planeSetting.lookupValue("axis", axisStr)) {
+      if (!axisStr.empty()) {
+        axis = axisStr[0];
+      }
+    }
+
+    float pos = 0.0f;
+    const Setting& posSetting = planeSetting.lookup("position");
+
+    if (posSetting.getType() == Setting::TypeFloat) {
+      pos = posSetting;
+    } else if (posSetting.getType() == Setting::TypeInt) {
+      pos = static_cast<float>(int(posSetting));
+    } else {
+      throw std::runtime_error(
+          "Position has invalid type (expected int or float)");
+    }
+
+    const Setting& colorSetting = planeSetting["color"];
+    int red, green, blue;
+    colorSetting.lookupValue("r", red);
+    colorSetting.lookupValue("g", green);
+    colorSetting.lookupValue("b", blue);
+
+    Color color(static_cast<uint8_t>(red), static_cast<uint8_t>(green),
+                static_cast<uint8_t>(blue));
+    Plane plane(axis, pos, color);
+
+    return plane;
+  } catch (const SettingNotFoundException& e) {
+    throw std::runtime_error(std::string("Setting not found: ") + e.what());
+  } catch (const SettingTypeException& e) {
+    throw std::runtime_error(std::string("Setting type error: ") + e.what());
+  } catch (const std::exception& e) {
+    throw std::runtime_error(std::string("Error parsing plane: ") + e.what());
+  }
+}
+
+std::vector<Plane> SceneParser::parsePlanes(const Setting& setting) {
+  std::vector<Plane> planes;
+
+  for (int i = 0; i < setting.getLength(); ++i) {
+    planes.push_back(parsePlane(setting[i]));
+  }
+
+  return planes;
+}
+
+float getFlexibleFloat(const Setting& setting) {
+  switch (setting.getType()) {
+    case Setting::TypeInt:
+      return static_cast<float>(int(setting));
+    case Setting::TypeFloat:
+      return float(setting);
+    default:
+      throw std::runtime_error("Expected a numeric type (int or float)");
+  }
+}
+
+void SceneParser::parseLights(const Setting& lightsSetting) {
+  try {
+    float ambient = 0.0f, diffuse = 0.0f;
+    if (lightsSetting.exists("ambient"))
+      ambient = getFlexibleFloat(lightsSetting["ambient"]);
+    if (lightsSetting.exists("diffuse"))
+      diffuse = getFlexibleFloat(lightsSetting["diffuse"]);
+
+    const Setting& pointLights = lightsSetting["point"];
+    if (pointLights.getType() == Setting::TypeList) {
+      for (int i = 0; i < pointLights.getLength(); ++i) {
+        const Setting& light = pointLights[i];
+        if (light.getType() == Setting::TypeGroup) {
+          float x = getFlexibleFloat(light["x"]);
+          float y = getFlexibleFloat(light["y"]);
+          float z = getFlexibleFloat(light["z"]);
+        } else
+          throw std::runtime_error("Invalid point light at index " +
+                                   std::to_string(i));
+      }
+    } else
+      throw std::runtime_error("Point lights is not a list!");
+
+    const Setting& dirLights = lightsSetting["directional"];
+    if (dirLights.getType() == Setting::TypeList) {
+      for (int i = 0; i < dirLights.getLength(); ++i) {
+        const Setting& light = dirLights[i];
+        if (light.getType() == Setting::TypeGroup) {
+          float x = getFlexibleFloat(light["x"]);
+          float y = getFlexibleFloat(light["y"]);
+          float z = getFlexibleFloat(light["z"]);
+        } else
+          throw std::runtime_error("Invalid directional light at index " +
+                                   std::to_string(i));
+      }
+    } else
+      throw std::runtime_error("Directional lights is not a list!");
+
+  } catch (const SettingNotFoundException& e) {
+    fprintf(stderr, "Missing setting: %s\n", e.what());
+  } catch (const SettingTypeException& e) {
+    fprintf(stderr, "Type error: %s\n", e.what());
+  } catch (const std::exception& e) {
+    fprintf(stderr, "Parsing error: %s\n", e.what());
+  }
+}
+
+}  // namespace RayTracer
