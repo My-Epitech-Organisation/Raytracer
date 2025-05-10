@@ -7,6 +7,7 @@ set(TEST_SOURCES
     test_Transform.cpp
     test_Vector3D.cpp
     test_Plane.cpp
+    test_Cylinder.cpp
 )
 
 # Test executable
