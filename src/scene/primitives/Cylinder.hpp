@@ -10,8 +10,8 @@
 
 #include <memory>
 #include <optional>
-#include <vector> // Potentially for multiple intersection points, though IPrimitive returns one
-#include "../../../include/IPrimitive.hpp" // Interface
+#include <vector>  // Potentially for multiple intersection points, though IPrimitive returns one
+#include "../../../include/IPrimitive.hpp"  // Interface
 #include "../../core/Color.hpp"
 #include "../../core/Ray.hpp"
 #include "../../core/Transform.hpp"
@@ -49,8 +49,8 @@ class Cylinder : public IPrimitive {
    * @brief Check if a ray intersects this cylinder.
    * Considers intersections with the body and the end caps.
    * @param ray The ray to check for intersection.
-   * @return An std::optional<Intersection> containing intersection data if a hit
-   * occurs within the cylinder's bounds, std::nullopt otherwise.
+   * @return An std::optional<Intersection> containing intersection data if a
+   * hit occurs within the cylinder's bounds, std::nullopt otherwise.
    */
   std::optional<Intersection> intersect(const Ray& ray) const override;
 
@@ -88,7 +88,8 @@ class Cylinder : public IPrimitive {
 
   /**
    * @brief Clone this cylinder.
-   * @return A std::shared_ptr to a new instance of this cylinder with the same properties.
+   * @return A std::shared_ptr to a new instance of this cylinder with the same
+   * properties.
    */
   std::shared_ptr<IPrimitive> clone() const override;
 
@@ -106,15 +107,16 @@ class Cylinder : public IPrimitive {
    */
   double getHeight() const;
 
-  // Note: Setters for radius and height could be added if dynamic resizing is needed.
-  // For now, they are set at construction.
+  // Note: Setters for radius and height could be added if dynamic resizing is
+  // needed. For now, they are set at construction.
 
  private:
-  double _radius;          ///< The radius of the cylinder.
-  double _height;          ///< The total height of the cylinder.
-  Color _color;            ///< The color of the cylinder.
-  Transform _transform;      ///< Transformation applied to the cylinder.
-  Transform _inverseTransform; ///< Cached inverse of _transform for intersection calculations.
+  double _radius;               ///< The radius of the cylinder.
+  double _height;               ///< The total height of the cylinder.
+  Color _color;                 ///< The color of the cylinder.
+  Transform _transform;         ///< Transformation applied to the cylinder.
+  Transform _inverseTransform;  ///< Cached inverse of _transform for
+                                ///< intersection calculations.
 
   // Helper methods for intersection logic (implemented in Cylinder.cpp)
   // These methods operate in the cylinder's local coordinate space.
@@ -122,22 +124,26 @@ class Cylinder : public IPrimitive {
   /**
    * @brief Calculates intersection with the cylinder's circular end caps.
    * @param localRay Ray in the cylinder's local coordinate system.
-   * @param t_min_overall Reference to the closest intersection distance found so far.
-   *                      This method will update it if a closer cap intersection is found.
-   * @return An optional Intersection data if a valid cap intersection is found closer
-   *         than t_min_overall, otherwise std::nullopt. Intersection data is in local space.
+   * @param t_min_overall Reference to the closest intersection distance found
+   * so far. This method will update it if a closer cap intersection is found.
+   * @return An optional Intersection data if a valid cap intersection is found
+   * closer than t_min_overall, otherwise std::nullopt. Intersection data is in
+   * local space.
    */
-  std::optional<Intersection> intersectCaps(const Ray& localRay, double& t_min_overall) const;
+  std::optional<Intersection> intersectCaps(const Ray& localRay,
+                                            double& t_min_overall) const;
 
   /**
    * @brief Calculates intersection with the cylinder's curved body.
    * @param localRay Ray in the cylinder's local coordinate system.
-   * @param t_min_overall Reference to the closest intersection distance found so far.
-   *                      This method will update it if a closer body intersection is found.
-   * @return An optional Intersection data if a valid body intersection is found closer
-   *         than t_min_overall, otherwise std::nullopt. Intersection data is in local space.
+   * @param t_min_overall Reference to the closest intersection distance found
+   * so far. This method will update it if a closer body intersection is found.
+   * @return An optional Intersection data if a valid body intersection is found
+   * closer than t_min_overall, otherwise std::nullopt. Intersection data is in
+   * local space.
    */
-  std::optional<Intersection> intersectBody(const Ray& localRay, double& t_min_overall) const;
+  std::optional<Intersection> intersectBody(const Ray& localRay,
+                                            double& t_min_overall) const;
 };
 
 }  // namespace RayTracer
