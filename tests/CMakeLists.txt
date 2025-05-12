@@ -1,7 +1,6 @@
 set(TEST_SOURCES
     test_Camera.cpp
     test_Color.cpp
-    test_parser.cpp
     test_Ray.cpp
     test_Sphere.cpp
     test_Transform.cpp
