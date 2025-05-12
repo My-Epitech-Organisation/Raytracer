@@ -138,4 +138,16 @@ char Plane::getCharFromAxis(Axis axis) const {
   }
 }
 
+double Plane::getPosition() const {
+  return _position;
+}
+
+Vector3D Plane::getNormal() const {
+  return _normal;
+}
+
+Axis Plane::getAxis() const {
+  return _axis;
+}
+
 }  // namespace RayTracer
