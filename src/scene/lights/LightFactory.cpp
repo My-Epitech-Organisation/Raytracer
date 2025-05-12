@@ -31,12 +31,8 @@ std::unique_ptr<Light> LightFactory::createLight(
     }
   }
 
-  float intensity = setting.exists("intensity")
-                        ? static_cast<float>(setting["intensity"])
-                        : 1.0f;
-
   if (type == "ambient") {
-    return std::make_unique<AmbientLight>(color, intensity);
+    return std::make_unique<AmbientLight>(color);
   } else if (type == "directional") {
     Vector3D direction(0, -1, 0);
     if (setting.exists("direction")) {
@@ -49,7 +45,7 @@ std::unique_ptr<Light> LightFactory::createLight(
         throw std::runtime_error("Direction must have 3 components");
       }
     }
-    return std::make_unique<DirectionalLight>(color, intensity, direction);
+    return std::make_unique<DirectionalLight>(color, direction);
   }
 
   throw std::runtime_error("Unknown light type: " + type);

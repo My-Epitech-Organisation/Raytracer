@@ -8,46 +8,39 @@
 #ifndef LIGHT_HPP_
 #define LIGHT_HPP_
 
+#include <string>
+#include <vector>
 #include "../../core/Vector3D.hpp"
 
 namespace RayTracer {
 
-/**
- * @brief Base class for all lights in the raytracer
- */
 class Light {
  public:
-  /**
-   * @brief Constructor
-   * @param color RGB color of the light
-   * @param intensity Brightness of the light
-   */
-  Light(const Vector3D& color, float intensity)
-      : _color(color), _intensity(intensity) {}
+  Light();
+  Light(const Vector3D& color);
+  Light(float ambient, float diffuse, const std::vector<Vector3D>& pointLights,
+        const std::vector<Vector3D>& directionalLights);
 
-  /**
-   * @brief Virtual destructor
-   */
   virtual ~Light() = default;
 
-  /**
-   * @brief Get the color of the light
-   */
-  Vector3D getColor() const { return _color; }
+  float getAmbient() const;
+  float getDiffuse() const;
+  const Vector3D& getColor() const;
 
-  /**
-   * @brief Get the intensity of the light
-   */
-  float getIntensity() const { return _intensity; }
+  const std::vector<Vector3D>& getPointLights() const;
+  const std::vector<Vector3D>& getDirectionalLights() const;
 
-  /**
-   * @brief Optional: compute light contribution (pure virtual)
-   */
-  virtual Vector3D illuminate(const Vector3D& point) const = 0;
+  void addPointLight(const Vector3D& light);
+  void addDirectionalLight(const Vector3D& light);
 
- protected:
+  virtual std::string toString() const = 0;
+
+ private:
+  float _ambient;
+  float _diffuse;
+  std::vector<Vector3D> _pointLights;
+  std::vector<Vector3D> _directionalLights;
   Vector3D _color;
-  float _intensity;
 };
 
 }  // namespace RayTracer
