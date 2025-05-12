@@ -10,7 +10,8 @@
 
 #include <libconfig.h++>
 #include <memory>
-#include "../lights/Light.hpp"
+#include "../../core/Vector3D.hpp"
+#include "Light.hpp"
 
 namespace RayTracer {
 
