@@ -6,9 +6,9 @@
 */
 
 #include <gtest/gtest.h>
-#include "../src/scene/lights/LightFactory.hpp"
 #include "../src/scene/lights/AmbientLight.hpp"
 #include "../src/scene/lights/DirectionalLight.hpp"
+#include "../src/scene/lights/LightFactory.hpp"
 
 using namespace RayTracer;
 
