@@ -45,7 +45,7 @@ Color Cylinder::getColor() const {
 }
 
 Vector3D Cylinder::getNormalAt(const Vector3D& point) const {
-  Vector3D localPoint = _transform.inverse().applyToPoint(point);
+  Vector3D localPoint = _inverseTransform.applyToPoint(point);
   double halfHeight = _height / 2.0;
 
   if (std::abs(localPoint.getY() - halfHeight) < CYLINDER_EPSILON) {
@@ -112,10 +112,10 @@ std::optional<Intersection> Cylinder::intersectCaps(
     const Ray& localRay, double& t_min_overall) const {
   std::optional<Intersection> cap_intersection = std::nullopt;
   double halfHeight = _height / 2.0;
+  double directionY = localRay.getDirection().getY();
 
-  if (std::abs(localRay.getDirection().getY()) > CYLINDER_EPSILON) {
-    double t_top = (halfHeight - localRay.getOrigin().getY()) /
-                   localRay.getDirection().getY();
+  if (std::abs(directionY) > CYLINDER_EPSILON) {
+    double t_top = (halfHeight - localRay.getOrigin().getY()) / directionY;
     if (t_top > CYLINDER_EPSILON && t_top < t_min_overall) {
       Vector3D p_top = localRay.pointAt(t_top);
       if (p_top.getX() * p_top.getX() + p_top.getZ() * p_top.getZ() <=
