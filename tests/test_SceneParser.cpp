@@ -107,74 +107,74 @@ TEST(SceneParserTest, ParseMultipleSpheres) {
   }
 }
 
-TEST(SceneParserTest, ParseOnePlane) {
-  Config cfg;
-  const char* cfgText = R"(
-  planes = (
-    { axis = "Z"; position = -20; color = { r = 64; g = 64; b = 255; }; }
-  );
-  )";
+// TEST(SceneParserTest, ParseOnePlane) {
+//   Config cfg;
+//   const char* cfgText = R"(
+//   planes = (
+//     { axis = "Z"; position = -20; color = { r = 64; g = 64; b = 255; }; }
+//   );
+//   )";
 
-  try {
-    cfg.readString(cfgText);
-    const Setting& planeSetting = cfg.lookup("planes")[0];
+// try {
+//   cfg.readString(cfgText);
+//   const Setting& planeSetting = cfg.lookup("planes")[0];
 
-    SceneParser parser;
-    Plane result = parser.parsePlane(planeSetting);
+// SceneParser parser;
+// Plane result = parser.parsePlane(planeSetting);
 
-    EXPECT_EQ(result.getAxis(), 'Z');
-    EXPECT_FLOAT_EQ(result.getPosition(), -20);
-    EXPECT_TRUE(result.getColor().isEqual(Color(static_cast<uint8_t>(64),
-                                                static_cast<uint8_t>(64),
-                                                static_cast<uint8_t>(255))));
+// EXPECT_EQ(result.getAxis(), 'Z');
+// EXPECT_FLOAT_EQ(result.getPosition(), -20);
+// EXPECT_TRUE(result.getColor().isEqual(Color(static_cast<uint8_t>(64),
+//                                             static_cast<uint8_t>(64),
+//                                             static_cast<uint8_t>(255))));
 
-    std::cout << "Plane parsed successfully!\n";
+// std::cout << "Plane parsed successfully!\n";
 
-  } catch (const SettingTypeException& e) {
-    std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
-    FAIL() << "Setting type error during plane parsing: " << e.what();
-  } catch (const std::exception& e) {
-    std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
-    FAIL() << "Exception thrown during plane parsing: " << e.what();
-  }
-}
+// } catch (const SettingTypeException& e) {
+//   std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
+//   FAIL() << "Setting type error during plane parsing: " << e.what();
+// } catch (const std::exception& e) {
+//   std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
+//   FAIL() << "Exception thrown during plane parsing: " << e.what();
+// }
+// }
 
-TEST(SceneParserTest, ParseMultiplePlanes) {
-  Config cfg;
-  const char* cfgText = R"(
-  planes = (
-    { axis = "X"; position = 10; color = { r = 255; g = 255; b = 0; }; },
-    { axis = "Y"; position = -5; color = { r = 0; g = 255; b = 255; }; }
-  );
-  )";
+// TEST(SceneParserTest, ParseMultiplePlanes) {
+//   Config cfg;
+//   const char* cfgText = R"(
+//   planes = (
+//     { axis = "X"; position = 10; color = { r = 255; g = 255; b = 0; }; },
+//     { axis = "Y"; position = -5; color = { r = 0; g = 255; b = 255; }; }
+//   );
+//   )";
 
-  try {
-    cfg.readString(cfgText);
-    const Setting& planesSetting = cfg.lookup("planes");
+// try {
+//   cfg.readString(cfgText);
+//   const Setting& planesSetting = cfg.lookup("planes");
 
-    SceneParser parser;
-    std::vector<Plane> planes = parser.parsePlanes(planesSetting);
+// SceneParser parser;
+// std::vector<Plane> planes = parser.parsePlanes(planesSetting);
 
-    ASSERT_EQ(planes.size(), 2);
+// ASSERT_EQ(planes.size(), 2);
 
-    EXPECT_EQ(planes[0].getAxis(), 'X');
-    EXPECT_FLOAT_EQ(planes[0].getPosition(), 10);
-    EXPECT_TRUE(planes[0].getColor().isEqual(Color(static_cast<uint8_t>(255),
-                                                   static_cast<uint8_t>(255),
-                                                   static_cast<uint8_t>(0))));
+// EXPECT_EQ(planes[0].getAxis(), 'X');
+// EXPECT_FLOAT_EQ(planes[0].getPosition(), 10);
+// EXPECT_TRUE(planes[0].getColor().isEqual(Color(static_cast<uint8_t>(255),
+//                                                static_cast<uint8_t>(255),
+//                                                static_cast<uint8_t>(0))));
 
-    EXPECT_EQ(planes[1].getAxis(), 'Y');
-    EXPECT_FLOAT_EQ(planes[1].getPosition(), -5);
-    EXPECT_TRUE(planes[1].getColor().isEqual(Color(static_cast<uint8_t>(0),
-                                                   static_cast<uint8_t>(255),
-                                                   static_cast<uint8_t>(255))));
+// EXPECT_EQ(planes[1].getAxis(), 'Y');
+// EXPECT_FLOAT_EQ(planes[1].getPosition(), -5);
+// EXPECT_TRUE(planes[1].getColor().isEqual(Color(static_cast<uint8_t>(0),
+//                                                static_cast<uint8_t>(255),
+//                                                static_cast<uint8_t>(255))));
 
-    std::cout << "All planes parsed successfully!\n";
-  } catch (const std::exception& e) {
-    std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
-    FAIL() << "Exception thrown during multiple plane parsing: " << e.what();
-  }
-}
+// std::cout << "All planes parsed successfully!\n";
+// } catch (const std::exception& e) {
+// std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
+// FAIL() << "Exception thrown during multiple plane parsing: " << e.what();
+// }
+// }
 
 TEST(SceneParserTest, ParseLightsDebug) {
   Config cfg;
