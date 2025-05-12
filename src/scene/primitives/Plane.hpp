@@ -89,6 +89,24 @@ class Plane : public IPrimitive {
    */
   std::shared_ptr<IPrimitive> clone() const override;
 
+  /**
+   * @brief Get the axis of the plane
+   * @return The axis the plane is aligned with
+   */
+  Axis getAxis() const;
+
+  /**
+   * @brief Get the position of the plane along the axis
+   * @return The position of the plane
+   */
+  double getPosition() const;
+
+  /**
+   * @brief Get the normal vector of the plane
+   * @return The normal vector of the plane
+   */
+  Vector3D getNormal() const;
+
  private:
   Axis getAxisFromChar(char axis) const;
   char getCharFromAxis(Axis axis) const;
