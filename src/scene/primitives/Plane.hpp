@@ -99,8 +99,8 @@ class Plane : public IPrimitive {
    * @brief Get the position of the plane along the axis
    * @return The position of the plane
    */
-
   double getPosition() const;
+
   /**
    * @brief Get the normal vector of the plane
    * @return The normal vector of the plane
