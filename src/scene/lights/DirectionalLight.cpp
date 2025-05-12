@@ -6,16 +6,19 @@
 */
 
 #include "DirectionalLight.hpp"
+#include <sstream>
 
 namespace RayTracer {
 
-DirectionalLight::DirectionalLight(const Vector3D& color, float intensity,
+DirectionalLight::DirectionalLight(const Vector3D& color,
                                    const Vector3D& direction)
-    : Light(color, intensity), _direction(direction.normalized()) {}
+    : Light(color), _direction(direction.normalized()) {}
 
-Vector3D DirectionalLight::illuminate(const Vector3D& /*point*/) const {
-  // This method could later simulate shadows or other effects
-  return _direction;
+std::string DirectionalLight::toString() const {
+  std::ostringstream oss;
+  oss << "DirectionalLight(Color: " << getColor()
+      << ", Direction: " << _direction << ")";
+  return oss.str();
 }
 
 Vector3D DirectionalLight::getDirection() const {

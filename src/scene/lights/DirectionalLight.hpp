@@ -20,14 +20,18 @@ class DirectionalLight : public Light {
    * @param intensity The intensity of the light
    * @param direction The direction the light is pointing (normalized)
    */
-  DirectionalLight(const Vector3D& color, float intensity,
-                   const Vector3D& direction);
+  DirectionalLight(const Vector3D& color, const Vector3D& direction);
 
   /**
-   * @brief Compute the light's contribution to a given point
-   * (for now, just return the direction as a vector)
+   * @brief Destructor
    */
-  Vector3D illuminate(const Vector3D& point) const override;
+  virtual ~DirectionalLight() = default;
+
+  /**
+   * @brief Get the string representation of the directional light
+   * @return The string representation of the directional light
+   */
+  std::string toString() const override;
 
   /**
    * @brief Get the direction of the light
