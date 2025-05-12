@@ -6,14 +6,16 @@
 */
 
 #include "AmbientLight.hpp"
+#include <sstream>
 
 namespace RayTracer {
 
-AmbientLight::AmbientLight(const Vector3D& color, float intensity)
-    : Light(color, intensity) {}
+AmbientLight::AmbientLight(const Vector3D& color) : Light(color) {}
 
-Vector3D AmbientLight::illuminate(const Vector3D& /*point*/) const {
-  return Vector3D(0, 0, 0);  // No direction
+std::string AmbientLight::toString() const {
+  std::ostringstream oss;
+  oss << "AmbientLight(Color: " << getColor() << ")";
+  return oss.str();
 }
 
 }  // namespace RayTracer

@@ -19,14 +19,18 @@ class AmbientLight : public Light {
    * @param color The color of the ambient light
    * @param intensity The intensity of the light
    */
-  AmbientLight(const Vector3D& color, float intensity);
+  AmbientLight(const Vector3D& color);
 
   /**
-   * @brief Illuminate a point
-   * @param point The point to be illuminated (unused here)
-   * @return A zero vector since ambient light has no direction
+   * @brief Destructor
    */
-  Vector3D illuminate(const Vector3D& point) const override;
+  virtual ~AmbientLight() = default;
+
+  /**
+   * @brief Get the string representation of the ambient light
+   * @return The string representation of the ambient light
+   */
+  std::string toString() const override;
 };
 
 }  // namespace RayTracer
