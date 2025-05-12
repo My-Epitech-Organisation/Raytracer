@@ -17,15 +17,11 @@ namespace RayTracer {
 class Light {
  public:
   Light();
-  Light(const Vector3D& color);
   Light(float ambient, float diffuse, const std::vector<Vector3D>& pointLights,
         const std::vector<Vector3D>& directionalLights);
 
-  virtual ~Light() = default;
-
   float getAmbient() const;
   float getDiffuse() const;
-  const Vector3D& getColor() const;
 
   const std::vector<Vector3D>& getPointLights() const;
   const std::vector<Vector3D>& getDirectionalLights() const;
@@ -33,14 +29,13 @@ class Light {
   void addPointLight(const Vector3D& light);
   void addDirectionalLight(const Vector3D& light);
 
-  virtual std::string toString() const = 0;
+  std::string toString() const;
 
  private:
   float _ambient;
   float _diffuse;
   std::vector<Vector3D> _pointLights;
   std::vector<Vector3D> _directionalLights;
-  Vector3D _color;
 };
 
 }  // namespace RayTracer

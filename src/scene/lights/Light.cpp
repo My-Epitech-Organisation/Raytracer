@@ -13,9 +13,6 @@ namespace RayTracer {
 
 Light::Light() : _ambient(0.0f), _diffuse(0.0f) {}
 
-Light::Light(const Vector3D& color)
-    : _ambient(0.0f), _diffuse(0.0f), _color(color) {}
-
 Light::Light(float ambient, float diffuse,
              const std::vector<Vector3D>& pointLights,
              const std::vector<Vector3D>& directionalLights)
@@ -60,10 +57,6 @@ std::string Light::toString() const {
     oss << "  " << d << "\n";
   }
   return oss.str();
-}
-
-const Vector3D& Light::getColor() const {
-  return _color;
 }
 
 }  // namespace RayTracer
