@@ -10,6 +10,7 @@
 
 #include <array>
 #include <iostream>
+#include "./Vector3D.hpp" // Add this include
 
 namespace RayTracer {
 
@@ -144,6 +145,12 @@ class Matrix {
    * @return The scaling matrix
    */
   static Matrix createScaling(double x, double y, double z);
+
+  /**
+   * @brief Get the translation components from the matrix
+   * @return A Vector3D representing the translation (x, y, z)
+   */
+  Vector3D getTranslation() const;
 
  private:
   std::array<double, 16> _data;  ///< Matrix data in row-major order
