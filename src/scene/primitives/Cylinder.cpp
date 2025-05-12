@@ -18,7 +18,7 @@ Cylinder::Cylinder(double radius, double height, const Color& color)
   }
   try {
     _inverseTransform = _transform.inverse();
-  } catch (const std::runtime_error& e) {
+  } catch (const std::runtime_error& /*e*/) {
     _inverseTransform = Transform();
   }
 }
@@ -27,7 +27,7 @@ void Cylinder::setTransform(const Transform& transform) {
   _transform = transform;
   try {
     _inverseTransform = _transform.inverse();
-  } catch (const std::runtime_error& e) {
+  } catch (const std::runtime_error& /*e*/) {
     _inverseTransform = Transform();
   }
 }
@@ -110,44 +110,52 @@ std::optional<Intersection> Cylinder::intersect(const Ray& ray) const {
 
 std::optional<Intersection> Cylinder::intersectCaps(
     const Ray& localRay, double& t_min_overall) const {
-  std::optional<Intersection> cap_intersection = std::nullopt;
+  std::optional<Intersection> closest_cap_intersection = std::nullopt;
   double halfHeight = _height / 2.0;
+
+  auto top_cap_hit =
+      checkCap(localRay, t_min_overall, halfHeight, Vector3D(0, 1, 0));
+  if (top_cap_hit) {
+    closest_cap_intersection = top_cap_hit;
+  }
+
+  auto bottom_cap_hit =
+      checkCap(localRay, t_min_overall, -halfHeight, Vector3D(0, -1, 0));
+  if (bottom_cap_hit) {
+    closest_cap_intersection = bottom_cap_hit;
+  }
+
+  return closest_cap_intersection;
+}
+
+std::optional<Intersection> Cylinder::checkCap(
+    const Ray& localRay, double& t_min_overall, double cap_y_position,
+    const Vector3D& cap_normal_param) const {
   double directionY = localRay.getDirection().getY();
 
-  if (std::abs(directionY) > CYLINDER_EPSILON) {
-    double t_top = (halfHeight - localRay.getOrigin().getY()) / directionY;
-    if (t_top > CYLINDER_EPSILON && t_top < t_min_overall) {
-      Vector3D p_top = localRay.pointAt(t_top);
-      if (p_top.getX() * p_top.getX() + p_top.getZ() * p_top.getZ() <=
-          _radius * _radius + CYLINDER_EPSILON) {
-        t_min_overall = t_top;
-        Intersection intersection_data;
-        intersection_data.distance = t_top;
-        intersection_data.point = p_top;
-        intersection_data.normal = Vector3D(0, 1, 0);
-        cap_intersection = intersection_data;
-      }
-    }
+  if (std::abs(directionY) < CYLINDER_EPSILON) {
+    return std::nullopt;
   }
 
-  if (std::abs(localRay.getDirection().getY()) > CYLINDER_EPSILON) {
-    double t_bottom = (-halfHeight - localRay.getOrigin().getY()) /
-                      localRay.getDirection().getY();
-    if (t_bottom > CYLINDER_EPSILON && t_bottom < t_min_overall) {
-      Vector3D p_bottom = localRay.pointAt(t_bottom);
-      if (p_bottom.getX() * p_bottom.getX() +
-              p_bottom.getZ() * p_bottom.getZ() <=
-          _radius * _radius + CYLINDER_EPSILON) {
-        t_min_overall = t_bottom;
-        Intersection intersection_data;
-        intersection_data.distance = t_bottom;
-        intersection_data.point = p_bottom;
-        intersection_data.normal = Vector3D(0, -1, 0);
-        cap_intersection = intersection_data;
-      }
-    }
+  double t = (cap_y_position - localRay.getOrigin().getY()) / directionY;
+
+  if (t <= CYLINDER_EPSILON || t >= t_min_overall) {
+    return std::nullopt;
   }
-  return cap_intersection;
+
+  Vector3D p = localRay.pointAt(t);
+
+  if (p.getX() * p.getX() + p.getZ() * p.getZ() >
+      _radius * _radius + CYLINDER_EPSILON) {
+    return std::nullopt;
+  }
+
+  t_min_overall = t;
+  Intersection intersection_data;
+  intersection_data.distance = t;
+  intersection_data.point = p;
+  intersection_data.normal = cap_normal_param;
+  return intersection_data;
 }
 
 std::optional<Intersection> Cylinder::intersectBody(
@@ -155,22 +163,15 @@ std::optional<Intersection> Cylinder::intersectBody(
   Vector3D O = localRay.getOrigin();
   Vector3D D = localRay.getDirection();
 
-  // Cylinder aligned with Y axis: x^2 + z^2 = radius^2
-  // Ray: P(t) = O + tD
-  // (Ox + tDx)^2 + (Oz + tDz)^2 = radius^2
-
   double a = D.getX() * D.getX() + D.getZ() * D.getZ();
   double b = 2.0 * (O.getX() * D.getX() + O.getZ() * D.getZ());
-  double c = O.getX() * O.getX() + O.getZ() * O.getZ() - _radius * _radius;
+  double c_quad = O.getX() * O.getX() + O.getZ() * O.getZ() - _radius * _radius;
 
   if (std::abs(a) < CYLINDER_EPSILON) {
-    if (c <= 0) {
-      return std::nullopt;
-    }
     return std::nullopt;
   }
 
-  double discriminant = b * b - 4 * a * c;
+  double discriminant = b * b - 4 * a * c_quad;
 
   if (discriminant < 0) {
     return std::nullopt;

@@ -10,8 +10,8 @@
 
 #include <memory>
 #include <optional>
-#include <vector>  // Potentially for multiple intersection points, though IPrimitive returns one
-#include "../../../include/IPrimitive.hpp"  // Interface
+#include <vector>
+#include "../../../include/IPrimitive.hpp"
 #include "../../core/Color.hpp"
 #include "../../core/Ray.hpp"
 #include "../../core/Transform.hpp"
@@ -107,9 +107,6 @@ class Cylinder : public IPrimitive {
    */
   double getHeight() const;
 
-  // Note: Setters for radius and height could be added if dynamic resizing is
-  // needed. For now, they are set at construction.
-
  private:
   double _radius;               ///< The radius of the cylinder.
   double _height;               ///< The total height of the cylinder.
@@ -118,8 +115,21 @@ class Cylinder : public IPrimitive {
   Transform _inverseTransform;  ///< Cached inverse of _transform for
                                 ///< intersection calculations.
 
-  // Helper methods for intersection logic (implemented in Cylinder.cpp)
-  // These methods operate in the cylinder's local coordinate space.
+  /**
+   * @brief Helper function to check intersection with a single cylinder cap.
+   * @param localRay Ray in the cylinder's local coordinate system.
+   * @param t_min_overall Reference to the closest intersection distance found
+   * so far. Updated if a closer hit is found.
+   * @param cap_y_position The Y coordinate of the cap plane.
+   * @param cap_normal The normal vector of the cap plane (in local space).
+   * @return An optional Intersection data if a valid cap intersection is found
+   * closer than t_min_overall, otherwise std::nullopt. Intersection data is in
+   * local space.
+   */
+  std::optional<Intersection> checkCap(const Ray& localRay,
+                                       double& t_min_overall,
+                                       double cap_y_position,
+                                       const Vector3D& cap_normal) const;
 
   /**
    * @brief Calculates intersection with the cylinder's circular end caps.
