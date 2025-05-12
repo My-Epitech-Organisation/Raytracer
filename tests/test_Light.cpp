@@ -31,3 +31,22 @@ TEST(LightTest, ToStringOutput) {
   EXPECT_NE(str.find("Vector3D(1, 2, 3)"), std::string::npos);
   EXPECT_NE(str.find("Vector3D(4, 5, 6)"), std::string::npos);
 }
+
+TEST(LightTest, DefaultInitialization) {
+  Light light;
+  EXPECT_FLOAT_EQ(light.getAmbient(), 0.0f);
+  EXPECT_FLOAT_EQ(light.getDiffuse(), 0.0f);
+  EXPECT_TRUE(light.getPointLights().empty());
+  EXPECT_TRUE(light.getDirectionalLights().empty());
+}
+
+TEST(LightTest, AddLights) {
+  Light light;
+  light.addPointLight(Vector3D(1, 2, 3));
+  light.addDirectionalLight(Vector3D(4, 5, 6));
+
+  ASSERT_EQ(light.getPointLights().size(), 1);
+  ASSERT_EQ(light.getDirectionalLights().size(), 1);
+  EXPECT_TRUE(light.getPointLights()[0].isEqual(Vector3D(1, 2, 3)));
+  EXPECT_TRUE(light.getDirectionalLights()[0].isEqual(Vector3D(4, 5, 6)));
+}
