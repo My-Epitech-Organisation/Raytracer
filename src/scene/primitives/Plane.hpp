@@ -93,19 +93,19 @@ class Plane : public IPrimitive {
    * @brief Get the axis of the plane
    * @return The axis the plane is aligned with
    */
-  Axis getAxis() const { return _axis; }
+  Axis getAxis() const;
 
   /**
    * @brief Get the position of the plane along the axis
    * @return The position of the plane
    */
 
-  double getPosition() const { return _position; }
+  double getPosition() const;
   /**
    * @brief Get the normal vector of the plane
    * @return The normal vector of the plane
    */
-  Vector3D getNormal() const { return _normal; }
+  Vector3D getNormal() const;
 
  private:
   Axis getAxisFromChar(char axis) const;
