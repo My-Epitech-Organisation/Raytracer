@@ -107,6 +107,12 @@ class Cylinder : public IPrimitive {
    */
   double getHeight() const;
 
+  /**
+   * @brief Get the position of the cylinder
+   * @return The position (translation component) of the cylinder
+   */
+  Vector3D getPosition() const;
+
  private:
   double _radius;               ///< The radius of the cylinder.
   double _height;               ///< The total height of the cylinder.

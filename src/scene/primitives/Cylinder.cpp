@@ -71,6 +71,10 @@ double Cylinder::getHeight() const {
   return _height;
 }
 
+Vector3D Cylinder::getPosition() const {
+  return _transform.getMatrix().getTranslation();
+}
+
 std::optional<Intersection> Cylinder::intersect(const Ray& ray) const {
   Ray localRay = ray.transform(_inverseTransform);
   double t_min_overall = std::numeric_limits<double>::infinity();
