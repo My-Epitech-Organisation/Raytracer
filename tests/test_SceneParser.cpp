@@ -204,3 +204,32 @@ TEST(SceneParserTest, ParseLightsDebug) {
     FAIL() << "Exception thrown during lights parsing: " << e.what();
   }
 }
+
+TEST(SceneParserTest, ParsePrimitivesDispatch) {
+  Config cfg;
+  const char* cfgText = R"(
+    primitives:
+    {
+      spheres = (
+        { x = 60; y = 5; z = 40; r = 25; color = { r = 255; g = 64; b = 64; }; },
+        { x = -40; y = 20; z = -10; r = 35; color = { r = 64; g = 255; b = 64; }; }
+      );
+      planes = (
+        { axis = "Z"; position = -20; color = { r = 64; g = 64; b = 255; }; }
+      );
+    };
+  )";
+
+  try {
+    cfg.readString(cfgText);
+    const Setting& primitivesSetting = cfg.lookup("primitives");
+
+    SceneParser parser;
+    parser.parsePrimitives(primitivesSetting);
+
+    std::cout << "Primitives parsed.\n";
+
+  } catch (const std::exception& e) {
+    FAIL() << "Exception thrown during primitive parsing: " << e.what();
+  }
+}

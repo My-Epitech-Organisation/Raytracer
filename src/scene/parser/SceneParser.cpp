@@ -202,4 +202,19 @@ void SceneParser::parseLights(const Setting& lightsSetting) {
   }
 }
 
+void SceneParser::parsePrimitives(const Setting& primitivesSetting) {
+  for (int i = 0; i < primitivesSetting.getLength(); ++i) {
+    const Setting& primitiveGroup = primitivesSetting[i];
+    std::string name = primitiveGroup.getName();
+
+    if (name == "spheres") {
+      this->parseSpheres(primitiveGroup);
+    } else if (name == "planes") {
+      this->parsePlanes(primitiveGroup);
+    } else {
+      std::cerr << "Unsupported primitive type: " << name << std::endl;
+    }
+  }
+}
+
 }  // namespace RayTracer

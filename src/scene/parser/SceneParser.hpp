@@ -27,6 +27,8 @@ class SceneParser {
   Plane parsePlane(const libconfig::Setting& planeSetting);
   std::vector<Plane> parsePlanes(const libconfig::Setting& setting);
   void parseLights(const libconfig::Setting& lightsSetting);
+  std::shared_ptr<Light> parseLights(const libconfig::Setting& lightsSetting);
+  void parsePrimitives(const libconfig::Setting& primitivesSetting);
 };
 
 }  // namespace RayTracer
