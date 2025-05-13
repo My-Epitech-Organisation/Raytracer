@@ -9,6 +9,7 @@ set(TEST_SOURCES
     test_Plane.cpp
     test_LightFactory.cpp
     test_Light.cpp
+    test_Cylinder.cpp
 )
 
 # Test executable

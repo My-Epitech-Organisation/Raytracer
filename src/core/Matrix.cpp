@@ -204,6 +204,10 @@ Matrix Matrix::createScaling(double x, double y, double z) {
   return result;
 }
 
+Vector3D Matrix::getTranslation() const {
+  return Vector3D(at(0, 3), at(1, 3), at(2, 3));
+}
+
 std::ostream& operator<<(std::ostream& os, const Matrix& matrix) {
   for (int row = 0; row < 4; ++row) {
     os << "| ";
