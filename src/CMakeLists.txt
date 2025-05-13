@@ -12,7 +12,8 @@ set(RAYTRACER_SOURCES
     scene/primitives/Sphere.cpp
     scene/primitives/Plane.cpp
     scene/primitives/Cylinder.cpp
-    scene/lights/DirectionalLight.cpp
+    scene/lights/LightFactory.cpp
+    scene/lights/Light.cpp
     scene/parser/SceneParser.cpp
 )
 
