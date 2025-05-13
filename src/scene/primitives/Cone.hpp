@@ -1,7 +1,7 @@
 #ifndef CONE_HPP_
 #define CONE_HPP_
 
-#include <cmath>  // For M_PI, tan, cos, sqrt, acos
+#include <cmath>
 #include <memory>
 #include <optional>
 #include <string>
