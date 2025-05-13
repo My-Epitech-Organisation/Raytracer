@@ -22,9 +22,9 @@ void Cone::updateInverseTransform() {
   try {
     _inverseTransform = _transform.inverse();
   } catch (const std::runtime_error& e) {
-    std::cerr << "Error initializing inverse transform for Cone: " << e.what()
-              << std::endl;
-    _inverseTransform = Transform();
+    throw std::runtime_error(
+        std::string("Error initializing inverse transform for Cone: ") +
+        e.what());
   }
 }
 
