@@ -10,7 +10,7 @@
 
 #include <array>
 #include <iostream>
-#include "./Vector3D.hpp"  // Add this include
+#include "./Vector3D.hpp"
 
 namespace RayTracer {
 
