@@ -9,10 +9,12 @@
 #define SCENEPARSER_HPP_
 
 #include <libconfig.h++>
+#include <memory>
 #include <vector>
 #include "../../core/Color.hpp"
 #include "../../core/Vector3D.hpp"
 #include "../Camera.hpp"
+#include "../lights/Light.hpp"
 #include "../primitives/Plane.hpp"
 #include "../primitives/Sphere.hpp"
 
@@ -26,7 +28,6 @@ class SceneParser {
   std::vector<Sphere> parseSpheres(const libconfig::Setting& setting);
   Plane parsePlane(const libconfig::Setting& planeSetting);
   std::vector<Plane> parsePlanes(const libconfig::Setting& setting);
-  void parseLights(const libconfig::Setting& lightsSetting);
   std::shared_ptr<Light> parseLights(const libconfig::Setting& lightsSetting);
   void parsePrimitives(const libconfig::Setting& primitivesSetting);
 };

@@ -8,6 +8,7 @@
 #include "SceneParser.hpp"
 #include <libconfig.h++>
 #include <stdexcept>
+#include "../lights/LightFactory.hpp"
 
 using namespace libconfig;
 
@@ -155,50 +156,19 @@ float getFlexibleFloat(const Setting& setting) {
   }
 }
 
-void SceneParser::parseLights(const Setting& lightsSetting) {
+std::shared_ptr<Light> SceneParser::parseLights(const Setting& lightsSetting) {
   try {
-    float ambient = 0.0f, diffuse = 0.0f;
-    if (lightsSetting.exists("ambient"))
-      ambient = getFlexibleFloat(lightsSetting["ambient"]);
-    if (lightsSetting.exists("diffuse"))
-      diffuse = getFlexibleFloat(lightsSetting["diffuse"]);
-
-    const Setting& pointLights = lightsSetting["point"];
-    if (pointLights.getType() == Setting::TypeList) {
-      for (int i = 0; i < pointLights.getLength(); ++i) {
-        const Setting& light = pointLights[i];
-        if (light.getType() == Setting::TypeGroup) {
-          float x = getFlexibleFloat(light["x"]);
-          float y = getFlexibleFloat(light["y"]);
-          float z = getFlexibleFloat(light["z"]);
-        } else
-          throw std::runtime_error("Invalid point light at index " +
-                                   std::to_string(i));
-      }
-    } else
-      throw std::runtime_error("Point lights is not a list!");
-
-    const Setting& dirLights = lightsSetting["directional"];
-    if (dirLights.getType() == Setting::TypeList) {
-      for (int i = 0; i < dirLights.getLength(); ++i) {
-        const Setting& light = dirLights[i];
-        if (light.getType() == Setting::TypeGroup) {
-          float x = getFlexibleFloat(light["x"]);
-          float y = getFlexibleFloat(light["y"]);
-          float z = getFlexibleFloat(light["z"]);
-        } else
-          throw std::runtime_error("Invalid directional light at index " +
-                                   std::to_string(i));
-      }
-    } else
-      throw std::runtime_error("Directional lights is not a list!");
-
+    return LightFactory::createLight(lightsSetting);
   } catch (const SettingNotFoundException& e) {
     fprintf(stderr, "Missing setting: %s\n", e.what());
+    throw std::runtime_error(std::string("Missing light setting: ") + e.what());
   } catch (const SettingTypeException& e) {
     fprintf(stderr, "Type error: %s\n", e.what());
+    throw std::runtime_error(std::string("Light setting type error: ") +
+                             e.what());
   } catch (const std::exception& e) {
     fprintf(stderr, "Parsing error: %s\n", e.what());
+    throw std::runtime_error(std::string("Error parsing lights: ") + e.what());
   }
 }
 
