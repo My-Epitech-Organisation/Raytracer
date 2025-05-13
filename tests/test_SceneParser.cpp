@@ -233,3 +233,31 @@ TEST(SceneParserTest, ParsePrimitivesDispatch) {
     FAIL() << "Exception thrown during primitive parsing: " << e.what();
   }
 }
+
+TEST(SceneParserTest, ParseUnknownPrimitiveType) {
+  Config cfg;
+  const char* cfgText = R"(
+    primitives:
+    {
+      spheres = (
+        { x = 10; y = 20; z = 30; r = 10; color = { r = 255; g = 255; b = 255; }; }
+      );
+      unicorns = (
+        { magic = 100; sparkle = true; }
+      );
+    };
+  )";
+
+  try {
+    cfg.readString(cfgText);
+    const Setting& primitivesSetting = cfg.lookup("primitives");
+
+    SceneParser parser;
+    parser.parsePrimitives(primitivesSetting);
+
+    std::cout << "Unknown primitive types were ignored gracefully.\n";
+
+  } catch (const std::exception& e) {
+    FAIL() << "Exception thrown during parsing: " << e.what();
+  }
+}
