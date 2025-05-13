@@ -89,7 +89,7 @@ TEST_F(ConeTest, IntersectionRayAlongAxisHitsApex) {
   EXPECT_EQ(intersection->color, defaultColor);
 }
 
-// Ray parallel to cone axis, but should miss
+// Ray parallel to cone axis, offset, and intersects the cone (e.g., at y = 10 * √3)
 TEST_F(ConeTest, IntersectionRayParallelToAxisMisses) {
   RayTracer::Vector3D apex(0, 0, 0);
   RayTracer::Vector3D axis(0, 1, 0);  // Cone opens along positive Y
