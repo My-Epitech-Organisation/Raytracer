@@ -40,7 +40,8 @@ Camera SceneParser::parseCamera(const Setting& cameraSetting) {
     if (fovSetting.isNumber())
       fov = static_cast<float>(fovSetting);
     else
-      throw std::runtime_error("Field of view must be a number");
+      throw RaytracerException(
+          "Field of view has invalid type (expected int or float)");
 
     Camera camera(Vector3D(posX, posY, posZ), width, height, fov);
     camera.setRotation(Vector3D(rotX, rotY, rotZ));
@@ -112,7 +113,7 @@ Plane SceneParser::parsePlane(const Setting& planeSetting) {
     } else if (posSetting.getType() == Setting::TypeInt) {
       pos = static_cast<float>(int(posSetting));
     } else {
-      throw std::runtime_error(
+      throw RaytracerException(
           "Position has invalid type (expected int or float)");
     }
 
