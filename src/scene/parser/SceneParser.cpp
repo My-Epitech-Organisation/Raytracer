@@ -145,6 +145,9 @@ Plane SceneParser::parsePlane(const Setting& planeSetting) {
         const Setting& sizeSetting = checkerboardSetting["size"];
         if (sizeSetting.isNumber()) {
           checkSize = static_cast<double>(sizeSetting);
+          if (checkSize <= 0.0) {
+            checkSize = 1.0; // Clamp to a minimum positive value
+          }
         }
       }
     }
