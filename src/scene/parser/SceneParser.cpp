@@ -123,7 +123,36 @@ Plane SceneParser::parsePlane(const Setting& planeSetting) {
 
     Color color(static_cast<uint8_t>(red), static_cast<uint8_t>(green),
                 static_cast<uint8_t>(blue));
-    Plane plane(axis, pos, color);
+
+    Color alternateColor = Color::BLACK;
+    double checkSize = 10.0;
+
+    if (planeSetting.exists("checkerboard")) {
+      const Setting& checkerboardSetting = planeSetting["checkerboard"];
+
+      if (checkerboardSetting.exists("alternateColor")) {
+        const Setting& altColorSetting = checkerboardSetting["alternateColor"];
+        int altRed = 0, altGreen = 0, altBlue = 0;
+        altColorSetting.lookupValue("r", altRed);
+        altColorSetting.lookupValue("g", altGreen);
+        altColorSetting.lookupValue("b", altBlue);
+        alternateColor =
+            Color(static_cast<uint8_t>(altRed), static_cast<uint8_t>(altGreen),
+                  static_cast<uint8_t>(altBlue));
+      }
+
+      if (checkerboardSetting.exists("size")) {
+        const Setting& sizeSetting = checkerboardSetting["size"];
+        if (sizeSetting.isNumber()) {
+          checkSize = static_cast<double>(sizeSetting);
+          if (checkSize <= 0.0) {
+            checkSize = 1.0;  // Clamp to a minimum positive value
+          }
+        }
+      }
+    }
+
+    Plane plane(axis, pos, color, alternateColor, checkSize);
 
     return plane;
   } catch (const SettingNotFoundException& e) {
