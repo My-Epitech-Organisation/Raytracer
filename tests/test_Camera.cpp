@@ -95,13 +95,8 @@ TEST(CameraTest, CenterRayGeneration) {
 
   EXPECT_TRUE(
       vectorsNearlyEqual_Camera(centerRay.getOrigin(), Vector3D(0, 0, 0)));
-
-  // In the current implementation, the center ray doesn't point to (0,0,-1)
-  // but rather to the normalized version of (0,1,0)
-  Vector3D expectedDirection(0, 1, 0);
-  expectedDirection = expectedDirection.normalized();
   EXPECT_TRUE(
-      vectorsNearlyEqual_Camera(centerRay.getDirection(), expectedDirection));
+      vectorsNearlyEqual_Camera(centerRay.getDirection(), Vector3D(0, 0, -1)));
 }
 
 // Test ray generation with default camera (corner pixels)
@@ -125,22 +120,21 @@ TEST(CameraTest, CornerRaysGeneration) {
   EXPECT_TRUE(
       vectorsNearlyEqual_Camera(bottomRightRay.getOrigin(), Vector3D(0, 0, 0)));
 
-  // Verify that corner rays have the expected directions based on FOV and the
-  // current implementation
+  // Verify that corner rays have the expected directions based on FOV
   double fovRadians = (camera.getFieldOfView() * M_PI) / 180.0;
   double aspectRatio =
       static_cast<double>(camera.getWidth()) / camera.getHeight();
   double tanHalfFov = tan(fovRadians / 2.0);
 
-  // The expected corner directions in the actual implementation (normalized)
+  // The expected corner directions (normalized)
   Vector3D expectedTopLeft =
-      Vector3D(-aspectRatio * tanHalfFov, 1.0, tanHalfFov).normalized();
+      Vector3D(-aspectRatio * tanHalfFov, tanHalfFov, -1.0).normalized();
   Vector3D expectedTopRight =
-      Vector3D(aspectRatio * tanHalfFov, 1.0, tanHalfFov).normalized();
+      Vector3D(aspectRatio * tanHalfFov, tanHalfFov, -1.0).normalized();
   Vector3D expectedBottomLeft =
-      Vector3D(-aspectRatio * tanHalfFov, 1.0, -tanHalfFov).normalized();
+      Vector3D(-aspectRatio * tanHalfFov, -tanHalfFov, -1.0).normalized();
   Vector3D expectedBottomRight =
-      Vector3D(aspectRatio * tanHalfFov, 1.0, -tanHalfFov).normalized();
+      Vector3D(aspectRatio * tanHalfFov, -tanHalfFov, -1.0).normalized();
 
   EXPECT_TRUE(
       vectorsNearlyEqual_Camera(topLeftRay.getDirection(), expectedTopLeft));
@@ -157,27 +151,40 @@ TEST(CameraTest, OffsetPositionRayGeneration) {
   Vector3D position(10, 20, 30);
   Camera camera(position, 800, 600, 60.0);
 
-  // The center ray should originate from the camera position
+  // The center ray should still point along -Z, but from the new position
   Ray centerRay =
       camera.generateRay(camera.getWidth() / 2, camera.getHeight() / 2);
 
   EXPECT_TRUE(vectorsNearlyEqual_Camera(centerRay.getOrigin(), position));
-
-  // In the actual implementation, the center ray direction is the normalized
-  // version of (0,1,0)
-  Vector3D expectedDirection(0, 1, 0);
-  expectedDirection = expectedDirection.normalized();
   EXPECT_TRUE(
-      vectorsNearlyEqual_Camera(centerRay.getDirection(), expectedDirection));
+      vectorsNearlyEqual_Camera(centerRay.getDirection(), Vector3D(0, 0, -1)));
 }
 
 // Test ray generation with camera rotation
 TEST(CameraTest, RotatedCameraRayGeneration) {
-  // Skip this test as it's verifying behavior that doesn't match the actual
-  // implementation and modifying the Camera implementation was explicitly not
-  // allowed.
-  GTEST_SKIP() << "Skipping camera rotation test as it requires modifying the "
-                  "Camera implementation";
+  Camera camera;
+
+  // Rotate the camera 90 degrees around Y axis
+  // This makes the camera look along the positive X axis
+  camera.setRotation(Vector3D(0, 90, 0));
+
+  // The center ray should now point along +X axis
+  Ray centerRay =
+      camera.generateRay(camera.getWidth() / 2, camera.getHeight() / 2);
+
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(centerRay.getOrigin(), Vector3D(0, 0, 0)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(centerRay.getDirection(), Vector3D(1, 0, 0)));
+
+  // Rotate the camera 90 degrees around X axis (looking down)
+  camera.setRotation(Vector3D(90, 0, 0));
+  centerRay = camera.generateRay(camera.getWidth() / 2, camera.getHeight() / 2);
+
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(centerRay.getOrigin(), Vector3D(0, 0, 0)));
+  EXPECT_TRUE(
+      vectorsNearlyEqual_Camera(centerRay.getDirection(), Vector3D(0, -1, 0)));
 }
 
 // Test ray generation with out-of-bounds pixel coordinates
