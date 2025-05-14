@@ -7,6 +7,9 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
+#include "../include/exceptions/InvalidTypeException.hpp"
+#include "../include/exceptions/ParserException.hpp"
+#include "../include/exceptions/RaytracerException.hpp"
 #include "../src/core/Ray.hpp"
 #include "../src/core/Vector3D.hpp"
 #include "../src/scene/Camera.hpp"
@@ -52,10 +55,10 @@ TEST(CameraTest, ParameterizedConstructor) {
 TEST(CameraTest, InvalidParameters) {
   Vector3D position(0, 0, 0);
 
-  EXPECT_THROW(Camera(position, -1, 1080, 72.0), std::runtime_error);
-  EXPECT_THROW(Camera(position, 1920, -1, 72.0), std::runtime_error);
-  EXPECT_THROW(Camera(position, 1920, 1080, -1.0), std::runtime_error);
-  EXPECT_THROW(Camera(position, 1920, 1080, 180.0), std::runtime_error);
+  EXPECT_THROW(Camera(position, -1, 1080, 72.0), InvalidTypeException);
+  EXPECT_THROW(Camera(position, 1920, -1, 72.0), InvalidTypeException);
+  EXPECT_THROW(Camera(position, 1920, 1080, -1.0), InvalidTypeException);
+  EXPECT_THROW(Camera(position, 1920, 1080, 180.0), InvalidTypeException);
 }
 
 // Test setters
@@ -75,10 +78,10 @@ TEST(CameraTest, Setters) {
   EXPECT_TRUE(vectorsNearlyEqual_Camera(camera.getPosition(), position));
   EXPECT_TRUE(vectorsNearlyEqual_Camera(camera.getRotation(), rotation));
 
-  EXPECT_THROW(camera.setResolution(-1, 1080), std::runtime_error);
-  EXPECT_THROW(camera.setResolution(1920, -1), std::runtime_error);
-  EXPECT_THROW(camera.setFieldOfView(-1.0), std::runtime_error);
-  EXPECT_THROW(camera.setFieldOfView(180.0), std::runtime_error);
+  EXPECT_THROW(camera.setResolution(-1, 1080), InvalidTypeException);
+  EXPECT_THROW(camera.setResolution(1920, -1), InvalidTypeException);
+  EXPECT_THROW(camera.setFieldOfView(-1.0), InvalidTypeException);
+  EXPECT_THROW(camera.setFieldOfView(180.0), InvalidTypeException);
 }
 
 // Test ray generation with default camera (center pixel)
@@ -181,10 +184,10 @@ TEST(CameraTest, RotatedCameraRayGeneration) {
 TEST(CameraTest, OutOfBoundsRayGeneration) {
   Camera camera;
 
-  EXPECT_THROW(camera.generateRay(-1, 300), std::runtime_error);
-  EXPECT_THROW(camera.generateRay(800, 300), std::runtime_error);
-  EXPECT_THROW(camera.generateRay(400, -1), std::runtime_error);
-  EXPECT_THROW(camera.generateRay(400, 600), std::runtime_error);
+  EXPECT_THROW(camera.generateRay(-1, 300), RaytracerException);
+  EXPECT_THROW(camera.generateRay(800, 300), RaytracerException);
+  EXPECT_THROW(camera.generateRay(400, -1), RaytracerException);
+  EXPECT_THROW(camera.generateRay(400, 600), RaytracerException);
 }
 
 // Test different field of view values
