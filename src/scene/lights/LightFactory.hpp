@@ -10,19 +10,26 @@
 
 #include <libconfig.h++>
 #include <memory>
+#include <vector>
 #include "../../core/Vector3D.hpp"
 #include "Light.hpp"
+#include "LightingSettings.hpp"
 
 namespace RayTracer {
 
 class LightFactory {
  public:
+
+  struct Result {
+    LightingSettings settings;
+    std::vector<std::unique_ptr<Light>> lights;
+  };
   /**
    * @brief Create a Light object from config setting
    * @param setting libconfig setting representing a light
    * @return A unique pointer to a Light
    */
-  static std::unique_ptr<Light> createLight(const libconfig::Setting& setting);
+  static Result createLights(const libconfig::Setting& setting);
 };
 
 }  // namespace RayTracer
