@@ -25,7 +25,7 @@ SFMLDisplay::~SFMLDisplay() {
   if (_updateThread.joinable()) {
     _updateThread.join();
   }
-  
+
   // Close the window
   if (_window.isOpen()) {
     _window.close();
@@ -159,7 +159,8 @@ sf::Color SFMLDisplay::convertColor(const Color& color) const {
   return sf::Color(color.getR(), color.getG(), color.getB());
 }
 
-void SFMLDisplay::updateTile(const PPMDisplay& ppmDisplay, const RenderTile& tile) {
+void SFMLDisplay::updateTile(const PPMDisplay& ppmDisplay,
+                             const RenderTile& tile) {
   // Copy pixels from the tile to the SFML image
   for (int y = tile.getStartY(); y < tile.getEndY(); ++y) {
     for (int x = tile.getStartX(); x < tile.getEndX(); ++x) {
@@ -171,7 +172,7 @@ void SFMLDisplay::updateTile(const PPMDisplay& ppmDisplay, const RenderTile& til
 
 void SFMLDisplay::displayUpdateThread(const PPMDisplay* ppmDisplay) {
   const int updateInterval = 100;  // milliseconds
-  
+
   while (_isRendering && _window.isOpen()) {
     // Copy the current state of the PPM display to our SFML image
     for (int y = 0; y < ppmDisplay->getHeight(); ++y) {
@@ -180,13 +181,13 @@ void SFMLDisplay::displayUpdateThread(const PPMDisplay* ppmDisplay) {
         _image.setPixel(x, y, convertColor(pixelColor));
       }
     }
-    
+
     // Update the display
     update();
-    
+
     // Handle any window events
     handleEvents();
-    
+
     // Wait a bit before the next update
     std::this_thread::sleep_for(std::chrono::milliseconds(updateInterval));
   }

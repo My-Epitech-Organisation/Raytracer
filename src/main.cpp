@@ -1,7 +1,7 @@
+#include <signal.h>
 #include <iostream>
 #include <libconfig.h++>
 #include <memory>
-#include <signal.h>
 #include <string>
 #include "display/PPMDisplay.hpp"
 #include "display/SFMLDisplay.hpp"

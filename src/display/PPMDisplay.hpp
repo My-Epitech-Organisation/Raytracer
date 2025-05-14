@@ -50,11 +50,13 @@ class PPMDisplay {
   /**
    * @brief Render a scene with progress tracking
    * @param scene The scene to render
-   * @param progressCallback A callback function to report progress percentage (0-100)
+   * @param progressCallback A callback function to report progress percentage
+   * (0-100)
    * @return true if rendering was successful, false otherwise
    */
-  bool renderWithProgress(const Scene& scene, 
-                         std::function<void(double, double)> progressCallback = nullptr);
+  bool renderWithProgress(
+      const Scene& scene,
+      std::function<void(double, double)> progressCallback = nullptr);
 
   /**
    * @brief Render a specific tile of the image
@@ -121,10 +123,11 @@ class PPMDisplay {
   std::vector<Color> _pixelBuffer;  ///< Buffer holding the pixel data
   int _width;                       ///< Width of the image in pixels
   int _height;                      ///< Height of the image in pixels
-  std::unique_ptr<ThreadPool> _threadPool;  ///< Thread pool for parallel rendering
+  std::unique_ptr<ThreadPool>
+      _threadPool;  ///< Thread pool for parallel rendering
   std::unique_ptr<TileManager> _tileManager;  ///< Manager for render tiles
-  std::mutex _bufferMutex;  ///< Mutex for pixel buffer access
-  std::atomic<bool> _renderingActive;  ///< Flag to control rendering
+  std::mutex _bufferMutex;                    ///< Mutex for pixel buffer access
+  std::atomic<bool> _renderingActive;         ///< Flag to control rendering
   std::chrono::steady_clock::time_point _startTime;  ///< Rendering start time
 
   /**

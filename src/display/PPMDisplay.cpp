@@ -18,10 +18,10 @@
 
 namespace RayTracer {
 
-PPMDisplay::PPMDisplay() 
-    : _pixelBuffer(), 
-      _width(0), 
-      _height(0), 
+PPMDisplay::PPMDisplay()
+    : _pixelBuffer(),
+      _width(0),
+      _height(0),
       _threadPool(nullptr),
       _tileManager(nullptr),
       _renderingActive(true) {}
@@ -37,18 +37,19 @@ bool PPMDisplay::render(const Scene& scene) {
 
   // Resize the pixel buffer to match the camera resolution
   _pixelBuffer.resize(_width * _height);
-  
+
   // Create a thread pool with number of cores - 1 threads
   _threadPool = std::make_unique<ThreadPool>();
-  _tileManager = std::make_unique<TileManager>(_width, _height, 64);  // 64x64 tiles
-  
+  _tileManager =
+      std::make_unique<TileManager>(_width, _height, 64);  // 64x64 tiles
+
   _renderingActive = true;
   _startTime = std::chrono::steady_clock::now();
-  
+
   // Process tiles until all are complete
   std::vector<std::future<void>> futures;
   RenderTile* tile;
-  
+
   while ((tile = _tileManager->getNextTile()) != nullptr) {
     futures.push_back(_threadPool->enqueue([this, &scene, tile]() {
       this->renderTile(scene, *tile);
@@ -56,35 +57,36 @@ bool PPMDisplay::render(const Scene& scene) {
       delete tile;
     }));
   }
-  
+
   // Wait for all tasks to complete
   for (auto& future : futures) {
     future.wait();
   }
-  
+
   return true;
 }
 
-bool PPMDisplay::renderWithProgress(const Scene& scene, 
-                                   std::function<void(double, double)> progressCallback) {
+bool PPMDisplay::renderWithProgress(
+    const Scene& scene, std::function<void(double, double)> progressCallback) {
   const Camera& camera = scene.getCamera();
   _width = camera.getWidth();
   _height = camera.getHeight();
 
   // Resize the pixel buffer to match the camera resolution
   _pixelBuffer.resize(_width * _height);
-  
+
   // Create a thread pool with number of cores - 1 threads
   _threadPool = std::make_unique<ThreadPool>();
-  _tileManager = std::make_unique<TileManager>(_width, _height, 64);  // 64x64 tiles
-  
+  _tileManager =
+      std::make_unique<TileManager>(_width, _height, 64);  // 64x64 tiles
+
   _renderingActive = true;
   _startTime = std::chrono::steady_clock::now();
-  
+
   // Process tiles asynchronously
   std::vector<std::future<void>> futures;
   int totalTiles = _tileManager->getTotalTiles();
-  
+
   // Queue all rendering tasks
   RenderTile* tile;
   while ((tile = _tileManager->getNextTile()) != nullptr) {
@@ -96,40 +98,43 @@ bool PPMDisplay::renderWithProgress(const Scene& scene,
       delete tile;
     }));
   }
-  
+
   // Monitor progress in a separate thread
   if (progressCallback) {
     std::thread progressThread([this, totalTiles, progressCallback]() {
       int lastCompleted = 0;
-      
-      while (_renderingActive && _tileManager->getCompletedTiles() < totalTiles) {
+
+      while (_renderingActive &&
+             _tileManager->getCompletedTiles() < totalTiles) {
         int completed = _tileManager->getCompletedTiles();
         if (completed > lastCompleted) {
           auto now = std::chrono::steady_clock::now();
           auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-              now - _startTime).count() / 1000.0;
-              
+                             now - _startTime)
+                             .count() /
+                         1000.0;
+
           double progress = 100.0 * completed / totalTiles;
           double etaSeconds = elapsed * (totalTiles - completed) / completed;
-          
+
           // Report progress
           progressCallback(progress, etaSeconds);
           lastCompleted = completed;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
       }
-      
+
       // Final progress update (100%)
       if (_renderingActive) {
         progressCallback(100.0, 0.0);
       }
     });
-    
+
     // Wait for all rendering tasks to complete
     for (auto& future : futures) {
       future.wait();
     }
-    
+
     progressThread.join();
   } else {
     // If no progress callback, just wait for rendering to complete
@@ -137,7 +142,7 @@ bool PPMDisplay::renderWithProgress(const Scene& scene,
       future.wait();
     }
   }
-  
+
   return _renderingActive;
 }
 
@@ -145,16 +150,16 @@ void PPMDisplay::renderTile(const Scene& scene, const RenderTile& tile) {
   if (!_renderingActive) {
     return;
   }
-  
+
   // Render all pixels in this tile
   for (int y = tile.getStartY(); y < tile.getEndY(); ++y) {
     for (int x = tile.getStartX(); x < tile.getEndX(); ++x) {
       if (!_renderingActive) {
         return;
       }
-      
+
       Color pixelColor = calculatePixelColor(scene, x, y);
-      
+
       // Thread-safe pixel buffer update
       {
         std::lock_guard<std::mutex> lock(_bufferMutex);
@@ -202,8 +207,9 @@ bool PPMDisplay::renderToFile(const Scene& scene, const std::string& filename) {
   // Display progress in the console
   auto progressCallback = [](double progress, double etaSeconds) {
     std::stringstream ss;
-    ss << "\rRendering: " << std::fixed << std::setprecision(1) << progress << "% complete";
-    
+    ss << "\rRendering: " << std::fixed << std::setprecision(1) << progress
+       << "% complete";
+
     if (etaSeconds > 0) {
       int minutes = static_cast<int>(etaSeconds) / 60;
       int seconds = static_cast<int>(etaSeconds) % 60;
@@ -213,18 +219,18 @@ bool PPMDisplay::renderToFile(const Scene& scene, const std::string& filename) {
       }
       ss << seconds << "s";
     }
-    
+
     // Add spaces to overwrite previous line and stay in place
     ss << "                    ";
-    
+
     std::cout << ss.str() << std::flush;
   };
-  
+
   if (!renderWithProgress(scene, progressCallback)) {
     std::cout << "\nRendering was interrupted." << std::endl;
     return false;
   }
-  
+
   std::cout << "\nRendering complete! Saving to file..." << std::endl;
   return saveToFile(filename);
 }
@@ -257,7 +263,7 @@ void PPMDisplay::clear(const Color& color) {
 
 void PPMDisplay::stopRendering() {
   _renderingActive = false;
-  
+
   // Wait for thread pool to finish (if it exists)
   _threadPool.reset();
   _tileManager.reset();

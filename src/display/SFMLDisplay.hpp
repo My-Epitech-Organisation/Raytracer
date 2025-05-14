@@ -96,8 +96,10 @@ class SFMLDisplay {
   sf::Sprite _sprite;        ///< SFML sprite to display the texture
   sf::Image _image;          ///< SFML image to hold pixel data
   std::string _windowTitle;  ///< Window title
-  std::atomic<bool> _isRendering;  ///< Flag to indicate if rendering is in progress
-  std::thread _updateThread;  ///< Thread for updating the display during rendering
+  std::atomic<bool>
+      _isRendering;  ///< Flag to indicate if rendering is in progress
+  std::thread
+      _updateThread;  ///< Thread for updating the display during rendering
 
   /**
    * @brief Convert a RayTracer::Color to sf::Color

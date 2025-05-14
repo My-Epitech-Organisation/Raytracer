@@ -7,7 +7,7 @@ namespace RayTracer {
 
 /**
  * @brief Represents a rectangular tile of the final image
- * 
+ *
  * Used for dividing the rendering workload among threads
  */
 class RenderTile {
@@ -112,13 +112,13 @@ class TileManager {
   double getProgress() const;
 
  private:
-  int _imageWidth;    ///< Total image width
-  int _imageHeight;   ///< Total image height
-  int _tileSize;      ///< Size of each tile (both width and height)
-  int _numTilesX;     ///< Number of tiles along X-axis
-  int _numTilesY;     ///< Number of tiles along Y-axis
-  int _totalTiles;    ///< Total number of tiles
-  
+  int _imageWidth;   ///< Total image width
+  int _imageHeight;  ///< Total image height
+  int _tileSize;     ///< Size of each tile (both width and height)
+  int _numTilesX;    ///< Number of tiles along X-axis
+  int _numTilesY;    ///< Number of tiles along Y-axis
+  int _totalTiles;   ///< Total number of tiles
+
   std::atomic<int> _currentTileIndex;  ///< Index of the next tile to process
   std::atomic<int> _completedTiles;    ///< Number of completed tiles
 };

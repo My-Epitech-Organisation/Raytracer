@@ -19,7 +19,8 @@ class ThreadPool {
  public:
   /**
    * @brief Constructor
-   * @param numThreads Number of worker threads to create (default: number of CPU cores - 1)
+   * @param numThreads Number of worker threads to create (default: number of
+   * CPU cores - 1)
    */
   explicit ThreadPool(size_t numThreads = 0);
 
@@ -63,14 +64,14 @@ class ThreadPool {
   bool isActive() const;
 
  private:
-  std::vector<std::thread> _workers;  ///< Worker threads
+  std::vector<std::thread> _workers;         ///< Worker threads
   std::queue<std::function<void()>> _tasks;  ///< Task queue
 
   // Synchronization
-  mutable std::mutex _queueMutex;  ///< Protects task queue
+  mutable std::mutex _queueMutex;      ///< Protects task queue
   std::condition_variable _condition;  ///< For notifying worker threads
-  std::atomic<bool> _stop;  ///< Flag to stop threads
-  std::atomic<bool> _active;  ///< Flag to pause/resume processing
+  std::atomic<bool> _stop;             ///< Flag to stop threads
+  std::atomic<bool> _active;           ///< Flag to pause/resume processing
 };
 
 // Template implementation (must be in header)
