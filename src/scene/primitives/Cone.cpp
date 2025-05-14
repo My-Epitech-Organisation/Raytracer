@@ -7,10 +7,10 @@
 
 #include "Cone.hpp"
 #include <cmath>
+#include <iomanip>
+#include <iostream>
 #include <limits>
 #include <stdexcept>
-#include <iostream>
-#include <iomanip>
 
 namespace RayTracer {
 
@@ -34,7 +34,9 @@ void Cone::updateInverseTransform() {
     _inverseTransform = _transform.inverse();
   } catch (const std::runtime_error& e) {
     _inverseTransform = Transform();
-    _color = Color(static_cast<unsigned char>(255), static_cast<unsigned char>(0), static_cast<unsigned char>(255));
+    _color =
+        Color(static_cast<unsigned char>(255), static_cast<unsigned char>(0),
+              static_cast<unsigned char>(255));
   }
 }
 

@@ -234,33 +234,40 @@ Cone SceneParser::parseCone(const Setting& coneSetting) {
     double apexY = static_cast<double>(tempApexY);
     double apexZ = static_cast<double>(tempApexZ);
 
-    std::cout << "DEBUG SceneParser::parseCone: Read apex from config: x=" << apexX << " (int: " << tempApexX << ")"<< ", y=" << apexY << " (int: " << tempApexY << ")"<< ", z=" << apexZ << " (int: " << tempApexZ << ")" << std::endl;
+    std::cout << "DEBUG SceneParser::parseCone: Read apex from config: x="
+              << apexX << " (int: " << tempApexX << ")" << ", y=" << apexY
+              << " (int: " << tempApexY << ")" << ", z=" << apexZ
+              << " (int: " << tempApexZ << ")" << std::endl;
 
     if (!axisSetting.isGroup()) {
-        throw std::runtime_error("Cone 'axis' setting must be a group (e.g., axis = { x = 0.0; y = 1.0; z = 0.0; }). Path: " + axisSetting.getPath());
+      throw std::runtime_error(
+          "Cone 'axis' setting must be a group (e.g., axis = { x = 0.0; y = "
+          "1.0; z = 0.0; }). Path: " +
+          axisSetting.getPath());
     }
 
     double axisX, axisY, axisZ;
 
     const Setting& compXSetting = axisSetting["x"];
     if (!compXSetting.isNumber()) {
-        throw SettingTypeException(compXSetting);
+      throw SettingTypeException(compXSetting);
     }
     axisX = static_cast<double>(compXSetting);
 
     const Setting& compYSetting = axisSetting["y"];
     if (!compYSetting.isNumber()) {
-        throw SettingTypeException(compYSetting);
+      throw SettingTypeException(compYSetting);
     }
     axisY = static_cast<double>(compYSetting);
 
     const Setting& compZSetting = axisSetting["z"];
     if (!compZSetting.isNumber()) {
-        throw SettingTypeException(compZSetting);
+      throw SettingTypeException(compZSetting);
     }
     axisZ = static_cast<double>(compZSetting);
 
-    std::cout << "DEBUG SceneParser::parseCone: Read axis from config: x=" << axisX << ", y=" << axisY << ", z=" << axisZ << std::endl;
+    std::cout << "DEBUG SceneParser::parseCone: Read axis from config: x="
+              << axisX << ", y=" << axisY << ", z=" << axisZ << std::endl;
 
     if (axisX == 0.0 && axisY == 0.0 && axisZ == 0.0) {
       throw std::runtime_error("Cone axis cannot be a zero vector.");
@@ -268,11 +275,13 @@ Cone SceneParser::parseCone(const Setting& coneSetting) {
 
     double angle;
     if (angleSetting.isNumber()) {
-      angle = static_cast<double>(angleSetting); // Direct cast if it's a number
+      angle =
+          static_cast<double>(angleSetting);  // Direct cast if it's a number
     } else {
       throw std::runtime_error("Cone angle must be a number.");
     }
-    std::cout << "DEBUG SceneParser::parseCone: Read angle from config: " << angle << std::endl;
+    std::cout << "DEBUG SceneParser::parseCone: Read angle from config: "
+              << angle << std::endl;
 
     const Setting& colorSetting = coneSetting["color"];
     int red, green, blue;
@@ -283,8 +292,8 @@ Cone SceneParser::parseCone(const Setting& coneSetting) {
     Color color(static_cast<uint8_t>(red), static_cast<uint8_t>(green),
                 static_cast<uint8_t>(blue));
 
-    Cone cone(Vector3D(apexX, apexY, apexZ),
-              Vector3D(axisX, axisY, axisZ), angle, color);
+    Cone cone(Vector3D(apexX, apexY, apexZ), Vector3D(axisX, axisY, axisZ),
+              angle, color);
 
     if (coneSetting.exists("transform")) {
       Transform transform = parseTransform(coneSetting["transform"]);
@@ -298,9 +307,9 @@ Cone SceneParser::parseCone(const Setting& coneSetting) {
   } catch (const SettingTypeException& e) {
     std::string error_msg = "Setting type error in cone. Path: ";
     if (e.getPath() != nullptr) {
-        error_msg += e.getPath();
+      error_msg += e.getPath();
     } else {
-        error_msg += "N/A";
+      error_msg += "N/A";
     }
     error_msg += ". Error: ";
     error_msg += e.what();

@@ -15,9 +15,9 @@
 #include "../../core/Vector3D.hpp"
 #include "../Camera.hpp"
 #include "../lights/Light.hpp"
+#include "../primitives/Cone.hpp"
 #include "../primitives/Plane.hpp"
 #include "../primitives/Sphere.hpp"
-#include "../primitives/Cone.hpp"
 
 namespace RayTracer {
 

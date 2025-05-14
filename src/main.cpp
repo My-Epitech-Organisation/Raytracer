@@ -67,11 +67,11 @@ int main(int argc, char** argv) {
 
     // Parse cones if they exist
     if (primitivesSetting.exists("cones")) {
-        const libconfig::Setting& conesSetting = primitivesSetting["cones"];
-        auto cones = parser.parseCones(conesSetting);
-        for (const auto& cone : cones) {
-            builder.withPrimitive(std::make_shared<RayTracer::Cone>(cone));
-        }
+      const libconfig::Setting& conesSetting = primitivesSetting["cones"];
+      auto cones = parser.parseCones(conesSetting);
+      for (const auto& cone : cones) {
+        builder.withPrimitive(std::make_shared<RayTracer::Cone>(cone));
+      }
     }
 
     // Parse lights
