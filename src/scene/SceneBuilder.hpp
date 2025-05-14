@@ -9,7 +9,6 @@
 #define SCENEBUILDER_HPP_
 
 #include <memory>
-#include <string>
 #include "../../include/ILight.hpp"
 #include "../../include/IPrimitive.hpp"
 #include "Camera.hpp"
