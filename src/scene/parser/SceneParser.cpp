@@ -7,7 +7,8 @@
 
 #include "SceneParser.hpp"
 #include <libconfig.h++>
-#include <stdexcept>
+#include "../../../include/exceptions/InvalidTypeException.hpp"
+#include "../../../include/exceptions/ParserException.hpp"
 #include "../lights/LightFactory.hpp"
 
 using namespace libconfig;
@@ -46,11 +47,11 @@ Camera SceneParser::parseCamera(const Setting& cameraSetting) {
 
     return camera;
   } catch (const SettingNotFoundException& e) {
-    throw std::runtime_error(std::string("Setting not found: ") + e.what());
+    throw ParserException(std::string("Setting not found: ") + e.what());
   } catch (const SettingTypeException& e) {
-    throw std::runtime_error(std::string("Setting type error: ") + e.what());
+    throw ParserException(std::string("Setting type error: ") + e.what());
   } catch (const std::exception& e) {
-    throw std::runtime_error(std::string("Error parsing camera: ") + e.what());
+    throw RaytracerException(std::string("Error parsing camera: ") + e.what());
   }
 }
 
@@ -74,11 +75,11 @@ Sphere SceneParser::parseSphere(const Setting& sphereSetting) {
 
     return sphere;
   } catch (const SettingNotFoundException& e) {
-    throw std::runtime_error(std::string("Setting not found: ") + e.what());
+    throw ParserException(std::string("Setting not found: ") + e.what());
   } catch (const SettingTypeException& e) {
-    throw std::runtime_error(std::string("Setting type error: ") + e.what());
+    throw ParserException(std::string("Setting type error: ") + e.what());
   } catch (const std::exception& e) {
-    throw std::runtime_error(std::string("Error parsing sphere: ") + e.what());
+    throw RaytracerException(std::string("Error parsing sphere: ") + e.what());
   }
 }
 
@@ -127,11 +128,11 @@ Plane SceneParser::parsePlane(const Setting& planeSetting) {
 
     return plane;
   } catch (const SettingNotFoundException& e) {
-    throw std::runtime_error(std::string("Setting not found: ") + e.what());
+    throw ParserException(std::string("Setting not found: ") + e.what());
   } catch (const SettingTypeException& e) {
-    throw std::runtime_error(std::string("Setting type error: ") + e.what());
+    throw ParserException(std::string("Setting type error: ") + e.what());
   } catch (const std::exception& e) {
-    throw std::runtime_error(std::string("Error parsing plane: ") + e.what());
+    throw RaytracerException(std::string("Error parsing plane: ") + e.what());
   }
 }
 
@@ -152,7 +153,7 @@ float getFlexibleFloat(const Setting& setting) {
     case Setting::TypeFloat:
       return float(setting);
     default:
-      throw std::runtime_error("Expected a numeric type (int or float)");
+      throw InvalidTypeException("Expected a numeric type (int or float)");
   }
 }
 
@@ -160,15 +161,11 @@ std::shared_ptr<Light> SceneParser::parseLights(const Setting& lightsSetting) {
   try {
     return LightFactory::createLight(lightsSetting);
   } catch (const SettingNotFoundException& e) {
-    fprintf(stderr, "Missing setting: %s\n", e.what());
-    throw std::runtime_error(std::string("Missing light setting: ") + e.what());
+    throw ParserException(std::string("Missing light setting: ") + e.what());
   } catch (const SettingTypeException& e) {
-    fprintf(stderr, "Type error: %s\n", e.what());
-    throw std::runtime_error(std::string("Light setting type error: ") +
-                             e.what());
+    throw ParserException(std::string("Light setting type error: ") + e.what());
   } catch (const std::exception& e) {
-    fprintf(stderr, "Parsing error: %s\n", e.what());
-    throw std::runtime_error(std::string("Error parsing lights: ") + e.what());
+    throw RaytracerException(std::string("Error parsing lights: ") + e.what());
   }
 }
 

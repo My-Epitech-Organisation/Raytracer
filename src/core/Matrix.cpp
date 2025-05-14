@@ -7,7 +7,6 @@
 
 #include "Matrix.hpp"
 #include <cmath>
-#include <stdexcept>
 
 namespace RayTracer {
 

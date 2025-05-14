@@ -7,7 +7,7 @@
 
 #include "Camera.hpp"
 #include <cmath>
-#include <stdexcept>
+#include "../../include/exceptions/InvalidTypeException.hpp"
 
 namespace RayTracer {
 
@@ -28,10 +28,11 @@ Camera::Camera(const Vector3D& position, int width, int height,
       _height(height),
       _fieldOfView(fieldOfView) {
   if (width <= 0 || height <= 0) {
-    throw std::runtime_error("Camera resolution must be positive");
+    throw InvalidTypeException("Camera resolution must be positive");
   }
   if (fieldOfView <= 0 || fieldOfView >= 180) {
-    throw std::runtime_error("Field of view must be between 0 and 180 degrees");
+    throw InvalidTypeException(
+        "Field of view must be between 0 and 180 degrees");
   }
   updateTransform();
 }
@@ -58,7 +59,7 @@ Vector3D Camera::getRotation() const {
 
 void Camera::setResolution(int width, int height) {
   if (width <= 0 || height <= 0) {
-    throw std::runtime_error("Camera resolution must be positive");
+    throw InvalidTypeException("Camera resolution must be positive");
   }
   _width = width;
   _height = height;
@@ -74,7 +75,8 @@ int Camera::getHeight() const {
 
 void Camera::setFieldOfView(double fov) {
   if (fov <= 0 || fov >= 180) {
-    throw std::runtime_error("Field of view must be between 0 and 180 degrees");
+    throw InvalidTypeException(
+        "Field of view must be between 0 and 180 degrees");
   }
   _fieldOfView = fov;
 }
@@ -85,7 +87,7 @@ double Camera::getFieldOfView() const {
 
 Ray Camera::generateRay(int x, int y) const {
   if (x < 0 || x >= _width || y < 0 || y >= _height) {
-    throw std::runtime_error("Pixel coordinates out of bounds");
+    throw RaytracerException("Pixel coordinates out of bounds");
   }
 
   double ndcX = (2.0 * x / (_width - 1)) - 1.0;

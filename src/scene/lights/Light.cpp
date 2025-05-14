@@ -7,7 +7,6 @@
 
 #include "Light.hpp"
 #include <sstream>
-#include <stdexcept>
 
 namespace RayTracer {
 

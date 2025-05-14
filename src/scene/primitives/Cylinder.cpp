@@ -1,7 +1,6 @@
 #include "Cylinder.hpp"
 #include <cmath>
 #include <limits>
-#include <stdexcept>
 #include "../../../include/IPrimitive.hpp"
 #include "../../core/Transform.hpp"
 #include "../../core/Vector3D.hpp"

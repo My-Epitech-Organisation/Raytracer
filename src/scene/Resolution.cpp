@@ -6,6 +6,7 @@
 */
 
 #include "Resolution.hpp"
+#include "../../include/exceptions/InvalidTypeException.hpp"
 
 namespace RayTracer {
 
@@ -13,7 +14,7 @@ Resolution::Resolution() : _width(0), _height(0) {}
 
 Resolution::Resolution(int width, int height) : _width(width), _height(height) {
   if (width <= 0 || height <= 0) {
-    throw std::runtime_error("Resolution must be positive");
+    throw InvalidTypeException("Resolution must be positive");
   }
 }
 
