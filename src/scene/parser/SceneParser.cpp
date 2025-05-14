@@ -145,6 +145,9 @@ Plane SceneParser::parsePlane(const Setting& planeSetting) {
         const Setting& sizeSetting = checkerboardSetting["size"];
         if (sizeSetting.isNumber()) {
           checkSize = static_cast<double>(sizeSetting);
+          if (checkSize <= 0.0) {
+            checkSize = 1.0;  // Clamp to a minimum positive value
+          }
         }
       }
     }
@@ -195,6 +198,21 @@ std::shared_ptr<Light> SceneParser::parseLights(const Setting& lightsSetting) {
   } catch (const std::exception& e) {
     fprintf(stderr, "Parsing error: %s\n", e.what());
     throw std::runtime_error(std::string("Error parsing lights: ") + e.what());
+  }
+}
+
+void SceneParser::parsePrimitives(const Setting& primitivesSetting) {
+  for (int i = 0; i < primitivesSetting.getLength(); ++i) {
+    const Setting& primitiveGroup = primitivesSetting[i];
+    std::string name = primitiveGroup.getName();
+
+    if (name == "spheres") {
+      this->parseSpheres(primitiveGroup);
+    } else if (name == "planes") {
+      this->parsePlanes(primitiveGroup);
+    } else {
+      std::cerr << "Unsupported primitive type: " << name << std::endl;
+    }
   }
 }
 

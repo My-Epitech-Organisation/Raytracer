@@ -8,7 +8,6 @@
 #include "PPMDisplay.hpp"
 #include <algorithm>
 #include <chrono>
-#include <cmath>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -183,20 +182,21 @@ bool PPMDisplay::saveToFile(const std::string& filename) const {
   }
 
   // Write PPM header
-  // P3 format is ASCII, P6 is binary
-  file << "P3" << std::endl;
+  file << "P6" << std::endl;
   file << _width << " " << _height << std::endl;
   file << "255" << std::endl;  // Max color value
 
-  // Write pixel data
+  // Write pixel data in binary format
   for (int y = 0; y < _height; ++y) {
     for (int x = 0; x < _width; ++x) {
       Color color = getPixel(x, y);
-      file << static_cast<int>(color.getR()) << " "
-           << static_cast<int>(color.getG()) << " "
-           << static_cast<int>(color.getB()) << " ";
+      unsigned char r = static_cast<unsigned char>(color.getR());
+      unsigned char g = static_cast<unsigned char>(color.getG());
+      unsigned char b = static_cast<unsigned char>(color.getB());
+      file.write(reinterpret_cast<char*>(&r), 1);
+      file.write(reinterpret_cast<char*>(&g), 1);
+      file.write(reinterpret_cast<char*>(&b), 1);
     }
-    file << std::endl;
   }
 
   file.close();
@@ -272,36 +272,28 @@ void PPMDisplay::stopRendering() {
 Color PPMDisplay::calculatePixelColor(const Scene& scene, int x, int y) const {
   const Camera& camera = scene.getCamera();
 
-  // Generate a ray for this pixel
   Ray ray = camera.generateRay(x, y);
 
-  // Trace the ray through the scene
   auto intersection = scene.traceRay(ray);
 
-  // If we didn't hit anything, return black (or background color)
   if (!intersection) {
     return Color::BLACK;
   }
 
-  // Calculate lighting for the intersection point
   return calculateLighting(scene, *intersection);
 }
 
 Color PPMDisplay::calculateLighting(const Scene& scene,
                                     const Intersection& intersection) const {
-  // Start with ambient light
   double ambientIntensity = scene.getAmbientLightIntensity();
   Color baseColor = intersection.color;
   Color resultColor = baseColor * ambientIntensity;
 
-  // Add contribution from each light source
   for (const auto& light : scene.getLights()) {
-    // Skip if the point is in shadow from this light
     if (scene.isInShadow(intersection.point, light)) {
       continue;
     }
 
-    // Get the light direction and intensity
     Vector3D lightDir = light->getDirectionFrom(intersection.point);
     double intensity = light->getIntensityAt(intersection.point);
 
@@ -313,7 +305,6 @@ Color PPMDisplay::calculateLighting(const Scene& scene,
     resultColor += baseColor * diffuseFactor;
   }
 
-  // Clamp the result to valid color range (the Color class should handle this)
   return resultColor;
 }
 
