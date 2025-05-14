@@ -6,7 +6,7 @@
 */
 
 #include <gtest/gtest.h>
-#include <stdexcept>
+#include "../include/exceptions/RaytracerException.hpp"
 #include "../src/core/Transform.hpp"
 #include "../src/core/Vector3D.hpp"
 
@@ -264,5 +264,5 @@ TEST(TransformTest, DegenerateTransform) {
   Transform transform;
 
   // Zero scaling makes matrix non-invertible
-  EXPECT_THROW(transform.scale(0.0, 1.0, 1.0), std::runtime_error);
+  EXPECT_THROW(transform.scale(0.0, 1.0, 1.0), RaytracerException);
 }

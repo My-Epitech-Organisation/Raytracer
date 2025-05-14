@@ -47,15 +47,10 @@ TEST(SceneParserTest, ParseCamera) {
 
 TEST(SceneParserTest, ParseOneSphere) {
   Config cfg;
-  const char* cfgText = R"(
-  spheres = (
-    { x = 60; y = 5; z = 40; r = 25; color = { r = 255; g = 64; b = 64; }; }
-  );
-  )";
 
   try {
-    cfg.readString(cfgText);
-    const Setting& sphereSetting = cfg.lookup("spheres")[0];
+    cfg.readFile("tests/configs/test_primitives.cfg");
+    const auto& sphereSetting = cfg.lookup("primitives.spheres")[0];
 
     SceneParser parser;
     Sphere result = parser.parseSphere(sphereSetting);
@@ -75,15 +70,10 @@ TEST(SceneParserTest, ParseOneSphere) {
 
 TEST(SceneParserTest, ParseMultipleSpheres) {
   Config cfg;
-  const char* cfgText = R"(
-  spheres = (
-    { x = 60; y = 5; z = 40; r = 25; color = { r = 255; g = 64; b = 64; }; },
-    { x = -40; y = 20; z = -10; r = 35; color = { r = 64; g = 255; b = 64; }; }
-  ))";
 
   try {
-    cfg.readString(cfgText);
-    const Setting& spheresSetting = cfg.lookup("spheres");
+    cfg.readFile("tests/configs/test_spheres.cfg");
+    const auto& spheresSetting = cfg.lookup("spheres");
 
     SceneParser parser;
     std::vector<Sphere> spheres = parser.parseSpheres(spheresSetting);
@@ -178,22 +168,10 @@ TEST(SceneParserTest, ParseMultiplePlanes) {
 
 TEST(SceneParserTest, ParseLights) {
   Config cfg;
-  const char* cfgText = R"(
-    lights = {
-      ambient = 0.4;
-      diffuse = 0.6;
-      point = (
-        { x = 400; y = 100; z = 500; }
-      );
-      directional = (
-        { x = 0; y = 1; z = 0; }
-      );
-    };
-    )";
 
   try {
-    cfg.readString(cfgText);
-    const Setting& lightsSetting = cfg.lookup("lights");
+    cfg.readFile("tests/configs/test_lights.cfg");
+    const auto& lightsSetting = cfg.lookup("lights");
 
     SceneParser parser;
     parser.parseLights(lightsSetting);
@@ -207,22 +185,10 @@ TEST(SceneParserTest, ParseLights) {
 
 TEST(SceneParserTest, ParsePrimitivesDispatch) {
   Config cfg;
-  const char* cfgText = R"(
-    primitives:
-    {
-      spheres = (
-        { x = 60; y = 5; z = 40; r = 25; color = { r = 255; g = 64; b = 64; }; },
-        { x = -40; y = 20; z = -10; r = 35; color = { r = 64; g = 255; b = 64; }; }
-      );
-      planes = (
-        { axis = "Z"; position = -20; color = { r = 64; g = 64; b = 255; }; }
-      );
-    };
-  )";
 
   try {
-    cfg.readString(cfgText);
-    const Setting& primitivesSetting = cfg.lookup("primitives");
+    cfg.readFile("tests/configs/test_primitives.cfg");
+    const auto& primitivesSetting = cfg.lookup("primitives");
 
     SceneParser parser;
     parser.parsePrimitives(primitivesSetting);
@@ -236,21 +202,10 @@ TEST(SceneParserTest, ParsePrimitivesDispatch) {
 
 TEST(SceneParserTest, ParseUnknownPrimitiveType) {
   Config cfg;
-  const char* cfgText = R"(
-    primitives:
-    {
-      spheres = (
-        { x = 10; y = 20; z = 30; r = 10; color = { r = 255; g = 255; b = 255; }; }
-      );
-      unicorns = (
-        { magic = 100; sparkle = true; }
-      );
-    };
-  )";
 
   try {
-    cfg.readString(cfgText);
-    const Setting& primitivesSetting = cfg.lookup("primitives");
+    cfg.readFile("tests/configs/test_primitives.cfg");
+    const auto& primitivesSetting = cfg.lookup("primitives");
 
     SceneParser parser;
     parser.parsePrimitives(primitivesSetting);

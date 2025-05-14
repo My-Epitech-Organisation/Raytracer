@@ -8,6 +8,9 @@
 #include <gtest/gtest.h>
 #include <cmath>
 #include <memory>
+#include "../include/exceptions/InvalidTypeException.hpp"
+#include "../include/exceptions/ParserException.hpp"
+#include "../include/exceptions/RaytracerException.hpp"
 #include "../src/core/Color.hpp"
 #include "../src/core/Ray.hpp"
 #include "../src/core/Transform.hpp"
@@ -52,8 +55,8 @@ TEST(SphereTest, InvalidRadius) {
   Color color(static_cast<uint8_t>(128), static_cast<uint8_t>(64),
               static_cast<uint8_t>(32));
 
-  EXPECT_THROW(Sphere(center, -1.0, color), std::invalid_argument);
-  EXPECT_THROW(Sphere(center, 0.0, color), std::invalid_argument);
+  EXPECT_THROW(Sphere(center, -1.0, color), InvalidTypeException);
+  EXPECT_THROW(Sphere(center, 0.0, color), InvalidTypeException);
 }
 
 // Test getters and setters
@@ -76,8 +79,8 @@ TEST(SphereTest, SetRadius) {
 TEST(SphereTest, SetInvalidRadius) {
   Sphere sphere;
 
-  EXPECT_THROW(sphere.setRadius(-1.0), std::invalid_argument);
-  EXPECT_THROW(sphere.setRadius(0.0), std::invalid_argument);
+  EXPECT_THROW(sphere.setRadius(-1.0), InvalidTypeException);
+  EXPECT_THROW(sphere.setRadius(0.0), InvalidTypeException);
 }
 
 TEST(SphereTest, SetColor) {

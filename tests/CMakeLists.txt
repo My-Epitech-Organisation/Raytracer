@@ -10,6 +10,7 @@ set(TEST_SOURCES
     test_LightFactory.cpp
     test_Light.cpp
     test_Cylinder.cpp
+    test_Exceptions.cpp
 )
 
 # Test executable
