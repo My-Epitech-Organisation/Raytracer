@@ -7,7 +7,6 @@
 
 #include "Vector3D.hpp"
 #include <cmath>
-#include <stdexcept>
 
 namespace RayTracer {
 

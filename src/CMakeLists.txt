@@ -16,6 +16,7 @@ set(RAYTRACER_SOURCES
     scene/lights/LightFactory.cpp
     scene/lights/Light.cpp
     scene/parser/SceneParser.cpp
+    exceptions/RaytracerException.cpp
 )
 
 # Create a library with the core functionality

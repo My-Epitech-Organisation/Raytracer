@@ -7,7 +7,7 @@
 
 #include "Sphere.hpp"
 #include <cmath>
-#include <stdexcept>
+#include "../../../include/exceptions/InvalidTypeException.hpp"
 
 namespace RayTracer {
 
@@ -17,7 +17,7 @@ Sphere::Sphere()
 Sphere::Sphere(const Vector3D& center, double radius, const Color& color)
     : _center(center), _radius(radius), _color(color), _transform() {
   if (radius <= 0) {
-    throw std::invalid_argument("Sphere radius must be positive");
+    throw InvalidTypeException("Sphere radius must be positive");
   }
 }
 
@@ -129,7 +129,7 @@ Vector3D Sphere::getCenter() const {
 
 void Sphere::setRadius(double radius) {
   if (radius <= 0) {
-    throw std::invalid_argument("Sphere radius must be positive");
+    throw InvalidTypeException("Sphere radius must be positive");
   }
   _radius = radius;
 }

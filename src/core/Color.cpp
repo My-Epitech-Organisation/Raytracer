@@ -7,7 +7,6 @@
 
 #include "Color.hpp"
 #include <cmath>
-#include <stdexcept>
 
 namespace RayTracer {
 

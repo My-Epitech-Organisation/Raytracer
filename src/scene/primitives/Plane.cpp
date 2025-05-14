@@ -8,7 +8,7 @@
 #include "Plane.hpp"
 #include <cmath>
 #include <iostream>
-#include <stdexcept>
+#include "../../../include/exceptions/RaytracerException.hpp"
 
 namespace RayTracer {
 
@@ -30,7 +30,7 @@ Plane::Plane(char axis, double position, const Color& color,
 
   try {
     _inverseTransform = _transform.inverse();
-  } catch (const std::runtime_error& e) {
+  } catch (const RaytracerException& e) {
     std::cerr << "Error initializing inverse transform for Plane: " << e.what()
               << std::endl;
     _inverseTransform = Transform();

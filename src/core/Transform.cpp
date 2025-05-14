@@ -6,7 +6,7 @@
 */
 
 #include "Transform.hpp"
-#include <stdexcept>
+#include "../../include/exceptions/RaytracerException.hpp"
 
 namespace RayTracer {
 
@@ -152,8 +152,8 @@ void Transform::updateInverseMatrix() {
   try {
     _inverseMatrix = _matrix.inverse();
   } catch (const std::runtime_error& e) {
-    throw std::runtime_error(
-        std::string("Transform has become non-invertible: ") + e.what());
+    throw RaytracerException(std::string("Transform is non-invertible: ") +
+                             e.what());
   }
 }
 
