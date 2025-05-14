@@ -17,6 +17,8 @@
 #include "../lights/Light.hpp"
 #include "../primitives/Plane.hpp"
 #include "../primitives/Sphere.hpp"
+#include "../lights/LightFactory.hpp"
+#include "../lights/LightingSettings.hpp"
 
 namespace RayTracer {
 
@@ -28,8 +30,9 @@ class SceneParser {
   std::vector<Sphere> parseSpheres(const libconfig::Setting& setting);
   Plane parsePlane(const libconfig::Setting& planeSetting);
   std::vector<Plane> parsePlanes(const libconfig::Setting& setting);
-  std::shared_ptr<Light> parseLights(const libconfig::Setting& lightsSetting);
   void parsePrimitives(const libconfig::Setting& primitivesSetting);
+  std::pair<LightingSettings, std::vector<std::unique_ptr<Light>>>
+  parseLightingSettings(const libconfig::Setting& lightsSetting);
 };
 
 }  // namespace RayTracer
