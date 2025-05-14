@@ -185,6 +185,146 @@ float getFlexibleFloat(const Setting& setting) {
   }
 }
 
+Transform SceneParser::parseTransform(const Setting& transformSetting) {
+  Transform transform;
+
+  if (transformSetting.exists("translate")) {
+    const Setting& translateSetting = transformSetting["translate"];
+    double x, y, z;
+    translateSetting.lookupValue("x", x);
+    translateSetting.lookupValue("y", y);
+    translateSetting.lookupValue("z", z);
+    transform.translate(x, y, z);
+  }
+
+  if (transformSetting.exists("rotate")) {
+    const Setting& rotateSetting = transformSetting["rotate"];
+    double x, y, z;
+    rotateSetting.lookupValue("x", x);
+    rotateSetting.lookupValue("y", y);
+    rotateSetting.lookupValue("z", z);
+    transform.rotateX(x);
+    transform.rotateY(y);
+    transform.rotateZ(z);
+  }
+
+  if (transformSetting.exists("scale")) {
+    const Setting& scaleSetting = transformSetting["scale"];
+    double x, y, z;
+    scaleSetting.lookupValue("x", x);
+    scaleSetting.lookupValue("y", y);
+    scaleSetting.lookupValue("z", z);
+    transform.scale(x, y, z);
+  }
+
+  return transform;
+}
+
+Cone SceneParser::parseCone(const Setting& coneSetting) {
+  try {
+    const Setting& apexSetting = coneSetting["apex"];
+    const Setting& axisSetting = coneSetting["axis"];
+    const Setting& angleSetting = coneSetting["angle"];
+
+    int tempApexX, tempApexY, tempApexZ;
+    apexSetting.lookupValue("x", tempApexX);
+    apexSetting.lookupValue("y", tempApexY);
+    apexSetting.lookupValue("z", tempApexZ);
+    double apexX = static_cast<double>(tempApexX);
+    double apexY = static_cast<double>(tempApexY);
+    double apexZ = static_cast<double>(tempApexZ);
+
+    std::cout << "DEBUG SceneParser::parseCone: Read apex from config: x=" << apexX << " (int: " << tempApexX << ")"<< ", y=" << apexY << " (int: " << tempApexY << ")"<< ", z=" << apexZ << " (int: " << tempApexZ << ")" << std::endl;
+
+    if (!axisSetting.isGroup()) {
+        throw std::runtime_error("Cone 'axis' setting must be a group (e.g., axis = { x = 0.0; y = 1.0; z = 0.0; }). Path: " + axisSetting.getPath());
+    }
+
+    double axisX, axisY, axisZ;
+
+    const Setting& compXSetting = axisSetting["x"];
+    if (!compXSetting.isNumber()) {
+        throw SettingTypeException(compXSetting);
+    }
+    axisX = static_cast<double>(compXSetting);
+
+    const Setting& compYSetting = axisSetting["y"];
+    if (!compYSetting.isNumber()) {
+        throw SettingTypeException(compYSetting);
+    }
+    axisY = static_cast<double>(compYSetting);
+
+    const Setting& compZSetting = axisSetting["z"];
+    if (!compZSetting.isNumber()) {
+        throw SettingTypeException(compZSetting);
+    }
+    axisZ = static_cast<double>(compZSetting);
+
+    std::cout << "DEBUG SceneParser::parseCone: Read axis from config: x=" << axisX << ", y=" << axisY << ", z=" << axisZ << std::endl;
+
+    if (axisX == 0.0 && axisY == 0.0 && axisZ == 0.0) {
+      throw std::runtime_error("Cone axis cannot be a zero vector.");
+    }
+
+    double angle;
+    if (angleSetting.isNumber()) {
+      angle = static_cast<double>(angleSetting); // Direct cast if it's a number
+    } else {
+      throw std::runtime_error("Cone angle must be a number.");
+    }
+    std::cout << "DEBUG SceneParser::parseCone: Read angle from config: " << angle << std::endl;
+
+    const Setting& colorSetting = coneSetting["color"];
+    int red, green, blue;
+    colorSetting.lookupValue("r", red);
+    colorSetting.lookupValue("g", green);
+    colorSetting.lookupValue("b", blue);
+
+    Color color(static_cast<uint8_t>(red), static_cast<uint8_t>(green),
+                static_cast<uint8_t>(blue));
+
+    Cone cone(Vector3D(apexX, apexY, apexZ),
+              Vector3D(axisX, axisY, axisZ), angle, color);
+
+    if (coneSetting.exists("transform")) {
+      Transform transform = parseTransform(coneSetting["transform"]);
+      cone.setTransform(transform);
+    }
+
+    return cone;
+  } catch (const SettingNotFoundException& e) {
+    throw std::runtime_error(std::string("Setting not found in cone: ") +
+                             e.what());
+  } catch (const SettingTypeException& e) {
+    std::string error_msg = "Setting type error in cone. Path: ";
+    if (e.getPath() != nullptr) {
+        error_msg += e.getPath();
+    } else {
+        error_msg += "N/A";
+    }
+    error_msg += ". Error: ";
+    error_msg += e.what();
+    throw std::runtime_error(error_msg);
+  } catch (const std::exception& e) {
+    throw std::runtime_error(std::string("Error parsing cone: ") + e.what());
+  }
+}
+
+std::vector<Cone> SceneParser::parseCones(const Setting& setting) {
+  std::vector<Cone> cones;
+  if (!setting.isList() && !setting.isGroup() && !setting.isArray()) {
+    throw std::runtime_error("Cones setting must be a list or group.");
+  }
+  for (int i = 0; i < setting.getLength(); ++i) {
+    try {
+      cones.push_back(parseCone(setting[i]));
+    } catch (const std::exception& e) {
+      std::cerr << "Failed to parse a cone: " << e.what() << std::endl;
+    }
+  }
+  return cones;
+}
+
 std::shared_ptr<Light> SceneParser::parseLights(const Setting& lightsSetting) {
   try {
     return LightFactory::createLight(lightsSetting);
@@ -210,6 +350,8 @@ void SceneParser::parsePrimitives(const Setting& primitivesSetting) {
       this->parseSpheres(primitiveGroup);
     } else if (name == "planes") {
       this->parsePlanes(primitiveGroup);
+    } else if (name == "cones") {
+      this->parseCones(primitiveGroup);
     } else {
       std::cerr << "Unsupported primitive type: " << name << std::endl;
     }
