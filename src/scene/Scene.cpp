@@ -127,18 +127,13 @@ bool Scene::isInShadow(const Vector3D& point,
     return false;
   }
 
-  // Create a shadow ray from the point to the light
   Ray shadowRay = light->getShadowRay(point);
 
-  // Get the distance to the light
   double lightDistance = light->getDistanceFrom(point);
 
-  // Check if any primitive blocks the light
   for (const auto& primitive : _primitives) {
     auto intersection = primitive->intersect(shadowRay);
 
-    // If we found an intersection that's between the point and the light, we're
-    // in shadow
     if (intersection && intersection->distance > 0.001 &&
         intersection->distance < lightDistance) {
       return true;
