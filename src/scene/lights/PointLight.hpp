@@ -15,13 +15,13 @@
 namespace RayTracer {
 
 class PointLight : public Light {
-  public:
-    PointLight(const Vector3D& position);
-    const Vector3D& getPosition() const;
-    std::string toString() const override;
+ public:
+  PointLight(const Vector3D& position);
+  const Vector3D& getPosition() const;
+  std::string toString() const override;
 
-private:
-    Vector3D _position;
+ private:
+  Vector3D _position;
 };
 
 }  // namespace RayTracer

@@ -189,8 +189,8 @@ float getFlexibleFloat(const Setting& setting) {
 
 std::pair<LightingSettings, std::vector<std::unique_ptr<Light>>>
 SceneParser::parseLightingSettings(const libconfig::Setting& lightsSetting) {
-    auto result = LightFactory::createLights(lightsSetting);
-    return {result.settings, std::move(result.lights)};
+  auto result = LightFactory::createLights(lightsSetting);
+  return {result.settings, std::move(result.lights)};
 }
 
 void SceneParser::parsePrimitives(const Setting& primitivesSetting) {

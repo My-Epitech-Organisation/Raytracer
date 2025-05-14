@@ -15,10 +15,10 @@
 #include "../../core/Vector3D.hpp"
 #include "../Camera.hpp"
 #include "../lights/Light.hpp"
-#include "../primitives/Plane.hpp"
-#include "../primitives/Sphere.hpp"
 #include "../lights/LightFactory.hpp"
 #include "../lights/LightingSettings.hpp"
+#include "../primitives/Plane.hpp"
+#include "../primitives/Sphere.hpp"
 
 namespace RayTracer {
 

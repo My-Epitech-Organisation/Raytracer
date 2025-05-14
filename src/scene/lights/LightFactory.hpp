@@ -19,7 +19,6 @@ namespace RayTracer {
 
 class LightFactory {
  public:
-
   struct Result {
     LightingSettings settings;
     std::vector<std::unique_ptr<Light>> lights;

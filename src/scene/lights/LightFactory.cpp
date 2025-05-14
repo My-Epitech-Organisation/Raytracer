@@ -6,17 +6,17 @@
 */
 
 #include "LightFactory.hpp"
-#include "exceptions/ParserException.hpp"
-#include "PointLight.hpp"
 #include "DirectionalLight.hpp"
-#include "LightingSettings.hpp"
 #include "Light.hpp"
+#include "LightingSettings.hpp"
+#include "PointLight.hpp"
+#include "exceptions/ParserException.hpp"
 
 namespace RayTracer {
 
-  LightFactory::Result LightFactory::createLights(
+LightFactory::Result LightFactory::createLights(
     const libconfig::Setting& setting) {
-    Result result;
+  Result result;
 
   if (!setting.lookupValue("ambient", result.settings.ambient))
     throw ParserException("Missing or invalid 'ambient' field in Light config");
@@ -29,14 +29,13 @@ namespace RayTracer {
     if (points.isList() || points.isArray()) {
       for (int i = 0; i < points.getLength(); ++i) {
         float x = 0, y = 0, z = 0;
-        if (!points[i].lookupValue("x", x) ||
-            !points[i].lookupValue("y", y) ||
+        if (!points[i].lookupValue("x", x) || !points[i].lookupValue("y", y) ||
             !points[i].lookupValue("z", z)) {
           throw ParserException("Incomplete point light definition at index " +
                                 std::to_string(i));
         }
         result.lights.emplace_back(
-          std::make_unique<PointLight>(Vector3D(x, y, z)));
+            std::make_unique<PointLight>(Vector3D(x, y, z)));
       }
     }
   }
@@ -47,8 +46,7 @@ namespace RayTracer {
     if (dirs.isList() || dirs.isArray()) {
       for (int i = 0; i < dirs.getLength(); ++i) {
         float x = 0, y = 0, z = 0;
-        if (!dirs[i].lookupValue("x", x) ||
-            !dirs[i].lookupValue("y", y) ||
+        if (!dirs[i].lookupValue("x", x) || !dirs[i].lookupValue("y", y) ||
             !dirs[i].lookupValue("z", z)) {
           throw ParserException(
               "Incomplete directional light definition at index " +

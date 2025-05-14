@@ -18,9 +18,9 @@ namespace RayTracer {
  * @brief Abstract base class for all light types
  */
 class Light {
-  public:
-    virtual ~Light() = default;
-    virtual std::string toString() const = 0;
+ public:
+  virtual ~Light() = default;
+  virtual std::string toString() const = 0;
 };
 
 }  // namespace RayTracer
