@@ -92,8 +92,8 @@ TEST(CameraTest, CenterRayGeneration) {
 
   EXPECT_TRUE(
       vectorsNearlyEqual_Camera(centerRay.getOrigin(), Vector3D(0, 0, 0)));
-      
-  // In the current implementation, the center ray doesn't point to (0,0,-1) 
+
+  // In the current implementation, the center ray doesn't point to (0,0,-1)
   // but rather to the normalized version of (0,1,0)
   Vector3D expectedDirection(0, 1, 0);
   expectedDirection = expectedDirection.normalized();
@@ -122,7 +122,8 @@ TEST(CameraTest, CornerRaysGeneration) {
   EXPECT_TRUE(
       vectorsNearlyEqual_Camera(bottomRightRay.getOrigin(), Vector3D(0, 0, 0)));
 
-  // Verify that corner rays have the expected directions based on FOV and the current implementation
+  // Verify that corner rays have the expected directions based on FOV and the
+  // current implementation
   double fovRadians = (camera.getFieldOfView() * M_PI) / 180.0;
   double aspectRatio =
       static_cast<double>(camera.getWidth()) / camera.getHeight();
@@ -158,8 +159,9 @@ TEST(CameraTest, OffsetPositionRayGeneration) {
       camera.generateRay(camera.getWidth() / 2, camera.getHeight() / 2);
 
   EXPECT_TRUE(vectorsNearlyEqual_Camera(centerRay.getOrigin(), position));
-  
-  // In the actual implementation, the center ray direction is the normalized version of (0,1,0)
+
+  // In the actual implementation, the center ray direction is the normalized
+  // version of (0,1,0)
   Vector3D expectedDirection(0, 1, 0);
   expectedDirection = expectedDirection.normalized();
   EXPECT_TRUE(
@@ -168,9 +170,11 @@ TEST(CameraTest, OffsetPositionRayGeneration) {
 
 // Test ray generation with camera rotation
 TEST(CameraTest, RotatedCameraRayGeneration) {
-  // Skip this test as it's verifying behavior that doesn't match the actual implementation
-  // and modifying the Camera implementation was explicitly not allowed.
-  GTEST_SKIP() << "Skipping camera rotation test as it requires modifying the Camera implementation";
+  // Skip this test as it's verifying behavior that doesn't match the actual
+  // implementation and modifying the Camera implementation was explicitly not
+  // allowed.
+  GTEST_SKIP() << "Skipping camera rotation test as it requires modifying the "
+                  "Camera implementation";
 }
 
 // Test ray generation with out-of-bounds pixel coordinates
