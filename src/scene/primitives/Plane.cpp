@@ -12,8 +12,13 @@
 
 namespace RayTracer {
 
-Plane::Plane(char axis, double position, const Color& color)
-    : _position(position), _color(color), _transform() {
+Plane::Plane(char axis, double position, const Color& color,
+             const Color& alternateColor, double checkSize)
+    : _position(position),
+      _color(color),
+      _transform(),
+      _alternateColor(alternateColor),
+      _checkSize(checkSize) {
   _axis = getAxisFromChar(axis);
   if (_axis == Axis::X) {
     _normal = Vector3D(1, 0, 0);
@@ -71,7 +76,13 @@ std::optional<Intersection> Plane::intersect(const Ray& ray) const {
       (worldIntersectionPoint - ray.getOrigin()).getMagnitude();
   intersection.point = worldIntersectionPoint;
   intersection.normal = worldNormal;
-  intersection.color = _color;
+
+  if (isWhiteSquare(localIntersectionPoint)) {
+    intersection.color = _color;
+  } else {
+    intersection.color = _alternateColor;
+  }
+
   intersection.primitive = this;
 
   return intersection;
@@ -108,7 +119,8 @@ Vector3D Plane::getNormalAt(const Vector3D& point) const {
 
 std::shared_ptr<IPrimitive> Plane::clone() const {
   char axisEnum = getCharFromAxis(_axis);
-  auto clonedPlane = std::make_shared<Plane>(axisEnum, _position, _color);
+  auto clonedPlane = std::make_shared<Plane>(axisEnum, _position, _color,
+                                             _alternateColor, _checkSize);
   clonedPlane->setTransform(_transform);
   return clonedPlane;
 }
@@ -148,6 +160,45 @@ Vector3D Plane::getNormal() const {
 
 Axis Plane::getAxis() const {
   return _axis;
+}
+
+void Plane::setAlternateColor(const Color& color) {
+  _alternateColor = color;
+}
+
+Color Plane::getAlternateColor() const {
+  return _alternateColor;
+}
+
+void Plane::setCheckSize(double size) {
+  if (size <= 0.0) {
+    throw std::invalid_argument("Checkerboard square size must be positive");
+  }
+  _checkSize = size;
+}
+
+double Plane::getCheckSize() const {
+  return _checkSize;
+}
+
+bool Plane::isWhiteSquare(const Vector3D& point) const {
+  double u, v;
+
+  if (_axis == Axis::X) {
+    u = point.getY();
+    v = point.getZ();
+  } else if (_axis == Axis::Y) {
+    u = point.getX();
+    v = point.getZ();
+  } else {  // Axis::Z
+    u = point.getX();
+    v = point.getY();
+  }
+
+  int ui = static_cast<int>(std::floor(u / _checkSize));
+  int vi = static_cast<int>(std::floor(v / _checkSize));
+
+  return (ui + vi) % 2 == 0;
 }
 
 }  // namespace RayTracer

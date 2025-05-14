@@ -12,6 +12,7 @@ set(RAYTRACER_SOURCES
     scene/primitives/Sphere.cpp
     scene/primitives/Plane.cpp
     scene/primitives/Cylinder.cpp
+    scene/primitives/Cone.cpp
     scene/lights/LightFactory.cpp
     scene/lights/Light.cpp
     scene/parser/SceneParser.cpp
@@ -59,7 +60,7 @@ target_include_directories(raytracer PRIVATE ${LIBCONFIG_INCLUDE_DIR})
 target_link_libraries(raytracer PRIVATE ${LIBCONFIG_LIBRARY})
 
 # Include project header files
-target_include_directories(raytracer PRIVATE 
+target_include_directories(raytracer PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
 )

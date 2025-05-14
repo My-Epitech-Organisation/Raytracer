@@ -11,6 +11,7 @@ set(TEST_SOURCES
     test_Light.cpp
     test_Cylinder.cpp
     test_Exceptions.cpp
+    test_Cone.cpp
 )
 
 # Test executable
