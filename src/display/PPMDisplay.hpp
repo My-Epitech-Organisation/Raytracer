@@ -8,9 +8,16 @@
 #ifndef PPMDISPLAY_HPP_
 #define PPMDISPLAY_HPP_
 
+#include <atomic>
+#include <chrono>
+#include <functional>
+#include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
 #include "../core/Color.hpp"
+#include "../core/RenderTile.hpp"
+#include "../core/ThreadPool.hpp"
 #include "../scene/Scene.hpp"
 
 namespace RayTracer {
@@ -39,6 +46,22 @@ class PPMDisplay {
    * @return true if rendering was successful, false otherwise
    */
   bool render(const Scene& scene);
+
+  /**
+   * @brief Render a scene with progress tracking
+   * @param scene The scene to render
+   * @param progressCallback A callback function to report progress percentage (0-100)
+   * @return true if rendering was successful, false otherwise
+   */
+  bool renderWithProgress(const Scene& scene, 
+                         std::function<void(double, double)> progressCallback = nullptr);
+
+  /**
+   * @brief Render a specific tile of the image
+   * @param scene The scene to render
+   * @param tile The tile to render
+   */
+  void renderTile(const Scene& scene, const RenderTile& tile);
 
   /**
    * @brief Save the rendered image to a PPM file
@@ -89,10 +112,20 @@ class PPMDisplay {
    */
   void clear(const Color& color = Color::BLACK);
 
+  /**
+   * @brief Stop any in-progress rendering
+   */
+  void stopRendering();
+
  private:
   std::vector<Color> _pixelBuffer;  ///< Buffer holding the pixel data
   int _width;                       ///< Width of the image in pixels
   int _height;                      ///< Height of the image in pixels
+  std::unique_ptr<ThreadPool> _threadPool;  ///< Thread pool for parallel rendering
+  std::unique_ptr<TileManager> _tileManager;  ///< Manager for render tiles
+  std::mutex _bufferMutex;  ///< Mutex for pixel buffer access
+  std::atomic<bool> _renderingActive;  ///< Flag to control rendering
+  std::chrono::steady_clock::time_point _startTime;  ///< Rendering start time
 
   /**
    * @brief Calculate the color for a pixel by tracing a ray through the scene
