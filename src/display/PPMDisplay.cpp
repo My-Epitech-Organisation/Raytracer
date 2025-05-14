@@ -7,7 +7,6 @@
 
 #include "PPMDisplay.hpp"
 #include <algorithm>
-#include <cmath>
 #include <fstream>
 #include <iostream>
 #include "../core/Ray.hpp"

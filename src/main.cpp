@@ -12,7 +12,6 @@
 #include "display/PPMDisplay.hpp"
 #include "scene/Scene.hpp"
 #include "scene/SceneBuilder.hpp"
-#include "scene/lights/Light.hpp"
 #include "scene/parser/SceneParser.hpp"
 
 void usage() {
