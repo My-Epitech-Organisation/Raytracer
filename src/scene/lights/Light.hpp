@@ -14,28 +14,13 @@
 
 namespace RayTracer {
 
+/**
+ * @brief Abstract base class for all light types
+ */
 class Light {
- public:
-  Light();
-  Light(float ambient, float diffuse, const std::vector<Vector3D>& pointLights,
-        const std::vector<Vector3D>& directionalLights);
-
-  float getAmbient() const;
-  float getDiffuse() const;
-
-  const std::vector<Vector3D>& getPointLights() const;
-  const std::vector<Vector3D>& getDirectionalLights() const;
-
-  void addPointLight(const Vector3D& light);
-  void addDirectionalLight(const Vector3D& light);
-
-  std::string toString() const;
-
- private:
-  float _ambient;
-  float _diffuse;
-  std::vector<Vector3D> _pointLights;
-  std::vector<Vector3D> _directionalLights;
+  public:
+    virtual ~Light() = default;
+    virtual std::string toString() const = 0;
 };
 
 }  // namespace RayTracer
