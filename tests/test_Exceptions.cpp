@@ -8,11 +8,11 @@
 #include <gtest/gtest.h>
 #include "exceptions/InvalidTypeException.hpp"
 #include "exceptions/ParserException.hpp"
+#include "exceptions/RaytracerException.hpp"
 
 TEST(ExceptionsTest, ThrowParserException) {
-  EXPECT_THROW(
-      { throw RayTracer::ParserException("This is a test"); },
-      RayTracer::ParserException);
+  EXPECT_THROW({ throw RayTracer::ParserException("This is a test"); },
+               RayTracer::ParserException);
 }
 
 TEST(ExceptionTest, ParserException) {
