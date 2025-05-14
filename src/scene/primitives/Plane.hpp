@@ -37,8 +37,14 @@ class Plane : public IPrimitive {
    * @param axis The axis the plane is perpendicular to ('X', 'Y', or 'Z')
    * @param position The position of the plane along the specified axis
    * @param color The color of the plane
+   * @param alternateColor The alternate color for checkerboard pattern (default
+   * black)
+   * @param checkSize The size of each square in the checkerboard pattern
+   * (default 10.0)
    */
-  explicit Plane(char axis, double position, const Color& color);
+  explicit Plane(char axis, double position, const Color& color,
+                 const Color& alternateColor = Color::BLACK,
+                 double checkSize = 10.0);
 
   /**
    * @brief Destructor
@@ -107,6 +113,37 @@ class Plane : public IPrimitive {
    */
   Vector3D getNormal() const;
 
+  /**
+   * @brief Set the alternating color for checkerboard pattern
+   * @param color The color to set
+   */
+  void setAlternateColor(const Color& color);
+
+  /**
+   * @brief Get the alternating color for checkerboard pattern
+   * @return The current alternate color
+   */
+  Color getAlternateColor() const;
+
+  /**
+   * @brief Set the size of each square in the checkerboard pattern
+   * @param size The size of each square
+   */
+  void setCheckSize(double size);
+
+  /**
+   * @brief Get the size of each square in the checkerboard pattern
+   * @return The current check size
+   */
+  double getCheckSize() const;
+
+  /**
+   * @brief Determine if a point on the plane is on a black or white square
+   * @param point The point to check
+   * @return true if on a white square, false if on a black square
+   */
+  bool isWhiteSquare(const Vector3D& point) const;
+
  private:
   Axis getAxisFromChar(char axis) const;
   char getCharFromAxis(Axis axis) const;
@@ -116,6 +153,8 @@ class Plane : public IPrimitive {
   Color _color;          ///< The color of the plane
   Transform _transform;  ///< Transformation applied to the plane
   Transform _inverseTransform;  ///< Inverse transformation
+  Color _alternateColor;  ///< The alternate color for checkerboard pattern
+  double _checkSize;      ///< Size of each square in the checkerboard pattern
 };
 
 }  // namespace RayTracer
