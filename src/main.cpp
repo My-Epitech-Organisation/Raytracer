@@ -82,10 +82,6 @@ int main(int argc, char** argv) {
         diffuseMultiplier = lightsSetting["diffuse"];
         builder.withDiffuseMultiplier(diffuseMultiplier);
       }
-
-      // Parse all lights - For now, we'll skip adding individual lights
-      // as they don't match the interface
-      // We've set the ambient and diffuse values which should be enough for basic rendering
     }
 
     // Build the scene
