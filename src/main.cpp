@@ -1,110 +1,185 @@
-/*
-** EPITECH PROJECT, 2025
-** Raytracer
-** File description:
-** main
-*/
-
 #include <iostream>
 #include <libconfig.h++>
 #include <memory>
 #include <string>
 #include "display/PPMDisplay.hpp"
+#include "display/SFMLDisplay.hpp"
 #include "scene/Scene.hpp"
 #include "scene/SceneBuilder.hpp"
-#include "scene/lights/Light.hpp"
 #include "scene/parser/SceneParser.hpp"
 
 void usage() {
-  std::cout << "USAGE: ./raytracer <SCENE_FILE>" << std::endl;
+  std::cout << "USAGE: ./raytracer <SCENE_FILE> [OPTIONS]" << std::endl;
   std::cout << "SCENE_FILE: scene configuration" << std::endl;
+  std::cout << "OPTIONS:" << std::endl;
+  std::cout << "  --display, -d    Display render in SFML window" << std::endl;
 }
 
-int main(int argc, char** argv) {
-  if (argc != 2) {
-    if (argc == 2 && std::string(argv[1]) == "--help") {
-      usage();
-      return 0;
+bool hasDisplayFlag(int argc, char** argv) {
+  for (int i = 1; i < argc; i++) {
+    std::string arg = argv[i];
+    if (arg == "--display" || arg == "-d") {
+      return true;
     }
-    usage();
-    return 84;
+  }
+  return false;
+}
+
+std::string getSceneFilePath(int argc, char** argv) {
+  for (int i = 1; i < argc; i++) {
+    std::string arg = argv[i];
+    if (arg != "--display" && arg != "-d" && arg != "--help") {
+      return arg;
+    }
+  }
+  return "";
+}
+
+RayTracer::Scene buildSceneFromFile(const std::string& filePath) {
+  libconfig::Config cfg;
+  cfg.readFile(filePath.c_str());
+
+  // Create a scene builder
+  RayTracer::SceneBuilder builder;
+  RayTracer::SceneParser parser;
+
+  // Parse camera settings
+  const libconfig::Setting& cameraSetting = cfg.lookup("camera");
+  RayTracer::Camera camera = parser.parseCamera(cameraSetting);
+  builder.withCamera(camera);
+
+  // Parse primitives
+  const libconfig::Setting& primitivesSetting = cfg.lookup("primitives");
+
+  // Parse spheres if they exist
+  if (primitivesSetting.exists("spheres")) {
+    const libconfig::Setting& spheresSetting = primitivesSetting["spheres"];
+    auto spheres = parser.parseSpheres(spheresSetting);
+    for (const auto& sphere : spheres) {
+      builder.withPrimitive(std::make_shared<RayTracer::Sphere>(sphere));
+    }
   }
 
-  try {
-    // Read the scene configuration file
-    libconfig::Config cfg;
-    cfg.readFile(argv[1]);
+  // Parse planes if they exist
+  if (primitivesSetting.exists("planes")) {
+    const libconfig::Setting& planesSetting = primitivesSetting["planes"];
+    auto planes = parser.parsePlanes(planesSetting);
+    for (const auto& plane : planes) {
+      builder.withPrimitive(std::make_shared<RayTracer::Plane>(plane));
+    }
+  }
 
-    // Create a scene builder
-    RayTracer::SceneBuilder builder;
-    RayTracer::SceneParser parser;
+  // Parse lights
+  if (cfg.exists("lights")) {
+    const libconfig::Setting& lightsSetting = cfg.lookup("lights");
 
-    // Parse camera settings
-    const libconfig::Setting& cameraSetting = cfg.lookup("camera");
-    RayTracer::Camera camera = parser.parseCamera(cameraSetting);
-    builder.withCamera(camera);
-
-    // Parse primitives
-    const libconfig::Setting& primitivesSetting = cfg.lookup("primitives");
-
-    // Parse spheres if they exist
-    if (primitivesSetting.exists("spheres")) {
-      const libconfig::Setting& spheresSetting = primitivesSetting["spheres"];
-      auto spheres = parser.parseSpheres(spheresSetting);
-      for (const auto& sphere : spheres) {
-        builder.withPrimitive(std::make_shared<RayTracer::Sphere>(sphere));
-      }
+    double ambientIntensity = 0.0;
+    if (lightsSetting.exists("ambient")) {
+      ambientIntensity = lightsSetting["ambient"];
+      builder.withAmbientLightIntensity(ambientIntensity);
     }
 
-    // Parse planes if they exist
-    if (primitivesSetting.exists("planes")) {
-      const libconfig::Setting& planesSetting = primitivesSetting["planes"];
-      auto planes = parser.parsePlanes(planesSetting);
-      for (const auto& plane : planes) {
-        builder.withPrimitive(std::make_shared<RayTracer::Plane>(plane));
-      }
+    double diffuseMultiplier = 0.0;
+    if (lightsSetting.exists("diffuse")) {
+      diffuseMultiplier = lightsSetting["diffuse"];
+      builder.withDiffuseMultiplier(diffuseMultiplier);
     }
+  }
 
-    // Parse lights
-    if (cfg.exists("lights")) {
-      const libconfig::Setting& lightsSetting = cfg.lookup("lights");
+  return builder.build();
+}
 
-      // Set ambient intensity if it exists
-      double ambientIntensity = 0.0;
-      if (lightsSetting.exists("ambient")) {
-        ambientIntensity = lightsSetting["ambient"];
-        builder.withAmbientLightIntensity(ambientIntensity);
-      }
+std::string generateOutputFilename(const std::string& inputFile) {
+  return inputFile.substr(0, inputFile.find_last_of('.')) + ".ppm";
+}
 
-      // Set diffuse multiplier if it exists
-      double diffuseMultiplier = 0.0;
-      if (lightsSetting.exists("diffuse")) {
-        diffuseMultiplier = lightsSetting["diffuse"];
-        builder.withDiffuseMultiplier(diffuseMultiplier);
-      }
-    }
+bool renderToPPM(const RayTracer::Scene& scene,
+                 const std::string& outputFilename) {
+  std::cout << "Rendering scene to " << outputFilename << "..." << std::endl;
 
-    // Build the scene
-    RayTracer::Scene scene = builder.build();
+  RayTracer::PPMDisplay ppmDisplay;
+  if (!ppmDisplay.renderToFile(scene, outputFilename)) {
+    std::cerr << "Error: Failed to render scene" << std::endl;
+    return false;
+  }
 
-    // Render the scene to a PPM file
-    std::string outputFilename =
-        std::string(argv[1]).substr(0, std::string(argv[1]).find_last_of('.')) +
-        ".ppm";
-    RayTracer::PPMDisplay display;
+  std::cout << "Rendering complete! Output saved to " << outputFilename
+            << std::endl;
+  return true;
+}
 
-    std::cout << "Rendering scene to " << outputFilename << "..." << std::endl;
+bool renderScene(const RayTracer::Scene& scene,
+                 const std::string& outputFilename, bool useDisplay) {
+#ifdef SFML_AVAILABLE
+  if (useDisplay) {
+    std::cout << "Rendering scene with SFML display..." << std::endl;
 
-    if (!display.renderToFile(scene, outputFilename)) {
+    RayTracer::SFMLDisplay sfmlDisplay;
+    RayTracer::PPMDisplay ppmDisplay;
+
+    if (!sfmlDisplay.renderWithPPM(scene, ppmDisplay, true, outputFilename)) {
       std::cerr << "Error: Failed to render scene" << std::endl;
-      return 84;
+      return false;
     }
 
     std::cout << "Rendering complete! Output saved to " << outputFilename
               << std::endl;
 
+    while (sfmlDisplay.isOpen()) {
+      if (!sfmlDisplay.handleEvents()) {
+        break;
+      }
+    }
+
+    return true;
+  }
+#else
+  if (useDisplay) {
+    std::cerr << "Warning: SFML display requested but SFML is not available. "
+              << "Falling back to PPM output only." << std::endl;
+  }
+#endif
+
+  return renderToPPM(scene, outputFilename);
+}
+
+int main(int argc, char** argv) {
+  // Check if we have enough arguments
+  if (argc < 2) {
+    usage();
+    return 84;
+  }
+
+  // Handle --help flag
+  if (std::string(argv[1]) == "--help") {
+    usage();
+    return 0;
+  }
+
+  // Get scene file and check display flag
+  std::string sceneFile = getSceneFilePath(argc, argv);
+  bool useDisplay = hasDisplayFlag(argc, argv);
+
+  if (sceneFile.empty()) {
+    std::cerr << "Error: No scene file provided" << std::endl;
+    usage();
+    return 84;
+  }
+
+  try {
+    // Build scene from file
+    RayTracer::Scene scene = buildSceneFromFile(sceneFile);
+
+    // Generate output filename
+    std::string outputFilename = generateOutputFilename(sceneFile);
+
+    // Render the scene
+    if (!renderScene(scene, outputFilename, useDisplay)) {
+      return 84;
+    }
+
   } catch (const libconfig::FileIOException& e) {
-    std::cerr << "Error: Cannot read scene file: " << argv[1] << std::endl;
+    std::cerr << "Error: Cannot read scene file: " << sceneFile << std::endl;
     return 84;
   } catch (const libconfig::ParseException& e) {
     std::cerr << "Error: Parse error in scene file " << e.getFile()
