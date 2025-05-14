@@ -146,7 +146,7 @@ Plane SceneParser::parsePlane(const Setting& planeSetting) {
         if (sizeSetting.isNumber()) {
           checkSize = static_cast<double>(sizeSetting);
           if (checkSize <= 0.0) {
-            checkSize = 1.0; // Clamp to a minimum positive value
+            checkSize = 1.0;  // Clamp to a minimum positive value
           }
         }
       }
