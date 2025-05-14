@@ -9,6 +9,8 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
+#include <iostream>
+#include <iomanip>
 
 namespace RayTracer {
 
@@ -32,6 +34,7 @@ void Cone::updateInverseTransform() {
     _inverseTransform = _transform.inverse();
   } catch (const std::runtime_error& e) {
     _inverseTransform = Transform();
+    _color = Color(static_cast<unsigned char>(255), static_cast<unsigned char>(0), static_cast<unsigned char>(255));
   }
 }
 
@@ -73,24 +76,33 @@ std::optional<double> Cone::findClosestValidIntersectionT(
     t1 = (-b + sqrt_discriminant) / (2.0 * a);
   }
 
-  double t_hit = std::numeric_limits<double>::max();
-  bool found_hit = false;
+  double valid_t_values[2];
+  int num_valid_t = 0;
 
   if (t0 > CONE_EPSILON) {
-    t_hit = t0;
-    found_hit = true;
+    Vector3D p0 = localRay.pointAt(t0);
+    double nappe_check_val_0 = (p0 - _apex).dot(_axis);
+    if (nappe_check_val_0 >= -CONE_EPSILON) {
+      valid_t_values[num_valid_t++] = t0;
+    }
   }
 
-  if (t1 > CONE_EPSILON && t1 < t_hit) {
-    t_hit = t1;
-    found_hit = true;
+  if (t1 > CONE_EPSILON) {
+    Vector3D p1 = localRay.pointAt(t1);
+    double nappe_check_val_1 = (p1 - _apex).dot(_axis);
+    if (nappe_check_val_1 >= -CONE_EPSILON) {
+      valid_t_values[num_valid_t++] = t1;
+    }
   }
 
-  if (found_hit) {
-    return t_hit;
+  if (num_valid_t == 0) {
+    return std::nullopt;
+  } else if (num_valid_t == 1) {
+    return valid_t_values[0];
+  } else {
+    double result_t = std::min(valid_t_values[0], valid_t_values[1]);
+    return result_t;
   }
-
-  return std::nullopt;
 }
 
 std::optional<Intersection> Cone::intersect(const Ray& ray) const {
@@ -143,11 +155,17 @@ Vector3D Cone::getNormalAt(const Vector3D& point_world) const {
   Vector3D PA = point_local - _apex;
 
   if (PA.getSquaredMagnitude() < CONE_EPSILON * CONE_EPSILON) {
-    return _transform.applyToNormal(_axis).normalized();
+    Vector3D transformedAxis = _transform.applyToNormal(_axis).normalized();
+    return transformedAxis;
   }
 
   double PA_dot_axis = PA.dot(_axis);
-  Vector3D localNormal = PA - _axis * (PA_dot_axis / _cos_angle_sq);
+
+  Vector3D localNormal_candidate1 = PA - _axis * (PA_dot_axis / _cos_angle_sq);
+  Vector3D localNormal_candidate2 = _axis * PA_dot_axis - PA * _cos_angle_sq;
+
+  Vector3D localNormal = localNormal_candidate1;
+
   Vector3D worldNormal = _transform.applyToNormal(localNormal).normalized();
 
   return worldNormal;
