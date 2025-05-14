@@ -37,8 +37,7 @@ class Plane : public IPrimitive {
    * @param axis The axis the plane is perpendicular to ('X', 'Y', or 'Z')
    * @param position The position of the plane along the specified axis
    * @param color The color of the plane
-   * @param alternateColor The alternate color for checkerboard pattern (default
-   * black)
+   * @param alternateColor The alternate color for checkerboard pattern (default black)
    * @param checkSize The size of each square in the checkerboard pattern
    * (default 10.0)
    */
