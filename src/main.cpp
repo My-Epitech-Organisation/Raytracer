@@ -1,3 +1,4 @@
+#include <signal.h>
 #include <iostream>
 #include <libconfig.h++>
 #include <memory>
@@ -165,6 +166,16 @@ int main(int argc, char** argv) {
     usage();
     return 84;
   }
+
+  // Handle interruption signals
+  signal(SIGINT, [](int) {
+    std::cout << "\nRendering interrupted by user." << std::endl;
+    exit(0);
+  });
+  signal(SIGTERM, [](int) {
+    std::cout << "\nRendering interrupted." << std::endl;
+    exit(0);
+  });
 
   try {
     // Build scene from file

@@ -4,6 +4,8 @@ set(RAYTRACER_SOURCES
     core/Matrix.cpp
     core/Transform.cpp
     core/Color.cpp
+    core/ThreadPool.cpp
+    core/RenderTile.cpp
     display/PPMDisplay.cpp
     display/SFMLDisplay.cpp
     scene/Scene.cpp
