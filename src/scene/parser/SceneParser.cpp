@@ -136,9 +136,9 @@ Plane SceneParser::parsePlane(const Setting& planeSetting) {
         altColorSetting.lookupValue("r", altRed);
         altColorSetting.lookupValue("g", altGreen);
         altColorSetting.lookupValue("b", altBlue);
-        alternateColor = Color(static_cast<uint8_t>(altRed),
-                              static_cast<uint8_t>(altGreen),
-                              static_cast<uint8_t>(altBlue));
+        alternateColor =
+            Color(static_cast<uint8_t>(altRed), static_cast<uint8_t>(altGreen),
+                  static_cast<uint8_t>(altBlue));
       }
 
       if (checkerboardSetting.exists("size")) {

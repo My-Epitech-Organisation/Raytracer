@@ -13,9 +13,12 @@
 namespace RayTracer {
 
 Plane::Plane(char axis, double position, const Color& color,
-            const Color& alternateColor, double checkSize)
-    : _position(position), _color(color), _transform(),
-      _alternateColor(alternateColor), _checkSize(checkSize) {
+             const Color& alternateColor, double checkSize)
+    : _position(position),
+      _color(color),
+      _transform(),
+      _alternateColor(alternateColor),
+      _checkSize(checkSize) {
   _axis = getAxisFromChar(axis);
   if (_axis == Axis::X) {
     _normal = Vector3D(1, 0, 0);
@@ -116,7 +119,8 @@ Vector3D Plane::getNormalAt(const Vector3D& point) const {
 
 std::shared_ptr<IPrimitive> Plane::clone() const {
   char axisEnum = getCharFromAxis(_axis);
-  auto clonedPlane = std::make_shared<Plane>(axisEnum, _position, _color, _alternateColor, _checkSize);
+  auto clonedPlane = std::make_shared<Plane>(axisEnum, _position, _color,
+                                             _alternateColor, _checkSize);
   clonedPlane->setTransform(_transform);
   return clonedPlane;
 }
@@ -186,7 +190,7 @@ bool Plane::isWhiteSquare(const Vector3D& point) const {
   } else if (_axis == Axis::Y) {
     u = point.getX();
     v = point.getZ();
-  } else { // Axis::Z
+  } else {  // Axis::Z
     u = point.getX();
     v = point.getY();
   }

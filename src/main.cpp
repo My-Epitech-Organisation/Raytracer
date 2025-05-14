@@ -6,14 +6,14 @@
 */
 
 #include <iostream>
-#include <string>
-#include <memory>
 #include <libconfig.h++>
+#include <memory>
+#include <string>
 #include "display/PPMDisplay.hpp"
 #include "scene/Scene.hpp"
 #include "scene/SceneBuilder.hpp"
-#include "scene/parser/SceneParser.hpp"
 #include "scene/lights/Light.hpp"
+#include "scene/parser/SceneParser.hpp"
 
 void usage() {
   std::cout << "USAGE: ./raytracer <SCENE_FILE>" << std::endl;
@@ -88,7 +88,9 @@ int main(int argc, char** argv) {
     RayTracer::Scene scene = builder.build();
 
     // Render the scene to a PPM file
-    std::string outputFilename = std::string(argv[1]).substr(0, std::string(argv[1]).find_last_of('.')) + ".ppm";
+    std::string outputFilename =
+        std::string(argv[1]).substr(0, std::string(argv[1]).find_last_of('.')) +
+        ".ppm";
     RayTracer::PPMDisplay display;
 
     std::cout << "Rendering scene to " << outputFilename << "..." << std::endl;
@@ -98,14 +100,16 @@ int main(int argc, char** argv) {
       return 84;
     }
 
-    std::cout << "Rendering complete! Output saved to " << outputFilename << std::endl;
+    std::cout << "Rendering complete! Output saved to " << outputFilename
+              << std::endl;
 
   } catch (const libconfig::FileIOException& e) {
     std::cerr << "Error: Cannot read scene file: " << argv[1] << std::endl;
     return 84;
   } catch (const libconfig::ParseException& e) {
-    std::cerr << "Error: Parse error in scene file " << e.getFile() << " at line "
-              << e.getLine() << ": " << e.getError() << std::endl;
+    std::cerr << "Error: Parse error in scene file " << e.getFile()
+              << " at line " << e.getLine() << ": " << e.getError()
+              << std::endl;
     return 84;
   } catch (const std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;

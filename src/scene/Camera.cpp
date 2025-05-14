@@ -97,7 +97,8 @@ Ray Camera::generateRay(int x, int y) const {
 
   double tanHalfFov = tan(fovRadians / 2.0);
 
-  Vector3D rayDirection(ndcX * aspectRatio * tanHalfFov, 1.0, ndcY * tanHalfFov);
+  Vector3D rayDirection(ndcX * aspectRatio * tanHalfFov, 1.0,
+                        ndcY * tanHalfFov);
 
   rayDirection = rayDirection.normalized();
 
