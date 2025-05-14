@@ -162,12 +162,7 @@ Vector3D Cone::getNormalAt(const Vector3D& point_world) const {
   }
 
   double PA_dot_axis = PA.dot(_axis);
-
-  Vector3D localNormal_candidate1 = PA - _axis * (PA_dot_axis / _cos_angle_sq);
-  Vector3D localNormal_candidate2 = _axis * PA_dot_axis - PA * _cos_angle_sq;
-
-  Vector3D localNormal = localNormal_candidate1;
-
+  Vector3D localNormal = PA - _axis * (PA_dot_axis / _cos_angle_sq);
   Vector3D worldNormal = _transform.applyToNormal(localNormal).normalized();
 
   return worldNormal;
