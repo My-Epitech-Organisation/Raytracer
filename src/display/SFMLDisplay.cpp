@@ -10,14 +10,23 @@
 // Only compile SFML implementation if available
 #ifdef SFML_AVAILABLE
 
+#include <chrono>
 #include <iostream>
+#include <thread>
 #include "../core/Ray.hpp"
 
 namespace RayTracer {
 
-SFMLDisplay::SFMLDisplay() : _windowTitle("RayTracer") {}
+SFMLDisplay::SFMLDisplay() : _windowTitle("RayTracer"), _isRendering(false) {}
 
 SFMLDisplay::~SFMLDisplay() {
+  // Stop any running update thread
+  _isRendering = false;
+  if (_updateThread.joinable()) {
+    _updateThread.join();
+  }
+  
+  // Close the window
   if (_window.isOpen()) {
     _window.close();
   }
@@ -148,6 +157,39 @@ bool SFMLDisplay::handleEvents() {
 sf::Color SFMLDisplay::convertColor(const Color& color) const {
   // Convert from 0-255 range using the proper accessors
   return sf::Color(color.getR(), color.getG(), color.getB());
+}
+
+void SFMLDisplay::updateTile(const PPMDisplay& ppmDisplay, const RenderTile& tile) {
+  // Copy pixels from the tile to the SFML image
+  for (int y = tile.getStartY(); y < tile.getEndY(); ++y) {
+    for (int x = tile.getStartX(); x < tile.getEndX(); ++x) {
+      Color pixelColor = ppmDisplay.getPixel(x, y);
+      _image.setPixel(x, y, convertColor(pixelColor));
+    }
+  }
+}
+
+void SFMLDisplay::displayUpdateThread(const PPMDisplay* ppmDisplay) {
+  const int updateInterval = 100;  // milliseconds
+  
+  while (_isRendering && _window.isOpen()) {
+    // Copy the current state of the PPM display to our SFML image
+    for (int y = 0; y < ppmDisplay->getHeight(); ++y) {
+      for (int x = 0; x < ppmDisplay->getWidth(); ++x) {
+        Color pixelColor = ppmDisplay->getPixel(x, y);
+        _image.setPixel(x, y, convertColor(pixelColor));
+      }
+    }
+    
+    // Update the display
+    update();
+    
+    // Handle any window events
+    handleEvents();
+    
+    // Wait a bit before the next update
+    std::this_thread::sleep_for(std::chrono::milliseconds(updateInterval));
+  }
 }
 
 }  // namespace RayTracer

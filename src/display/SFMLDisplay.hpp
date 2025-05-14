@@ -8,8 +8,12 @@
 #ifndef SFMLDISPLAY_HPP_
 #define SFMLDISPLAY_HPP_
 
+#include <atomic>
+#include <functional>
 #include <string>
+#include <thread>
 #include "../core/Color.hpp"
+#include "../core/RenderTile.hpp"
 #include "../scene/Scene.hpp"
 #include "PPMDisplay.hpp"
 
@@ -57,6 +61,13 @@ class SFMLDisplay {
                      bool saveToFile = false, const std::string& filename = "");
 
   /**
+   * @brief Update a specific tile in the window
+   * @param ppmDisplay The PPM display with the pixel data
+   * @param tile The tile to update
+   */
+  void updateTile(const PPMDisplay& ppmDisplay, const RenderTile& tile);
+
+  /**
    * @brief Update the window to show the current pixel buffer
    * @return true if update was successful, false otherwise
    */
@@ -85,6 +96,8 @@ class SFMLDisplay {
   sf::Sprite _sprite;        ///< SFML sprite to display the texture
   sf::Image _image;          ///< SFML image to hold pixel data
   std::string _windowTitle;  ///< Window title
+  std::atomic<bool> _isRendering;  ///< Flag to indicate if rendering is in progress
+  std::thread _updateThread;  ///< Thread for updating the display during rendering
 
   /**
    * @brief Convert a RayTracer::Color to sf::Color
@@ -92,6 +105,12 @@ class SFMLDisplay {
    * @return The equivalent SFML color
    */
   sf::Color convertColor(const Color& color) const;
+
+  /**
+   * @brief Background thread for updating the display during rendering
+   * @param ppmDisplay The PPM display to monitor for updates
+   */
+  void displayUpdateThread(const PPMDisplay* ppmDisplay);
 };
 
 }  // namespace RayTracer
@@ -109,6 +128,7 @@ class SFMLDisplay {
                      const std::string& = "") {
     return false;
   }
+  void updateTile(const PPMDisplay&, const RenderTile&) {}
   bool update() { return false; }
   void close() {}
   bool isOpen() const { return false; }
