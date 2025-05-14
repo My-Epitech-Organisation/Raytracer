@@ -246,14 +246,21 @@ TEST_F(ConeTest, CloneCone) {
       dynamic_cast<RayTracer::Cone*>(clonedPrimitive.get());
   ASSERT_NE(clonedCone, nullptr);
 
-  // Compare world properties of the cloned cone with world properties of the original cone
-  EXPECT_NEAR(clonedCone->getApex().getX(), originalWorldApex.getX(), EPSILON_TEST);
-  EXPECT_NEAR(clonedCone->getApex().getY(), originalWorldApex.getY(), EPSILON_TEST);
-  EXPECT_NEAR(clonedCone->getApex().getZ(), originalWorldApex.getZ(), EPSILON_TEST);
+  // Compare world properties of the cloned cone with world properties of the
+  // original cone
+  EXPECT_NEAR(clonedCone->getApex().getX(), originalWorldApex.getX(),
+              EPSILON_TEST);
+  EXPECT_NEAR(clonedCone->getApex().getY(), originalWorldApex.getY(),
+              EPSILON_TEST);
+  EXPECT_NEAR(clonedCone->getApex().getZ(), originalWorldApex.getZ(),
+              EPSILON_TEST);
 
-  EXPECT_NEAR(clonedCone->getAxis().getX(), originalWorldAxis.getX(), EPSILON_TEST);
-  EXPECT_NEAR(clonedCone->getAxis().getY(), originalWorldAxis.getY(), EPSILON_TEST);
-  EXPECT_NEAR(clonedCone->getAxis().getZ(), originalWorldAxis.getZ(), EPSILON_TEST);
+  EXPECT_NEAR(clonedCone->getAxis().getX(), originalWorldAxis.getX(),
+              EPSILON_TEST);
+  EXPECT_NEAR(clonedCone->getAxis().getY(), originalWorldAxis.getY(),
+              EPSILON_TEST);
+  EXPECT_NEAR(clonedCone->getAxis().getZ(), originalWorldAxis.getZ(),
+              EPSILON_TEST);
 
   EXPECT_NEAR(clonedCone->getAngleDegrees(), angle, EPSILON_TEST);
   EXPECT_EQ(clonedCone->getColor(), color);
