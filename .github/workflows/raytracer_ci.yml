@@ -69,7 +69,7 @@ jobs:
     - name: Install dependencies
       run: |
         apt-get update
-        apt-get install -y libconfig++-dev libsfml-dev lcov 
+        apt-get install -y libconfig++-dev libsfml-dev lcov
         # Install a specific version of clang-format (for consistency with local environment)
         apt-get install -y wget gnupg software-properties-common
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
