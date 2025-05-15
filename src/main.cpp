@@ -90,11 +90,20 @@ RayTracer::Scene buildSceneFromFile(const std::string& filePath) {
     }
   }
 
+  // Parse cylinders if they exist
+  if (primitivesSetting.exists("cylinders")) {
+    const libconfig::Setting& cylindersSetting = primitivesSetting["cylinders"];
+    auto cylinders = parser.parseInfiniteCylinders(cylindersSetting);
+    for (const auto& cylinder : cylinders) {
+      builder.withPrimitive(std::make_shared<RayTracer::Cylinder>(cylinder));
+    }
+  }
+
   // Parse limited cylinders if they exist
   if (primitivesSetting.exists("limitedcylinders")) {
     const libconfig::Setting& cylindersSetting =
         primitivesSetting["limitedcylinders"];
-    auto limitedCylinders = parser.parseCylinders(cylindersSetting);
+    auto limitedCylinders = parser.parseLimitedCylinders(cylindersSetting);
     for (const auto& limitedCylinder : limitedCylinders) {
       builder.withPrimitive(
           std::make_shared<RayTracer::LimitedCylinder>(limitedCylinder));
