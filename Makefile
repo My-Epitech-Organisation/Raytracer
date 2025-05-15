@@ -42,6 +42,7 @@ fclean: clean
 
 normalize:
 	@echo "Applying clang format to all C++ files..."
+	@echo "Using clang-format version: $$(clang-format --version)"
 	@find . \( -name "*.cpp" -o -name "*.hpp" \) | xargs clang-format -i
 
 cov: fclean
