@@ -1,5 +1,6 @@
 set(TEST_SOURCES
     test_Camera.cpp
+    test_ChessboardPlane.cpp
     test_Color.cpp
     test_Ray.cpp
     test_Sphere.cpp
