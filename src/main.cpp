@@ -90,6 +90,17 @@ RayTracer::Scene buildSceneFromFile(const std::string& filePath) {
     }
   }
 
+  // Parse limited cylinders if they exist
+  if (primitivesSetting.exists("limitedcylinders")) {
+    const libconfig::Setting& cylindersSetting =
+        primitivesSetting["limitedcylinders"];
+    auto limitedCylinders = parser.parseCylinders(cylindersSetting);
+    for (const auto& limitedCylinder : limitedCylinders) {
+      builder.withPrimitive(
+          std::make_shared<RayTracer::LimitedCylinder>(limitedCylinder));
+    }
+  }
+
   // Parse lights
   if (cfg.exists("lights")) {
     const libconfig::Setting& lightsSetting = cfg.lookup("lights");
