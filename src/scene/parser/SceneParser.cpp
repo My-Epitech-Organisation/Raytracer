@@ -464,6 +464,51 @@ std::vector<LimitedCone> SceneParser::parseLimitedCones(
   return limitedCones;
 }
 
+LimitedCylinder SceneParser::parseCylinder(const Setting& cylinderSetting) {
+  try {
+    double radius = 1.0, height = 1.0;
+    int r = 255, g = 255, b = 255;
+    if (cylinderSetting.exists("radius"))
+      radius = getFlexibleFloat(cylinderSetting["radius"]);
+    if (cylinderSetting.exists("height"))
+      height = getFlexibleFloat(cylinderSetting["height"]);
+    if (cylinderSetting.exists("color")) {
+      const Setting& colorSetting = cylinderSetting["color"];
+      colorSetting.lookupValue("r", r);
+      colorSetting.lookupValue("g", g);
+      colorSetting.lookupValue("b", b);
+    }
+    Color color(static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(b));
+    LimitedCylinder cylinder(radius, height, color);
+    if (cylinderSetting.exists("transform")) {
+      Transform transform = parseTransform(cylinderSetting["transform"]);
+      cylinder.setTransform(transform);
+    }
+    return cylinder;
+  } catch (const SettingNotFoundException& e) {
+    throw ParserException(std::string("Setting not found in cylinder: ") + e.what());
+  } catch (const SettingTypeException& e) {
+    throw ParserException(std::string("Setting type error in cylinder: ") + e.what());
+  } catch (const std::exception& e) {
+    throw RaytracerException(std::string("Error parsing cylinder: ") + e.what());
+  }
+}
+
+std::vector<LimitedCylinder> SceneParser::parseCylinders(const Setting& setting) {
+  std::vector<LimitedCylinder> cylinders;
+  if (!setting.isList() && !setting.isGroup() && !setting.isArray()) {
+    throw std::runtime_error("Cylinders setting must be a list or group.");
+  }
+  for (int i = 0; i < setting.getLength(); ++i) {
+    try {
+      cylinders.push_back(parseCylinder(setting[i]));
+    } catch (const std::exception& e) {
+      std::cerr << "Failed to parse a cylinder: " << e.what() << std::endl;
+    }
+  }
+  return cylinders;
+}
+
 std::shared_ptr<Light> SceneParser::parseLights(const Setting& lightsSetting) {
   try {
     return LightFactory::createLight(lightsSetting);
@@ -489,6 +534,8 @@ void SceneParser::parsePrimitives(const Setting& primitivesSetting) {
       this->parseCones(primitiveGroup);
     } else if (name == "limitedcones") {
       this->parseLimitedCones(primitiveGroup);
+    } else if (name == "cylinders") {
+      this->parseCylinders(primitiveGroup);
     } else {
       std::cerr << "Unsupported primitive type: " << name << std::endl;
     }

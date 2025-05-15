@@ -19,6 +19,7 @@
 #include "../primitives/LimitedCone.hpp"
 #include "../primitives/Plane.hpp"
 #include "../primitives/Sphere.hpp"
+#include "../primitives/LimitedCylinder.hpp"
 
 namespace RayTracer {
 
@@ -37,6 +38,8 @@ class SceneParser {
   Transform parseTransform(const libconfig::Setting& transformSetting);
   LimitedCone parseLimitedCone(const libconfig::Setting& coneSetting);
   std::vector<LimitedCone> parseLimitedCones(const libconfig::Setting& setting);
+  LimitedCylinder parseCylinder(const libconfig::Setting& cylinderSetting);
+  std::vector<LimitedCylinder> parseCylinders(const libconfig::Setting& setting);
 };
 
 }  // namespace RayTracer
