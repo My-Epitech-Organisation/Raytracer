@@ -174,7 +174,7 @@ TEST(SceneParserTest, ParseLights) {
     const auto& lightsSetting = cfg.lookup("lights");
 
     SceneParser parser;
-    parser.parseLights(lightsSetting);
+    parser.parseLightingSettings(lightsSetting);
 
     std::cout << "Light is parsed successfully!\n";
   } catch (const std::exception& e) {
