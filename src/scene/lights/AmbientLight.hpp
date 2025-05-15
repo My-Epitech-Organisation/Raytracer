@@ -8,18 +8,34 @@
 #ifndef AMBIENTLIGHT_HPP_
 #define AMBIENTLIGHT_HPP_
 
+#include <memory>
 #include "Light.hpp"
+#include "../../core/Color.hpp"
+#include "../../core/Ray.hpp"
 
 namespace RayTracer {
 
 class AmbientLight : public Light {
  public:
   explicit AmbientLight(float ambient);
+  
+  // ILight interface implementation
+  Vector3D getDirectionFrom(const Vector3D& point) const override;
+  double getDistanceFrom(const Vector3D& point) const override;
+  double getIntensityAt(const Vector3D& point) const override;
+  Color getColor() const override;
+  bool castsShadows() const override;
+  Ray getShadowRay(const Vector3D& point) const override;
+  std::shared_ptr<ILight> clone() const override;
+  Vector3D getPosition() const override;
+  
+  // Additional methods
   float getAmbient() const;
   std::string toString() const override;
 
  private:
   float _ambient;
+  Color _color{static_cast<uint8_t>(255), static_cast<uint8_t>(255), static_cast<uint8_t>(255)}; // Default white light
 };
 
 }  // namespace RayTracer

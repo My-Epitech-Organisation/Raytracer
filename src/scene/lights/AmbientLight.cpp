@@ -6,10 +6,49 @@
 */
 
 #include "AmbientLight.hpp"
+#include <limits>
 
 namespace RayTracer {
 
 AmbientLight::AmbientLight(float ambient) : _ambient(ambient) {}
+
+Vector3D AmbientLight::getDirectionFrom(const Vector3D& point) const {
+  // Ambient light comes from all directions, but let's use a default
+  return Vector3D(0, 0, 1);
+}
+
+double AmbientLight::getDistanceFrom(const Vector3D& point) const {
+  // Ambient light has no distance
+  return 0.0;
+}
+
+double AmbientLight::getIntensityAt(const Vector3D& point) const {
+  // Return the ambient intensity
+  return _ambient;
+}
+
+Color AmbientLight::getColor() const {
+  return _color;
+}
+
+bool AmbientLight::castsShadows() const {
+  // Ambient light doesn't cast shadows
+  return false;
+}
+
+Ray AmbientLight::getShadowRay(const Vector3D& point) const {
+  // Ambient light doesn't produce shadow rays, but need to implement
+  return Ray(point, Vector3D(0, 0, 1));
+}
+
+std::shared_ptr<ILight> AmbientLight::clone() const {
+  return std::make_shared<AmbientLight>(_ambient);
+}
+
+Vector3D AmbientLight::getPosition() const {
+  // Ambient light doesn't have a position
+  return Vector3D(0, 0, 0);
+}
 
 float AmbientLight::getAmbient() const {
   return _ambient;
