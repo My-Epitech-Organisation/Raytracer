@@ -1,5 +1,15 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** Cone
+*/
+
 #include "Cone.hpp"
+#include <cmath>
+#include <iomanip>
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 
 namespace RayTracer {
@@ -10,7 +20,8 @@ Cone::Cone(const Vector3D& apex, const Vector3D& axis, double angleDegrees,
            const Color& color)
     : _apex(apex), _axis(axis.normalized()), _color(color), _transform() {
   if (angleDegrees <= 0 || angleDegrees >= 90) {
-    throw std::invalid_argument("Cone angle must be between 0 and 90 degrees.");
+    throw std::invalid_argument(
+        "Cone angle must be strictly between 0 and 90 degrees.");
   }
   _angle_rad = angleDegrees * M_PI / 180.0;
   double cos_angle = std::cos(_angle_rad);
@@ -22,9 +33,10 @@ void Cone::updateInverseTransform() {
   try {
     _inverseTransform = _transform.inverse();
   } catch (const std::runtime_error& e) {
-    throw std::runtime_error(
-        std::string("Error initializing inverse transform for Cone: ") +
-        e.what());
+    _inverseTransform = Transform();
+    _color =
+        Color(static_cast<unsigned char>(255), static_cast<unsigned char>(0),
+              static_cast<unsigned char>(255));
   }
 }
 
@@ -32,92 +44,95 @@ std::optional<double> Cone::findClosestValidIntersectionT(
     const Ray& localRay) const {
   Vector3D ro = localRay.getOrigin();
   Vector3D rd = localRay.getDirection();
-  Vector3D v_minus_ro = _apex - ro;
+
+  Vector3D delta_p = ro - _apex;
 
   double rd_dot_axis = rd.dot(_axis);
-  double v_minus_ro_dot_axis = v_minus_ro.dot(_axis);
+  double delta_p_dot_axis = delta_p.dot(_axis);
+  double rd_dot_delta_p = rd.dot(delta_p);
+  double delta_p_sq = delta_p.getSquaredMagnitude();
+  double rd_sq = rd.getSquaredMagnitude();
 
-  double a = rd_dot_axis * rd_dot_axis - _cos_angle_sq;
-  double b = 2.0 * (rd.dot(v_minus_ro) * _cos_angle_sq -
-                    rd_dot_axis * v_minus_ro_dot_axis);
-  double c = v_minus_ro_dot_axis * v_minus_ro_dot_axis -
-             v_minus_ro.dot(v_minus_ro) * _cos_angle_sq;
+  double a = rd_dot_axis * rd_dot_axis - rd_sq * _cos_angle_sq;
+  double b =
+      2.0 * (rd_dot_axis * delta_p_dot_axis - rd_dot_delta_p * _cos_angle_sq);
+  double c = delta_p_dot_axis * delta_p_dot_axis - delta_p_sq * _cos_angle_sq;
 
-  double t_intersect = -1.0;
+  double discriminant = b * b - 4.0 * a * c;
 
-  if (std::abs(a) < CONE_EPSILON) {
-    if (std::abs(b) > CONE_EPSILON) {
-      double t_candidate = -c / b;
-      if (t_candidate > CONE_EPSILON) {
-        Vector3D p_local = localRay.pointAt(t_candidate);
-        if ((p_local - _apex).dot(_axis) >= -CONE_EPSILON) {
-          t_intersect = t_candidate;
-        }
-      }
-    }
-  } else {
-    double discriminant = b * b - 4.0 * a * c;
-
-    if (discriminant >= -CONE_EPSILON) {
-      double sqrt_discriminant = std::sqrt(std::max(0.0, discriminant));
-
-      double t_values[2];
-      t_values[0] = (-b - sqrt_discriminant) / (2.0 * a);
-      t_values[1] = (-b + sqrt_discriminant) / (2.0 * a);
-
-      double smallest_valid_t = -1.0;
-
-      for (double current_t_val : t_values) {
-        if (current_t_val > CONE_EPSILON) {
-          Vector3D p_local = localRay.pointAt(current_t_val);
-          if ((p_local - _apex).dot(_axis) >= -CONE_EPSILON) {
-            if (smallest_valid_t < 0 || current_t_val < smallest_valid_t) {
-              smallest_valid_t = current_t_val;
-            }
-          }
-        }
-      }
-      t_intersect = smallest_valid_t;
-    }
-  }
-
-  if (t_intersect < 0.0) {
+  if (discriminant < -CONE_EPSILON) {
     return std::nullopt;
   }
-  return t_intersect;
+
+  double t0, t1;
+
+  if (std::abs(a) < CONE_EPSILON) {
+    if (std::abs(b) < CONE_EPSILON) {
+      return std::nullopt;
+    }
+    t0 = -c / b;
+    t1 = t0;
+  } else {
+    double sqrt_discriminant = std::sqrt(std::max(0.0, discriminant));
+    t0 = (-b - sqrt_discriminant) / (2.0 * a);
+    t1 = (-b + sqrt_discriminant) / (2.0 * a);
+  }
+
+  double valid_t_values[2];
+  int num_valid_t = 0;
+
+  if (t0 > CONE_EPSILON) {
+    Vector3D p0 = localRay.pointAt(t0);
+    double nappe_check_val_0 = (p0 - _apex).dot(_axis);
+    if (nappe_check_val_0 >= -CONE_EPSILON) {
+      valid_t_values[num_valid_t++] = t0;
+    }
+  }
+
+  if (t1 > CONE_EPSILON) {
+    Vector3D p1 = localRay.pointAt(t1);
+    double nappe_check_val_1 = (p1 - _apex).dot(_axis);
+    if (nappe_check_val_1 >= -CONE_EPSILON) {
+      valid_t_values[num_valid_t++] = t1;
+    }
+  }
+
+  if (num_valid_t == 0) {
+    return std::nullopt;
+  } else if (num_valid_t == 1) {
+    return valid_t_values[0];
+  } else {
+    double result_t = std::min(valid_t_values[0], valid_t_values[1]);
+    return result_t;
+  }
 }
 
 std::optional<Intersection> Cone::intersect(const Ray& ray) const {
   Ray localRay = ray.transform(_inverseTransform);
 
-  std::optional<double> t_intersect_opt =
-      findClosestValidIntersectionT(localRay);
+  std::optional<double> t_opt = findClosestValidIntersectionT(localRay);
 
-  if (!t_intersect_opt) {
+  if (!t_opt) {
     return std::nullopt;
   }
 
-  double t_intersect = *t_intersect_opt;
+  double t_hit = *t_opt;
+  Vector3D localIntersectionPoint = localRay.pointAt(t_hit);
 
-  Vector3D localIntersectionPoint = localRay.pointAt(t_intersect);
   Vector3D worldIntersectionPoint =
       _transform.applyToPoint(localIntersectionPoint);
+
   Vector3D worldNormal = getNormalAt(worldIntersectionPoint);
 
-  if (worldNormal.dot(ray.getDirection()) > 0) {
-    worldNormal =
-        Vector3D(-worldNormal.getX(), -worldNormal.getY(), -worldNormal.getZ());
-  }
-
-  Intersection intersection;
-  intersection.distance =
+  Intersection intersection_data;
+  intersection_data.point = worldIntersectionPoint;
+  intersection_data.normal = worldNormal;
+  intersection_data.distance =
       (worldIntersectionPoint - ray.getOrigin()).getMagnitude();
-  intersection.point = worldIntersectionPoint;
-  intersection.normal = worldNormal;
-  intersection.color = _color;
-  intersection.primitive = this;
+  intersection_data.color = _color;
+  intersection_data.primitive = this;
 
-  return intersection;
+  return intersection_data;
 }
 
 void Cone::setTransform(const Transform& transform) {
@@ -137,24 +152,19 @@ Color Cone::getColor() const {
   return _color;
 }
 
-Vector3D Cone::getNormalAt(const Vector3D& point) const {
-  Vector3D localPoint = _inverseTransform.applyToPoint(point);
-  Vector3D C_to_P = localPoint - _apex;
+Vector3D Cone::getNormalAt(const Vector3D& point_world) const {
+  Vector3D point_local = _inverseTransform.applyToPoint(point_world);
+  Vector3D PA = point_local - _apex;
 
-  if (C_to_P.getMagnitude() < CONE_EPSILON) {
-    return _transform.applyToNormal(-_axis).normalized();
+  if (PA.getSquaredMagnitude() < CONE_EPSILON * CONE_EPSILON) {
+    Vector3D transformedAxis = _transform.applyToNormal(_axis).normalized();
+    return transformedAxis;
   }
 
-  double cp_dot_axis = C_to_P.dot(_axis);
-  Vector3D normal_local_unnormalized =
-      (C_to_P - _axis * (cp_dot_axis / _cos_angle_sq));
+  double PA_dot_axis = PA.dot(_axis);
+  Vector3D localNormal = PA - _axis * (PA_dot_axis / _cos_angle_sq);
+  Vector3D worldNormal = _transform.applyToNormal(localNormal).normalized();
 
-  if (normal_local_unnormalized.getMagnitude() < CONE_EPSILON) {
-    return _transform.applyToNormal(-_axis).normalized();
-  }
-
-  Vector3D normal_local = normal_local_unnormalized.normalized();
-  Vector3D worldNormal = _transform.applyToNormal(normal_local).normalized();
   return worldNormal;
 }
 
@@ -166,11 +176,11 @@ std::shared_ptr<IPrimitive> Cone::clone() const {
 }
 
 Vector3D Cone::getApex() const {
-  return _apex;
+  return _transform.applyToPoint(_apex);
 }
 
 Vector3D Cone::getAxis() const {
-  return _axis;
+  return _transform.applyToNormal(_axis).normalized();
 }
 
 double Cone::getAngleDegrees() const {
