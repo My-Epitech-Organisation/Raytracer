@@ -95,12 +95,15 @@ std::optional<Intersection> Cylinder::intersect(const Ray& ray) const {
   double t0 = (-b - sqrt_discriminant) / (2 * a);
   double t1 = (-b + sqrt_discriminant) / (2 * a);
 
-  double t = t0;
-  if (t < CYLINDER_EPSILON) {
+  double t = std::numeric_limits<double>::infinity();
+  if (t0 > CYLINDER_EPSILON && t1 > CYLINDER_EPSILON) {
+    t = std::min(t0, t1);
+  } else if (t0 > CYLINDER_EPSILON) {
+    t = t0;
+  } else if (t1 > CYLINDER_EPSILON) {
     t = t1;
-    if (t < CYLINDER_EPSILON) {
-      return std::nullopt;
-    }
+  } else {
+    return std::nullopt;
   }
 
   Vector3D localIntersectionPoint = localRay.pointAt(t);
