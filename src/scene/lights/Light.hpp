@@ -10,8 +10,8 @@
 
 #include <string>
 #include <vector>
-#include "../../core/Vector3D.hpp"
 #include "../../../include/ILight.hpp"
+#include "../../core/Vector3D.hpp"
 
 namespace RayTracer {
 

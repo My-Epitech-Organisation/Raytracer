@@ -13,19 +13,19 @@ namespace RayTracer {
 AmbientLight::AmbientLight(float ambient) : _ambient(ambient) {}
 
 Vector3D AmbientLight::getDirectionFrom(const Vector3D& point) const {
-  (void)point; // Silence unused parameter warning
+  (void)point;  // Silence unused parameter warning
   // Ambient light comes from all directions, but let's use a default
   return Vector3D(0, 0, 1);
 }
 
 double AmbientLight::getDistanceFrom(const Vector3D& point) const {
-  (void)point; // Silence unused parameter warning
+  (void)point;  // Silence unused parameter warning
   // Ambient light has no distance
   return 0.0;
 }
 
 double AmbientLight::getIntensityAt(const Vector3D& point) const {
-  (void)point; // Silence unused parameter warning
+  (void)point;  // Silence unused parameter warning
   // Return the ambient intensity
   return _ambient;
 }
@@ -40,7 +40,7 @@ bool AmbientLight::castsShadows() const {
 }
 
 Ray AmbientLight::getShadowRay(const Vector3D& point) const {
-  (void)point; // Silence unused parameter warning
+  (void)point;  // Silence unused parameter warning
   // Ambient light doesn't produce shadow rays, but need to implement
   return Ray(point, Vector3D(0, 0, 1));
 }
