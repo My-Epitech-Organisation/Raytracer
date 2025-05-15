@@ -62,7 +62,8 @@ TEST(CylinderTest, ConstructorInvalidHeight) {
 
 TEST(CylinderTest, RayIntersectionMiss) {
   LimitedCylinder cyl(1.0, 2.0, Color::BLUE);
-  Ray ray(Vector3D(0, 0, -5), Vector3D(0, 1, 0));  // Ray parallel to Y, outside cylinder body
+  Ray ray(Vector3D(0, 0, -5),
+          Vector3D(0, 1, 0));  // Ray parallel to Y, outside cylinder body
   auto intersection = cyl.intersect(ray);
   EXPECT_FALSE(intersection.has_value());
 
@@ -73,8 +74,7 @@ TEST(CylinderTest, RayIntersectionMiss) {
 }
 
 TEST(CylinderTest, RayIntersectionBody) {
-  Cylinder cyl(
-      1.0, Color::GREEN);  // infini
+  Cylinder cyl(1.0, Color::GREEN);                 // infini
   Ray ray(Vector3D(0, 0, -5), Vector3D(0, 0, 1));  // Ray along +Z, hits body
 
   auto intersection = cyl.intersect(ray);
@@ -90,7 +90,7 @@ TEST(CylinderTest, RayIntersectionBody) {
 
 // Les tests de caps et de hauteur sont pour LimitedCylinder
 TEST(CylinderTest, RayIntersectionTopCap) {
-  LimitedCylinder cyl(1.0, 2.0, Color::RED);              // Height from -1 to 1 on Y
+  LimitedCylinder cyl(1.0, 2.0, Color::RED);       // Height from -1 to 1 on Y
   Ray ray(Vector3D(0, 5, 0), Vector3D(0, -1, 0));  // Ray along -Y, hits top cap
 
   auto intersection = cyl.intersect(ray);
@@ -176,7 +176,8 @@ TEST(CylinderTest, Clone) {
   std::shared_ptr<IPrimitive> cloneBase = original.clone();
   ASSERT_NE(cloneBase, nullptr);
 
-  std::shared_ptr<LimitedCylinder> clone = std::dynamic_pointer_cast<LimitedCylinder>(cloneBase);
+  std::shared_ptr<LimitedCylinder> clone =
+      std::dynamic_pointer_cast<LimitedCylinder>(cloneBase);
   ASSERT_NE(clone, nullptr);
 
   EXPECT_EQ(clone->getRadius(), 1.5);
@@ -190,9 +191,14 @@ TEST(CylinderTest, Clone) {
 
   ASSERT_EQ(originalIntersection.has_value(), cloneIntersection.has_value());
   if (originalIntersection.has_value()) {
-    EXPECT_NEAR(originalIntersection->distance, cloneIntersection->distance, CYLINDER_EPSILON);
-    EXPECT_VECTORS_NEARLY_EQUAL_CYLINDER(originalIntersection->point, cloneIntersection->point, CYLINDER_EPSILON);
-    EXPECT_VECTORS_NEARLY_EQUAL_CYLINDER(originalIntersection->normal, cloneIntersection->normal, CYLINDER_EPSILON);
+    EXPECT_NEAR(originalIntersection->distance, cloneIntersection->distance,
+                CYLINDER_EPSILON);
+    EXPECT_VECTORS_NEARLY_EQUAL_CYLINDER(originalIntersection->point,
+                                         cloneIntersection->point,
+                                         CYLINDER_EPSILON);
+    EXPECT_VECTORS_NEARLY_EQUAL_CYLINDER(originalIntersection->normal,
+                                         cloneIntersection->normal,
+                                         CYLINDER_EPSILON);
   }
 }
 
