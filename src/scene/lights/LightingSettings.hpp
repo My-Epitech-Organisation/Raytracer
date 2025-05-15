@@ -15,7 +15,6 @@
 namespace RayTracer {
 
 struct LightingSettings {
-  float ambient = 0.0f;
   float diffuse = 0.0f;
 };
 
