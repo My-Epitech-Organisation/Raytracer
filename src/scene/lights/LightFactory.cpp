@@ -6,6 +6,7 @@
 */
 
 #include "LightFactory.hpp"
+#include "AmbientLight.hpp"
 #include "DirectionalLight.hpp"
 #include "Light.hpp"
 #include "LightingSettings.hpp"
@@ -18,8 +19,12 @@ LightFactory::Result LightFactory::createLights(
     const libconfig::Setting& setting) {
   Result result;
 
-  if (!setting.lookupValue("ambient", result.settings.ambient))
+  float ambient = 0.0f;
+  if (setting.lookupValue("ambient", ambient)) {
+    result.lights.emplace_back(std::make_unique<AmbientLight>(ambient));
+  } else {
     throw ParserException("Missing or invalid 'ambient' field in Light config");
+  }
   if (!setting.lookupValue("diffuse", result.settings.diffuse))
     throw ParserException("Missing or invalid 'diffuse' field in Light config");
 
