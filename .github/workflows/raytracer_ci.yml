@@ -69,7 +69,16 @@ jobs:
     - name: Install dependencies
       run: |
         apt-get update
-        apt-get install -y libconfig++-dev libsfml-dev lcov clang-format
+        apt-get install -y libconfig++-dev libsfml-dev lcov 
+        # Install a specific version of clang-format (for consistency with local environment)
+        apt-get install -y wget gnupg software-properties-common
+        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+        add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-20 main"
+        apt-get update
+        apt-get install -y clang-format-20
+        ln -sf /usr/bin/clang-format-20 /usr/local/bin/clang-format
+        # Show installed version for debugging
+        clang-format --version
 
     - name: Check Code Formatting
       run: |
