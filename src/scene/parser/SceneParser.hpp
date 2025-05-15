@@ -15,11 +15,18 @@
 #include "../../core/Vector3D.hpp"
 #include "../Camera.hpp"
 #include "../lights/Light.hpp"
+#include "../primitives/ChessboardPlane.hpp"
 #include "../primitives/Cone.hpp"
 #include "../primitives/Plane.hpp"
 #include "../primitives/Sphere.hpp"
 
 namespace RayTracer {
+
+class Camera;
+class Cone;
+class Plane;
+class ChessboardPlane;
+class Light;
 
 class SceneParser {
  public:
@@ -29,6 +36,8 @@ class SceneParser {
   std::vector<Sphere> parseSpheres(const libconfig::Setting& setting);
   Plane parsePlane(const libconfig::Setting& planeSetting);
   std::vector<Plane> parsePlanes(const libconfig::Setting& setting);
+  ChessboardPlane parseChessboardPlane(const libconfig::Setting& planeSetting);
+  std::vector<ChessboardPlane> parseChessboardPlanes(const libconfig::Setting& setting);
   Cone parseCone(const libconfig::Setting& coneSetting);
   std::vector<Cone> parseCones(const libconfig::Setting& setting);
   std::shared_ptr<Light> parseLights(const libconfig::Setting& lightsSetting);

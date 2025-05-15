@@ -10,6 +10,7 @@
 #include "../../../include/exceptions/InvalidTypeException.hpp"
 #include "../../../include/exceptions/ParserException.hpp"
 #include "../lights/LightFactory.hpp"
+#include "../primitives/ChessboardPlane.hpp"
 
 using namespace libconfig;
 
@@ -126,6 +127,61 @@ Plane SceneParser::parsePlane(const Setting& planeSetting) {
     Color color(static_cast<uint8_t>(red), static_cast<uint8_t>(green),
                 static_cast<uint8_t>(blue));
 
+    // Create a basic plane
+    Plane plane(axis, pos, color);
+
+    return plane;
+  } catch (const SettingNotFoundException& e) {
+    throw ParserException(std::string("Setting not found: ") + e.what());
+  } catch (const SettingTypeException& e) {
+    throw ParserException(std::string("Setting type error: ") + e.what());
+  } catch (const std::exception& e) {
+    throw RaytracerException(std::string("Error parsing plane: ") + e.what());
+  }
+}
+
+std::vector<Plane> SceneParser::parsePlanes(const Setting& setting) {
+  std::vector<Plane> planes;
+
+  for (int i = 0; i < setting.getLength(); ++i) {
+    planes.push_back(parsePlane(setting[i]));
+  }
+
+  return planes;
+}
+
+ChessboardPlane SceneParser::parseChessboardPlane(const Setting& planeSetting) {
+  try {
+    char axis = 'x';
+    std::string axisStr;
+
+    if (planeSetting.lookupValue("axis", axisStr)) {
+      if (!axisStr.empty()) {
+        axis = axisStr[0];
+      }
+    }
+
+    float pos = 0.0f;
+    const Setting& posSetting = planeSetting.lookup("position");
+
+    if (posSetting.getType() == Setting::TypeFloat) {
+      pos = posSetting;
+    } else if (posSetting.getType() == Setting::TypeInt) {
+      pos = static_cast<float>(int(posSetting));
+    } else {
+      throw RaytracerException(
+          "Position has invalid type (expected int or float)");
+    }
+
+    const Setting& colorSetting = planeSetting["color"];
+    int red, green, blue;
+    colorSetting.lookupValue("r", red);
+    colorSetting.lookupValue("g", green);
+    colorSetting.lookupValue("b", blue);
+
+    Color color(static_cast<uint8_t>(red), static_cast<uint8_t>(green),
+                static_cast<uint8_t>(blue));
+
     Color alternateColor = Color::BLACK;
     double checkSize = 10.0;
 
@@ -154,7 +210,7 @@ Plane SceneParser::parsePlane(const Setting& planeSetting) {
       }
     }
 
-    Plane plane(axis, pos, color, alternateColor, checkSize);
+    ChessboardPlane plane(axis, pos, color, alternateColor, checkSize);
 
     return plane;
   } catch (const SettingNotFoundException& e) {
@@ -162,15 +218,15 @@ Plane SceneParser::parsePlane(const Setting& planeSetting) {
   } catch (const SettingTypeException& e) {
     throw ParserException(std::string("Setting type error: ") + e.what());
   } catch (const std::exception& e) {
-    throw RaytracerException(std::string("Error parsing plane: ") + e.what());
+    throw RaytracerException(std::string("Error parsing chessboard plane: ") + e.what());
   }
 }
 
-std::vector<Plane> SceneParser::parsePlanes(const Setting& setting) {
-  std::vector<Plane> planes;
+std::vector<ChessboardPlane> SceneParser::parseChessboardPlanes(const Setting& setting) {
+  std::vector<ChessboardPlane> planes;
 
   for (int i = 0; i < setting.getLength(); ++i) {
-    planes.push_back(parsePlane(setting[i]));
+    planes.push_back(parseChessboardPlane(setting[i]));
   }
 
   return planes;
@@ -357,6 +413,8 @@ void SceneParser::parsePrimitives(const Setting& primitivesSetting) {
       this->parseSpheres(primitiveGroup);
     } else if (name == "planes") {
       this->parsePlanes(primitiveGroup);
+    } else if (name == "chessboardPlanes") {
+      this->parseChessboardPlanes(primitiveGroup);
     } else if (name == "cones") {
       this->parseCones(primitiveGroup);
     } else {
