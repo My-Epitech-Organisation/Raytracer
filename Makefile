@@ -42,7 +42,8 @@ fclean: clean
 
 normalize:
 	@echo "Applying clang format to all C++ files..."
-	@find . -name "*.cpp" -o -name "*.hpp" | xargs clang-format -i
+	@echo "Using clang-format version: $$(clang-format --version)"
+	@find . \( -name "*.cpp" -o -name "*.hpp" \) | xargs clang-format -i
 
 cov: fclean
 	@echo "Generating coverage report..."
@@ -61,4 +62,9 @@ cov: fclean
 
 	@echo "Coverage report generated at: build/coverage/index.html"
 
-.PHONY: all re tests_run clean fclean normalize cov
+check_normalize:
+	@echo "Checking code formatting with clang-format..."
+	@echo "Using clang-format version: $$(clang-format --version)"
+	@find . \( -name "*.cpp" -o -name "*.hpp" \) -exec clang-format -n -Werror {} \;
+
+.PHONY: all re tests_run clean fclean normalize check_normalize cov

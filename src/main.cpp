@@ -72,6 +72,26 @@ RayTracer::Scene buildSceneFromFile(const std::string& filePath) {
     }
   }
 
+  // Parse cones if they exist
+  if (primitivesSetting.exists("cones")) {
+    const libconfig::Setting& conesSetting = primitivesSetting["cones"];
+    auto cones = parser.parseCones(conesSetting);
+    for (const auto& cone : cones) {
+      builder.withPrimitive(std::make_shared<RayTracer::Cone>(cone));
+    }
+  }
+
+  // Parse limited cones if they exist
+  if (primitivesSetting.exists("limitedcones")) {
+    const libconfig::Setting& limitedConesSetting =
+        primitivesSetting["limitedcones"];
+    auto limitedCones = parser.parseLimitedCones(limitedConesSetting);
+    for (const auto& limitedCone : limitedCones) {
+      builder.withPrimitive(
+          std::make_shared<RayTracer::LimitedCone>(limitedCone));
+    }
+  }
+
   // Parse lights
   if (cfg.exists("lights")) {
     const libconfig::Setting& lightsSetting = cfg.lookup("lights");

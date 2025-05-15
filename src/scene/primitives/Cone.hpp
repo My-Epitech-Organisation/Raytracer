@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** Cone
+*/
+
 #ifndef CONE_HPP_
 #define CONE_HPP_
 
@@ -5,11 +12,11 @@
 #include <memory>
 #include <optional>
 #include <string>
-#include "../../../include/IPrimitive.hpp"
 #include "../../core/Color.hpp"
 #include "../../core/Ray.hpp"
 #include "../../core/Transform.hpp"
 #include "../../core/Vector3D.hpp"
+#include "./ICone.hpp"
 
 namespace RayTracer {
 
@@ -17,7 +24,7 @@ namespace RayTracer {
  * @brief Represents an infinite cone primitive.
  * The cone is defined by an apex, an axis vector, and a half-angle.
  */
-class Cone : public IPrimitive {
+class Cone : public ICone {
  public:
   /**
    * @brief Constructor for a Cone.
@@ -79,9 +86,9 @@ class Cone : public IPrimitive {
   std::shared_ptr<IPrimitive> clone() const override;
 
   // Specific getters for Cone
-  Vector3D getApex() const;
-  Vector3D getAxis() const;
-  double getAngleDegrees() const;
+  Vector3D getApex() const override;
+  Vector3D getAxis() const override;
+  double getAngleDegrees() const override;
 
  private:
   Vector3D _apex;        ///< Apex of the cone in its local coordinate system.

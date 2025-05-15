@@ -17,6 +17,8 @@
 #include "../lights/Light.hpp"
 #include "../lights/LightFactory.hpp"
 #include "../lights/LightingSettings.hpp"
+#include "../primitives/Cone.hpp"
+#include "../primitives/LimitedCone.hpp"
 #include "../primitives/Plane.hpp"
 #include "../primitives/Sphere.hpp"
 
@@ -30,9 +32,14 @@ class SceneParser {
   std::vector<Sphere> parseSpheres(const libconfig::Setting& setting);
   Plane parsePlane(const libconfig::Setting& planeSetting);
   std::vector<Plane> parsePlanes(const libconfig::Setting& setting);
-  void parsePrimitives(const libconfig::Setting& primitivesSetting);
   std::pair<LightingSettings, std::vector<std::unique_ptr<Light>>>
   parseLightingSettings(const libconfig::Setting& lightsSetting);
+  Cone parseCone(const libconfig::Setting& coneSetting);
+  std::vector<Cone> parseCones(const libconfig::Setting& setting);
+  void parsePrimitives(const libconfig::Setting& primitivesSetting);
+  Transform parseTransform(const libconfig::Setting& transformSetting);
+  LimitedCone parseLimitedCone(const libconfig::Setting& coneSetting);
+  std::vector<LimitedCone> parseLimitedCones(const libconfig::Setting& setting);
 };
 
 }  // namespace RayTracer
