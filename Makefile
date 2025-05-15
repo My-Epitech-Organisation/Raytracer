@@ -64,6 +64,7 @@ cov: fclean
 
 check_normalize:
 	@echo "Checking code formatting with clang-format..."
+	@echo "Using clang-format version: $$(clang-format --version)"
 	@! find . \( -name "*.cpp" -o -name "*.hpp" \) -exec clang-format -n -Werror {} \; 2>&1 | grep -q "error: code should be clang-formatted" || \
 	(find . \( -name "*.cpp" -o -name "*.hpp" \) -exec clang-format -n -Werror {} \; 2>&1 | grep "error: code should be clang-formatted" && exit 1)
 
