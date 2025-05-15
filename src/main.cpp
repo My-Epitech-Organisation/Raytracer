@@ -8,6 +8,8 @@
 #include "scene/Scene.hpp"
 #include "scene/SceneBuilder.hpp"
 #include "scene/parser/SceneParser.hpp"
+#include "scene/lights/PointLight.hpp"
+#include "scene/lights/DirectionalLight.hpp"
 
 void usage() {
   std::cout << "USAGE: ./raytracer <SCENE_FILE> [OPTIONS]" << std::endl;
@@ -84,6 +86,32 @@ RayTracer::Scene buildSceneFromFile(const std::string& filePath) {
     if (lightsSetting.exists("diffuse")) {
       diffuseMultiplier = lightsSetting["diffuse"];
       builder.withDiffuseMultiplier(diffuseMultiplier);
+    }
+    
+    // Parse and add point lights
+    if (lightsSetting.exists("point")) {
+      const libconfig::Setting& pointLights = lightsSetting["point"];
+      for (int i = 0; i < pointLights.getLength(); ++i) {
+        const libconfig::Setting& light = pointLights[i];
+        float x = 0, y = 0, z = 0;
+        if (light.lookupValue("x", x) && light.lookupValue("y", y) && light.lookupValue("z", z)) {
+          auto pointLight = std::make_shared<RayTracer::PointLight>(RayTracer::Vector3D(x, y, z));
+          builder.withLight(pointLight);
+        }
+      }
+    }
+    
+    // Parse and add directional lights
+    if (lightsSetting.exists("directional")) {
+      const libconfig::Setting& dirLights = lightsSetting["directional"];
+      for (int i = 0; i < dirLights.getLength(); ++i) {
+        const libconfig::Setting& light = dirLights[i];
+        float x = 0, y = 0, z = 0;
+        if (light.lookupValue("x", x) && light.lookupValue("y", y) && light.lookupValue("z", z)) {
+          auto dirLight = std::make_shared<RayTracer::DirectionalLight>(RayTracer::Vector3D(x, y, z));
+          builder.withLight(dirLight);
+        }
+      }
     }
   }
 
