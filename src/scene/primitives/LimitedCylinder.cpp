@@ -1,4 +1,5 @@
-#include "Cylinder.hpp"
+#include "LimitedCylinder.hpp"
+#include "ICylinder.hpp"
 #include <cmath>
 #include <limits>
 #include "../../../include/IPrimitive.hpp"
@@ -7,7 +8,7 @@
 
 namespace RayTracer {
 
-Cylinder::Cylinder(double radius, double height, const Color& color)
+LimitedCylinder::LimitedCylinder(double radius, double height, const Color& color)
     : _radius(radius), _height(height), _color(color), _transform() {
   if (radius <= 0) {
     throw std::invalid_argument("Cylinder radius must be positive");
@@ -22,7 +23,7 @@ Cylinder::Cylinder(double radius, double height, const Color& color)
   }
 }
 
-void Cylinder::setTransform(const Transform& transform) {
+void LimitedCylinder::setTransform(const Transform& transform) {
   _transform = transform;
   try {
     _inverseTransform = _transform.inverse();
@@ -31,19 +32,19 @@ void Cylinder::setTransform(const Transform& transform) {
   }
 }
 
-Transform Cylinder::getTransform() const {
+Transform LimitedCylinder::getTransform() const {
   return _transform;
 }
 
-void Cylinder::setColor(const Color& color) {
+void LimitedCylinder::setColor(const Color& color) {
   _color = color;
 }
 
-Color Cylinder::getColor() const {
+Color LimitedCylinder::getColor() const {
   return _color;
 }
 
-Vector3D Cylinder::getNormalAt(const Vector3D& point) const {
+Vector3D LimitedCylinder::getNormalAt(const Vector3D& point) const {
   Vector3D localPoint = _inverseTransform.applyToPoint(point);
   double halfHeight = _height / 2.0;
 
@@ -58,23 +59,29 @@ Vector3D Cylinder::getNormalAt(const Vector3D& point) const {
   return _transform.applyToNormal(localNormal).normalized();
 }
 
-std::shared_ptr<IPrimitive> Cylinder::clone() const {
-  return std::make_shared<Cylinder>(*this);
+std::shared_ptr<IPrimitive> LimitedCylinder::clone() const {
+  return std::make_shared<LimitedCylinder>(*this);
 }
 
-double Cylinder::getRadius() const {
+double LimitedCylinder::getRadius() const {
   return _radius;
 }
 
-double Cylinder::getHeight() const {
+double LimitedCylinder::getHeight() const {
   return _height;
 }
 
-Vector3D Cylinder::getPosition() const {
-  return _transform.getMatrix().getTranslation();
+Vector3D LimitedCylinder::getBaseCenter() const {
+  // Base center is at (0, -height/2, 0) in local, transformed to world
+  return _transform.applyToPoint(Vector3D(0, -_height / 2.0, 0));
 }
 
-std::optional<Intersection> Cylinder::intersect(const Ray& ray) const {
+Vector3D LimitedCylinder::getAxis() const {
+  // Axis is Y in local, transformed to world
+  return _transform.applyToNormal(Vector3D(0, 1, 0)).normalized();
+}
+
+std::optional<Intersection> LimitedCylinder::intersect(const Ray& ray) const {
   Ray localRay = ray.transform(_inverseTransform);
   double t_min_overall = std::numeric_limits<double>::infinity();
   std::optional<Intersection> closest_intersection = std::nullopt;
@@ -111,7 +118,7 @@ std::optional<Intersection> Cylinder::intersect(const Ray& ray) const {
   return std::nullopt;
 }
 
-std::optional<Intersection> Cylinder::intersectCaps(
+std::optional<Intersection> LimitedCylinder::intersectCaps(
     const Ray& localRay, double& t_min_overall) const {
   std::optional<Intersection> closest_cap_intersection = std::nullopt;
   double halfHeight = _height / 2.0;
@@ -131,7 +138,7 @@ std::optional<Intersection> Cylinder::intersectCaps(
   return closest_cap_intersection;
 }
 
-std::optional<Intersection> Cylinder::checkCap(
+std::optional<Intersection> LimitedCylinder::checkCap(
     const Ray& localRay, double& t_min_overall, double cap_y_position,
     const Vector3D& cap_normal_param) const {
   double directionY = localRay.getDirection().getY();
@@ -161,7 +168,7 @@ std::optional<Intersection> Cylinder::checkCap(
   return intersection_data;
 }
 
-std::optional<Intersection> Cylinder::intersectBody(
+std::optional<Intersection> LimitedCylinder::intersectBody(
     const Ray& localRay, double& t_min_overall) const {
   Vector3D O = localRay.getOrigin();
   Vector3D D = localRay.getDirection();

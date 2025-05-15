@@ -16,6 +16,7 @@
 #include "../../core/Ray.hpp"
 #include "../../core/Transform.hpp"
 #include "../../core/Vector3D.hpp"
+#include "ICylinder.hpp"
 
 namespace RayTracer {
 
@@ -28,7 +29,7 @@ constexpr double CYLINDER_EPSILON = 1e-6;
  * It is aligned with the Y-axis in its local coordinate system,
  * centered at (0,0,0), extending from -height/2 to +height/2 on the Y-axis.
  */
-class Cylinder : public IPrimitive {
+class LimitedCylinder : public ICylinder {
  public:
   /**
    * @brief Constructor for a cylinder.
@@ -36,12 +37,12 @@ class Cylinder : public IPrimitive {
    * @param height The total height of the cylinder. Must be positive.
    * @param color The color of the cylinder.
    */
-  Cylinder(double radius, double height, const Color& color);
+  LimitedCylinder(double radius, double height, const Color& color);
 
   /**
    * @brief Destructor.
    */
-  ~Cylinder() override = default;
+  ~LimitedCylinder() override = default;
 
   // --- IPrimitive Interface Implementation ---
 
@@ -93,25 +94,30 @@ class Cylinder : public IPrimitive {
    */
   std::shared_ptr<IPrimitive> clone() const override;
 
-  // --- Cylinder Specific Methods ---
+  // ICylinder interface
+  /**
+   * @brief Get the base center of the cylinder.
+   * @return The base center point.
+   */
+  Vector3D getBaseCenter() const override;
+
+  /**
+   * @brief Get the axis of the cylinder.
+   * @return The axis vector.
+   */
+  Vector3D getAxis() const override;
 
   /**
    * @brief Get the radius of the cylinder.
    * @return The radius.
    */
-  double getRadius() const;
+  double getRadius() const override;
 
   /**
    * @brief Get the height of the cylinder.
    * @return The height.
    */
-  double getHeight() const;
-
-  /**
-   * @brief Get the position of the cylinder
-   * @return The position (translation component) of the cylinder
-   */
-  Vector3D getPosition() const;
+  double getHeight() const override;
 
  private:
   double _radius;               ///< The radius of the cylinder.
