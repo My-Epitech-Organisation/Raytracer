@@ -11,13 +11,14 @@
 #include <string>
 #include <vector>
 #include "../../core/Vector3D.hpp"
+#include "../../../include/ILight.hpp"
 
 namespace RayTracer {
 
 /**
  * @brief Abstract base class for all light types
  */
-class Light {
+class Light : public ILight {
  public:
   virtual ~Light() = default;
   virtual std::string toString() const = 0;
