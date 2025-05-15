@@ -9,6 +9,7 @@
 #include <libconfig.h++>
 #include "../src/core/Color.hpp"
 #include "../src/scene/parser/SceneParser.hpp"
+#include "../src/scene/primitives/ChessboardPlane.hpp"
 
 using namespace RayTracer;
 using namespace libconfig;
@@ -126,6 +127,50 @@ TEST(SceneParserTest, ParseOnePlane) {
   } catch (const std::exception& e) {
     std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
     FAIL() << "Exception thrown during plane parsing: " << e.what();
+  }
+}
+
+TEST(SceneParserTest, ParseOneChessboardPlane) {
+  Config cfg;
+  const char* cfgText = R"(
+  chessboardPlanes = (
+    {
+      axis = "Z";
+      position = -20;
+      color = { r = 64; g = 64; b = 255; };
+      checkerboard = {
+        alternateColor = { r = 200; g = 200; b = 200; };
+        size = 15.0;
+      }
+    }
+  );
+  )";
+
+  try {
+    cfg.readString(cfgText);
+    const Setting& planeSetting = cfg.lookup("chessboardPlanes")[0];
+
+    SceneParser parser;
+    ChessboardPlane result = parser.parseChessboardPlane(planeSetting);
+
+    EXPECT_EQ(result.getAxis(), Axis::Z);
+    EXPECT_FLOAT_EQ(result.getPosition(), -20);
+    EXPECT_TRUE(result.getColor().isEqual(Color(static_cast<uint8_t>(64),
+                                                static_cast<uint8_t>(64),
+                                                static_cast<uint8_t>(255))));
+    EXPECT_TRUE(result.getAlternateColor().isEqual(Color(static_cast<uint8_t>(200),
+                                                         static_cast<uint8_t>(200),
+                                                         static_cast<uint8_t>(200))));
+    EXPECT_DOUBLE_EQ(result.getCheckSize(), 15.0);
+
+    std::cout << "Chessboard plane parsed successfully!\n";
+
+  } catch (const SettingTypeException& e) {
+    std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
+    FAIL() << "Setting type error during chessboard plane parsing: " << e.what();
+  } catch (const std::exception& e) {
+    std::cerr << "[WARNING] Error loading config: " << e.what() << "\n";
+    FAIL() << "Exception thrown during chessboard plane parsing: " << e.what();
   }
 }
 
