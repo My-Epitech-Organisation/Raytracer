@@ -12,8 +12,14 @@
 namespace RayTracer {
 
 /**
+ * @brief Epsilon for floating point comparisons specific to Cylinder
+ */
+constexpr double CYLINDER_EPSILON = 1e-6;
+
+/**
  * @brief Interface for cylinder primitives.
- * Defines the common behavior for all types of cylinders (e.g., infinite, limited).
+ * Defines the common behavior for all types of cylinders (e.g., infinite,
+ * limited).
  */
 class ICylinder : public IPrimitive {
  public:
@@ -22,7 +28,8 @@ class ICylinder : public IPrimitive {
    */
   ~ICylinder() override = default;
 
-  // Methods inherited from IPrimitive that must be implemented by concrete cylinders
+  // Methods inherited from IPrimitive that must be implemented by concrete
+  // cylinders
   std::optional<Intersection> intersect(const Ray& ray) const override = 0;
   void setTransform(const Transform& transform) override = 0;
   Transform getTransform() const override = 0;
@@ -52,7 +59,8 @@ class ICylinder : public IPrimitive {
 
   /**
    * @brief Get the height of the cylinder (for limited cylinders).
-   * For infinite cylinders, this can return std::numeric_limits<double>::infinity().
+   * For infinite cylinders, this can return
+   * std::numeric_limits<double>::infinity().
    * @return The height.
    */
   virtual double getHeight() const = 0;

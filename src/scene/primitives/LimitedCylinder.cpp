@@ -1,14 +1,15 @@
 #include "LimitedCylinder.hpp"
-#include "ICylinder.hpp"
 #include <cmath>
 #include <limits>
 #include "../../../include/IPrimitive.hpp"
 #include "../../core/Transform.hpp"
 #include "../../core/Vector3D.hpp"
+#include "ICylinder.hpp"
 
 namespace RayTracer {
 
-LimitedCylinder::LimitedCylinder(double radius, double height, const Color& color)
+LimitedCylinder::LimitedCylinder(double radius, double height,
+                                 const Color& color)
     : _radius(radius), _height(height), _color(color), _transform() {
   if (radius <= 0) {
     throw std::invalid_argument("Cylinder radius must be positive");

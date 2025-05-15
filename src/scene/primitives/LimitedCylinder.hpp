@@ -20,9 +20,6 @@
 
 namespace RayTracer {
 
-// Epsilon for floating point comparisons specific to Cylinder
-constexpr double CYLINDER_EPSILON = 1e-6;
-
 /**
  * @brief Represents a cylinder primitive.
  * This cylinder is defined by its radius and height.
