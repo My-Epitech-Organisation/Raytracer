@@ -16,6 +16,7 @@
 #include "../Camera.hpp"
 #include "../lights/Light.hpp"
 #include "../primitives/Cone.hpp"
+#include "../primitives/LimitedCone.hpp"
 #include "../primitives/Plane.hpp"
 #include "../primitives/Sphere.hpp"
 
@@ -34,6 +35,8 @@ class SceneParser {
   std::shared_ptr<Light> parseLights(const libconfig::Setting& lightsSetting);
   void parsePrimitives(const libconfig::Setting& primitivesSetting);
   Transform parseTransform(const libconfig::Setting& transformSetting);
+  LimitedCone parseLimitedCone(const libconfig::Setting& coneSetting);
+  std::vector<LimitedCone> parseLimitedCones(const libconfig::Setting& setting);
 };
 
 }  // namespace RayTracer
