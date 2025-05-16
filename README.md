@@ -5,9 +5,9 @@ Projet Epitech - B-OOP-400 (Object-Oriented Programming)
 
 ---
 
-## 📝 Présentation
+## 📝 Overview
 
-Le Raytracer est un moteur de rendu d’images 3D basé sur le **lancer de rayons**. Il simule le trajet inverse de la lumière pour générer des images réalistes à partir de scènes décrites dans un fichier de configuration.
+Raytracer is a 3D image rendering engine based on ray tracing. It simulates the reverse path of light to generate realistic images from scenes described in a configuration file.
 
 ---
 
@@ -16,19 +16,19 @@ Le Raytracer est un moteur de rendu d’images 3D basé sur le **lancer de rayon
 ### Makefile
 
 ```bash
-make          # Compile le projet
-make clean    # Supprime les fichiers objets
-make fclean   # Supprime les fichiers objets + binaire
-make re       # Recompile tout
+make          # Compiles the project
+make clean    # Removes object files
+make fclean   # Removes object files + binary
+make re       # Recompiles everything
 ```
 
-### 🚀 Utilisation
+### 🚀 Usage
 
 ```bash
 ./raytracer <SCENE_FILE>
 ```
 
-#### Exemple
+#### Example
 
 ```bash
 ./raytracer scenes/demo_sphere.cfg
@@ -36,14 +36,14 @@ make re       # Recompile tout
 
 ---
 
-## ✅ Fonctionnalités implémentées
+## ✅ Implemented Features
 
-- Voir [FEATURES.md](docs/FEATURES.md) pour la liste complète des fonctionnalités.
+- See [FEATURES.md](docs/FEATURES.md) for the full list of features.
 
 ---
 
-## 👥 Contributeurs
+## 👥 Contributors
 
-Ce projet a été réalisé par une équipe de trois étudiants dans le cadre du module B-OOP-400 à Epitech.
+This project was developed by a team of three students as part of the B-OOP-400 module at Epitech.
 
-- Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour la liste complète des membres.
+- See [CONTRIBUTING.md](CONTRIBUTING.md) for the full list of members.
