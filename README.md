@@ -20,6 +20,10 @@ make          # Compiles the project
 make clean    # Removes object files
 make fclean   # Removes object files + binary
 make re       # Recompiles everything
+make normalize # Applying clang format to all C++ files
+make check_normalize # Check if all C++ files are normalized
+make tests_run # Run tests
+make cov # Generate code coverage report
 ```
 
 ### 🚀 Usage
@@ -28,10 +32,20 @@ make re       # Recompiles everything
 ./raytracer <SCENE_FILE>
 ```
 
+-d is to render the scene in sfml window.
+
+```bash
+./raytracer <SCENE_FILE> -d
+```
+
 #### Example
 
 ```bash
 ./raytracer scenes/demo_sphere.cfg
+```
+
+```bash
+./raytracer scenes/demo_cylinder.cfg -d
 ```
 
 ---
