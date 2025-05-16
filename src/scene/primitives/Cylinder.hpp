@@ -42,7 +42,7 @@ class Cylinder : public ICylinder {
   Vector3D getBaseCenter() const override;
   Vector3D getAxis() const override;
   double getRadius() const override;
-  double getHeight() const override;  // returns infinity
+  double getHeight() const override;
 
  private:
   double _radius;

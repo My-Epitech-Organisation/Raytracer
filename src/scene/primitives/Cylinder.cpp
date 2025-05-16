@@ -55,12 +55,10 @@ std::shared_ptr<IPrimitive> Cylinder::clone() const {
 }
 
 Vector3D Cylinder::getBaseCenter() const {
-  // For infinite cylinder, base is arbitrary: use (0,0,0) transformed
   return _transform.applyToPoint(Vector3D(0, 0, 0));
 }
 
 Vector3D Cylinder::getAxis() const {
-  // Axis is Y in local, transformed to world
   return _transform.applyToNormal(Vector3D(0, 1, 0)).normalized();
 }
 
@@ -69,7 +67,6 @@ double Cylinder::getRadius() const {
 }
 
 double Cylinder::getHeight() const {
-  // Infinite height
   return std::numeric_limits<double>::infinity();
 }
 
