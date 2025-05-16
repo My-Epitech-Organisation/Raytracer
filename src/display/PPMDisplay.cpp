@@ -15,6 +15,7 @@
 #include <sstream>
 #include <thread>
 #include "../core/Ray.hpp"
+#include "../scene/lights/AmbientLight.hpp"
 
 namespace RayTracer {
 
@@ -288,7 +289,16 @@ Color PPMDisplay::calculateLighting(const Scene& scene,
                                     const Intersection& intersection) const {
   double ambientIntensity = scene.getAmbientLightIntensity();
   Color baseColor = intersection.color;
-  Color resultColor = baseColor * ambientIntensity;
+
+  Color ambientColor = Color::WHITE;
+  for (const auto& light : scene.getLights()) {
+    if (auto ambient = std::dynamic_pointer_cast<AmbientLight>(light)) {
+      ambientColor = ambient->getColor();
+      break;
+    }
+  }
+
+  Color resultColor = baseColor * ambientColor * ambientIntensity;
 
   Vector3D viewDir =
       (scene.getCamera().getPosition() - intersection.point).normalized();
@@ -308,14 +318,17 @@ Color PPMDisplay::calculateLighting(const Scene& scene,
     double diffuseFactor = std::max(0.0, intersection.normal.dot(lightDir));
     diffuseFactor *= scene.getDiffuseMultiplier() * intensity;
 
+    // Apply light color to diffuse lighting
+    Color diffuseColor = baseColor * light->getColor() * diffuseFactor;
+
     // Add diffuse component to the result
-    resultColor += baseColor * diffuseFactor;
+    resultColor += diffuseColor;
 
     // Calcul specular (Phong model)
     Vector3D reflectDir = reflect(-lightDir, intersection.normal);
     double spec = std::pow(std::max(0.0, viewDir.dot(reflectDir)), shininess);
-    Color specular = Color((uint8_t)255, (uint8_t)255, (uint8_t)255) *
-                     (specularStrength * spec * intensity);
+
+    Color specular = light->getColor() * (specularStrength * spec * intensity);
 
     // Add specular component to the result
     resultColor += specular;
