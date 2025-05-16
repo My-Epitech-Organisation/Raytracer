@@ -8,6 +8,7 @@
 #include "PPMDisplay.hpp"
 #include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -289,6 +290,11 @@ Color PPMDisplay::calculateLighting(const Scene& scene,
   Color baseColor = intersection.color;
   Color resultColor = baseColor * ambientIntensity;
 
+  Vector3D viewDir = (scene.getCamera().getPosition() - intersection.point).normalized();
+
+  const double specularStrength = 0.5;
+  const double shininess = 32.0;
+
   for (const auto& light : scene.getLights()) {
     if (scene.isInShadow(intersection.point, light)) {
       continue;
@@ -303,9 +309,21 @@ Color PPMDisplay::calculateLighting(const Scene& scene,
 
     // Add diffuse component to the result
     resultColor += baseColor * diffuseFactor;
+
+    // Calcul specular (Phong model)
+    Vector3D reflectDir = reflect(-lightDir, intersection.normal);
+    double spec = std::pow(std::max(0.0, viewDir.dot(reflectDir)), shininess);
+    Color specular = Color((uint8_t)255, (uint8_t)255, (uint8_t)255) * (specularStrength * spec * intensity);
+
+    // Add specular component to the result
+    resultColor += specular;
   }
 
   return resultColor;
+}
+
+Vector3D PPMDisplay::reflect(const Vector3D& incident, const Vector3D& normal) const {
+  return incident - normal * 2.0 * incident.dot(normal);
 }
 
 }  // namespace RayTracer
