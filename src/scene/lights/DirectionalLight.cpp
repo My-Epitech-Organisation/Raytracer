@@ -14,6 +14,10 @@ namespace RayTracer {
 DirectionalLight::DirectionalLight(const Vector3D& direction)
     : _direction(direction) {}
 
+DirectionalLight::DirectionalLight(const Vector3D& direction,
+                                   const Color& color)
+    : _direction(direction), _color(color) {}
+
 Vector3D DirectionalLight::getDirectionFrom(const Vector3D& point) const {
   (void)point;  // Silence unused parameter warning
   // Directional light has the same direction regardless of point
@@ -47,7 +51,9 @@ Ray DirectionalLight::getShadowRay(const Vector3D& point) const {
 }
 
 std::shared_ptr<ILight> DirectionalLight::clone() const {
-  return std::make_shared<DirectionalLight>(_direction);
+  auto clone = std::make_shared<DirectionalLight>(_direction);
+  clone->_color = _color;
+  return clone;
 }
 
 Vector3D DirectionalLight::getPosition() const {
