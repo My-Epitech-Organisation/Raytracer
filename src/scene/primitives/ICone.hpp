@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** ICone
+*/
+
 #ifndef ICONE_HPP_
 #define ICONE_HPP_
 

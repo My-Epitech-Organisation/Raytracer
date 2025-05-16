@@ -1,7 +1,14 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** LimitedCone
+*/
+
 #ifndef LIMITEDCONE_HPP_
 #define LIMITEDCONE_HPP_
 
-#include <limits>  // Required for std::numeric_limits
+#include <limits>
 #include "ICone.hpp"
 
 namespace RayTracer {
