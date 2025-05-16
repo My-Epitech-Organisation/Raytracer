@@ -1,0 +1,35 @@
+/**
+ * @mainpage 🌀 Raytracer Project — Documentation
+ *
+ * Welcome to the official documentation of the Raytracer project 😎
+ * This project simulates a ray tracing-based rendering engine 🌈
+ *
+ * ---
+ *
+ * ## 🧠 Educational Objectives
+ * - Learn the basics of 3D (vectors, matrices, rays)
+ * - Work with C++
+ * - Implement physical concepts (reflections, lighting)
+ * - Master organizing and documenting a large project
+ *
+ * ---
+ *
+ * ## 📂 Project Organization
+ * - **core/**: vectors, rays, matrices
+ * - **render/**: camera, scene, image
+ * - **lights/**: all light sources (ambient, directional, etc.)
+ * - **materials/**: object properties
+ * - **parsers/**: configuration file loading
+ *
+ * ---
+ *
+ * ## 🔗 Useful Links
+ * - [GitHub](https://github.com/My-Epitech-Organisation/Raytracer)
+ * - [User Guide](docs/user_guide.dox)
+ * - [FAQ](docs/faq.dox)
+ *
+ * ---
+ *
+ * @author Santiago
+ * @date 2025-05-16
+ */

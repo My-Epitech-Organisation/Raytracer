@@ -1,0 +1,122 @@
+/**
+ * @page USER_GUIDE User Guide
+ *
+ * # 🌈 Welcome to Raytracer: YOUR CPU GOES BRRRRR! 🌀
+ *
+ * Raytracer is a command-line rendering engine that generates realistic images by simulating
+ * the inverse path of light. ✨✨
+ *
+ * ---
+ *
+ * ## 🚀 Quick Start
+ *
+ * Compile the project with `make` or using `cmake`.
+ *
+ * Then, run the following command:
+ * ```
+ * ./raytracer <SCENE_FILE>
+ * ```
+ * > `SCENE_FILE` is a configuration file describing the scene to be rendered (in `.cfg` format using libconfig++).
+ *
+ * Help is also available via:
+ * ```
+ * ./raytracer --help
+ * ```
+ *
+ * ---
+ *
+ * ## 🔧 Configuration File (`.cfg`)
+ *
+ * The scene file defines:
+ * - 📷 the camera (`camera`)
+ * - 🔶 the primitives (`spheres`, `planes`, etc.)
+ * - 💡 the lighting (`lights`)
+ *
+ * Example:
+ * ```cfg
+ * camera: {
+ *   resolution = { width = 1920; height = 1080; };
+ *   position = { x = 0; y = -100; z = 20; };
+ *   rotation = { x = 0; y = 0; z = 0; };
+ *   fieldOfView = 72.0;
+ * }
+ * ```
+ *
+ * ---
+ *
+ * ## 🎮 Camera Control
+ *
+ * Camera movements and rotations are set in the `.cfg` file with:
+ * - `position = { x, y, z };`
+ * - `rotation = { x, y, z };`
+ *
+ * ---
+ *
+ * ## 📦 Main Features
+ *
+ * ✅ Supported Primitives:
+ * - Sphere
+ * - Plane
+ *
+ * ✅ Transformations:
+ * - Translation
+ *
+ * ✅ Lighting:
+ * - Directional light
+ * - Ambient light
+ *
+ * ✅ Materials:
+ * - Flat color
+ *
+ * ✅ Interface:
+ * - Output image in `.ppm` (no GUI)
+ *
+ * ---
+ *
+ * ## 📁 Organization
+ *
+ * - The `raytracer` binary is at the root of the project.
+ * - Dynamic plugins (bonus) are located in the `./plugins/` folder.
+ * - Scenes are stored in `./scenes/`, and renders in `./screenshots/`.
+ *
+ * ---
+ *
+ * ## ⚙️ Compilation
+ *
+ * ### Makefile
+ * - Required targets: `all`, `clean`, `fclean`, `re`
+ *
+ * ### CMake (optional):
+ * ```bash
+ * mkdir build && cd build
+ * cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+ * cmake --build .
+ * ```
+ *
+ * ---
+ *
+ * ## 🔌 Extensions and Plugins (bonus)
+ *
+ * The raytracer can dynamically load plugins from `./plugins/`.
+ * These plugins can add:
+ * - Additional primitives
+ * - New types of lights
+ * - Optical effects, etc.
+ *
+ * ---
+ *
+ * ## 📐 Design Patterns Used
+ *
+ * You must implement at least **2 design patterns** among:
+ * - Factory, Builder, Composite, Decorator, Observer, State, Mediator
+ *
+ * ---
+ *
+ * ## 🧪 Demonstration & Defense
+ *
+ * Prepare several `.cfg` scenes and their rendered `.ppm` outputs to showcase your project!
+ *
+ * ---
+ *
+ * 💖 Enjoy your Raytracer engine! The more features you add, the closer you get to *true photorealism*! 🌟
+ */
