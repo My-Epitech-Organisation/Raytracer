@@ -1,8 +1,8 @@
-# 👥 Contributeurs du projet Raytracer
+# 👥 Raytracer Project Contributors
 
-Ce projet a été réalisé dans le cadre du module B-OOP-400 (Epitech).
+This project was developed as part of the B-OOP-400 module (Epitech).
 
-## Membres de l’équipe
+## Team Members
 
 - **Santiago Pidcova** – [github.com/SantiagoPidji](https://github.com/SantiagoPidji)
 - **Paul-Antoine Salmon** – [github.com/Arkteus](https://github.com/Arkteus)
