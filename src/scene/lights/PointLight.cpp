@@ -23,12 +23,14 @@ double PointLight::getDistanceFrom(const Vector3D& point) const {
 }
 
 double PointLight::getIntensityAt(const Vector3D& point) const {
-  // Simple inverse square law for light falloff
   double distance = getDistanceFrom(point);
-  // Avoid division by zero and limit maximum intensity
-  if (distance < 1.0)
-    return 1.0;
-  return 1.0 / (distance * distance);
+
+  // Constant, linear and quadratic (Phong attenuation model)
+  const double kConstant = 1.0;
+  const double kLinear = 0.09;
+  const double kQuadratic = 0.032;
+
+  return 1.0 / (kConstant + kLinear * distance + kQuadratic * distance * distance);
 }
 
 Color PointLight::getColor() const {
