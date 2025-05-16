@@ -30,11 +30,13 @@ double PointLight::getIntensityAt(const Vector3D& point) const {
 
   // Constant, linear and quadratic (Phong attenuation model)
   const double kConstant = 1.0;
-  const double kLinear = 0.09;
-  const double kQuadratic = 0.032;
+  const double kLinear = 0.007;
+  const double kQuadratic = 0.0008;
 
-  return 1.0 /
-         (kConstant + kLinear * distance + kQuadratic * distance * distance);
+  double intensity =
+      2.5 / (kConstant + kLinear * distance + kQuadratic * distance * distance);
+
+  return std::min(intensity, 3.0);
 }
 
 Color PointLight::getColor() const {
