@@ -313,23 +313,25 @@ Color PPMDisplay::calculateLighting(const Scene& scene,
 
     Vector3D lightDir = light->getDirectionFrom(intersection.point);
     double intensity = light->getIntensityAt(intersection.point);
-    
+
     if (std::dynamic_pointer_cast<AmbientLight>(light)) {
-        continue;
+      continue;
     }
 
     // Calculate diffuse lighting (Lambert's law)
     double diffuseFactor = std::max(0.0, intersection.normal.dot(lightDir));
-    diffuseFactor *= scene.getDiffuseMultiplier() * intensity * 1.5;  // Multiplied by 1.5 for stronger diffuse
+    diffuseFactor *= scene.getDiffuseMultiplier() * intensity *
+                     1.5;  // Multiplied by 1.5 for stronger diffuse
 
     Color lightColor = light->getColor();
-    
-    lightColor = Color(
-        static_cast<uint8_t>(std::min(255, static_cast<int>(lightColor.getR() * 1.2))),
-        static_cast<uint8_t>(std::min(255, static_cast<int>(lightColor.getG() * 1.2))),
-        static_cast<uint8_t>(std::min(255, static_cast<int>(lightColor.getB() * 1.2)))
-    );
-    
+
+    lightColor = Color(static_cast<uint8_t>(std::min(
+                           255, static_cast<int>(lightColor.getR() * 1.2))),
+                       static_cast<uint8_t>(std::min(
+                           255, static_cast<int>(lightColor.getG() * 1.2))),
+                       static_cast<uint8_t>(std::min(
+                           255, static_cast<int>(lightColor.getB() * 1.2))));
+
     Color diffuseColor = baseColor * lightColor * diffuseFactor;
 
     // Add diffuse component to the result
