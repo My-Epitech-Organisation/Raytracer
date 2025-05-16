@@ -7,7 +7,8 @@
 
 /**
  * @file RaytracerException.cpp
- * @brief Implementation of the base exception class used throughout the raytracer
+ * @brief Implementation of the base exception class used throughout the
+ * raytracer
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

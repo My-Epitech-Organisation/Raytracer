@@ -7,7 +7,8 @@
 
 /**
  * @file ICone.hpp
- * @brief Definition of the ICone interface for cone primitives in the raytracing engine
+ * @brief Definition of the ICone interface for cone primitives in the
+ * raytracing engine
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

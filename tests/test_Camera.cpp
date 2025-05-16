@@ -7,7 +7,8 @@
 
 /**
  * @file test_Camera.cpp
- * @brief Unit tests for the Camera class to validate camera positioning, ray generation and transformations
+ * @brief Unit tests for the Camera class to validate camera positioning, ray
+ * generation and transformations
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

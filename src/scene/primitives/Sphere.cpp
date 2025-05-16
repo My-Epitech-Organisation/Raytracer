@@ -7,7 +7,8 @@
 
 /**
  * @file Sphere.cpp
- * @brief Implementation of the sphere primitive with ray-sphere intersection calculation
+ * @brief Implementation of the sphere primitive with ray-sphere intersection
+ * calculation
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

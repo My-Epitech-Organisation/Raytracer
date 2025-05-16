@@ -7,7 +7,8 @@
 
 /**
  * @file Camera.cpp
- * @brief Implementation of the Camera class which handles view position, orientation and ray generation
+ * @brief Implementation of the Camera class which handles view position,
+ * orientation and ray generation
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

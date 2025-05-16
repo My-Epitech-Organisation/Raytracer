@@ -7,7 +7,8 @@
 
 /**
  * @file SceneParser.cpp
- * @brief Implementation of the configuration file parser for loading 3D scenes from cfg files
+ * @brief Implementation of the configuration file parser for loading 3D scenes
+ * from cfg files
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

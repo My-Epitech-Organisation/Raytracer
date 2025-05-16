@@ -7,7 +7,8 @@
 
 /**
  * @file SceneBuilder.hpp
- * @brief Defines the SceneBuilder class which implements the Builder pattern for creating Scene objects
+ * @brief Defines the SceneBuilder class which implements the Builder pattern
+ * for creating Scene objects
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

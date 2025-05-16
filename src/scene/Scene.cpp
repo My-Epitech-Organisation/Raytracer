@@ -7,7 +7,8 @@
 
 /**
  * @file Scene.cpp
- * @brief Implementation of the Scene class that manages all 3D objects, lights and rendering environment
+ * @brief Implementation of the Scene class that manages all 3D objects, lights
+ * and rendering environment
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

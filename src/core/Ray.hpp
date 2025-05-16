@@ -7,7 +7,8 @@
 
 /**
  * @file Ray.hpp
- * @brief Provides the Ray class for representing rays with origin points and direction vectors for ray tracing
+ * @brief Provides the Ray class for representing rays with origin points and
+ * direction vectors for ray tracing
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

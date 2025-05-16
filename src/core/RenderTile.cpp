@@ -7,7 +7,8 @@
 
 /**
  * @file RenderTile.cpp
- * @brief Implementation of the tile-based rendering system for parallel processing
+ * @brief Implementation of the tile-based rendering system for parallel
+ * processing
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

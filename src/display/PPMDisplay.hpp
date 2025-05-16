@@ -7,7 +7,8 @@
 
 /**
  * @file PPMDisplay.hpp
- * @brief Defines the PPMDisplay class which handles rendering to PPM image format
+ * @brief Defines the PPMDisplay class which handles rendering to PPM image
+ * format
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

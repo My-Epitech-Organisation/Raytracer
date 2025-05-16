@@ -7,11 +7,12 @@
 
 /**
  * @file test_Resolution.cpp
- * @brief Unit tests for the Resolution class to validate screen resolution operations
+ * @brief Unit tests for the Resolution class to validate screen resolution
+ * operations
  * @author Santi
  * @date 2025-05-16
  * @version 1.0
- */ 
+ */
 
 #include <gtest/gtest.h>
 #include "../src/scene/Resolution.hpp"

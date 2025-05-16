@@ -7,7 +7,8 @@
 
 /**
  * @file ILight.hpp
- * @brief Interface defining the behavior of light sources in the raytracing engine
+ * @brief Interface defining the behavior of light sources in the raytracing
+ * engine
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

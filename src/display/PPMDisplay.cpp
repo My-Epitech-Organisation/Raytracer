@@ -7,7 +7,8 @@
 
 /**
  * @file PPMDisplay.cpp
- * @brief Implementation of the PPM display system for rendering and saving images in the PPM format
+ * @brief Implementation of the PPM display system for rendering and saving
+ * images in the PPM format
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

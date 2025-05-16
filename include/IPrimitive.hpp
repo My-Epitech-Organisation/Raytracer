@@ -7,7 +7,8 @@
 
 /**
  * @file IPrimitive.hpp
- * @brief Interface defining the behavior of geometric primitives in the raytracing engine
+ * @brief Interface defining the behavior of geometric primitives in the
+ * raytracing engine
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

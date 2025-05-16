@@ -7,7 +7,8 @@
 
 /**
  * @file SFMLDisplay.cpp
- * @brief Implementation of the display system using SFML for real-time rendering visualization
+ * @brief Implementation of the display system using SFML for real-time
+ * rendering visualization
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

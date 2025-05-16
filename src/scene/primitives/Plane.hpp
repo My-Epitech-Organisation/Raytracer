@@ -7,7 +7,8 @@
 
 /**
  * @file Plane.hpp
- * @brief Definition of the Plane class for representing infinite planes in the raytracing engine
+ * @brief Definition of the Plane class for representing infinite planes in the
+ * raytracing engine
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

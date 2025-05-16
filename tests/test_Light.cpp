@@ -7,11 +7,12 @@
 
 /**
  * @file test_Light.cpp
- * @brief Unit tests for Light classes to validate lighting calculations and behaviors
+ * @brief Unit tests for Light classes to validate lighting calculations and
+ * behaviors
  * @author Santi
  * @date 2025-05-16
  * @version 1.0
- */ 
+ */
 
 #include <gtest/gtest.h>
 #include <sstream>

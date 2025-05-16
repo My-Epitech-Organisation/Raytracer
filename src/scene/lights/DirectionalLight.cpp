@@ -7,7 +7,8 @@
 
 /**
  * @file DirectionalLight.cpp
- * @brief Implementation of the directional light class which simulates light coming from infinity in a specific direction
+ * @brief Implementation of the directional light class which simulates light
+ * coming from infinity in a specific direction
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

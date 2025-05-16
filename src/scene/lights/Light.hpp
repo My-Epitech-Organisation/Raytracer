@@ -7,7 +7,8 @@
 
 /**
  * @file Light.hpp
- * @brief Defines the abstract Light base class for all light sources in the ray tracer
+ * @brief Defines the abstract Light base class for all light sources in the ray
+ * tracer
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

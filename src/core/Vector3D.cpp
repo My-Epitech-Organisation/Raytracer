@@ -7,7 +7,8 @@
 
 /**
  * @file Vector3D.cpp
- * @brief Implementation of the 3D vector class with mathematical operations for 3D graphics
+ * @brief Implementation of the 3D vector class with mathematical operations for
+ * 3D graphics
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

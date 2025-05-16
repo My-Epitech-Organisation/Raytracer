@@ -7,7 +7,8 @@
 
 /**
  * @file LimitedCone.hpp
- * @brief Definition of the LimitedCone class for representing cones with a limited height
+ * @brief Definition of the LimitedCone class for representing cones with a
+ * limited height
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

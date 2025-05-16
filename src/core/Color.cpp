@@ -7,7 +7,8 @@
 
 /**
  * @file Color.cpp
- * @brief Implementation of the Color class for RGB color representation and operations
+ * @brief Implementation of the Color class for RGB color representation and
+ * operations
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

@@ -7,7 +7,8 @@
 
 /**
  * @file main.cpp
- * @brief Main entry point for the Raytracer application, handling command-line arguments, scene loading, and rendering
+ * @brief Main entry point for the Raytracer application, handling command-line
+ * arguments, scene loading, and rendering
  * @author Santi
  * @date 2025-05-16
  * @version 1.0

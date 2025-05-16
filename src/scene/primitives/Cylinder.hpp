@@ -7,7 +7,8 @@
 
 /**
  * @file Cylinder.hpp
- * @brief Definition of the Cylinder class for representing cylinders in the raytracing engine
+ * @brief Definition of the Cylinder class for representing cylinders in the
+ * raytracing engine
  * @author Santi
  * @date 2025-05-16
  * @version 1.0
