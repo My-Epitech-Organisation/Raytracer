@@ -30,7 +30,8 @@ double PointLight::getIntensityAt(const Vector3D& point) const {
   const double kLinear = 0.09;
   const double kQuadratic = 0.032;
 
-  return 1.0 / (kConstant + kLinear * distance + kQuadratic * distance * distance);
+  return 1.0 /
+         (kConstant + kLinear * distance + kQuadratic * distance * distance);
 }
 
 Color PointLight::getColor() const {
