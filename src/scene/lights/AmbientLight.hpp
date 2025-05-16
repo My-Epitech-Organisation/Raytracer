@@ -18,6 +18,7 @@ namespace RayTracer {
 class AmbientLight : public Light {
  public:
   explicit AmbientLight(float ambient);
+  AmbientLight(float ambient, const Color& color);
 
   // ILight interface implementation
   Vector3D getDirectionFrom(const Vector3D& point) const override;
