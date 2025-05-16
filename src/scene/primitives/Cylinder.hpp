@@ -5,8 +5,8 @@
 ** Cylinder
 */
 
-#ifndef INFINITE_CYLINDER_HPP_
-#define INFINITE_CYLINDER_HPP_
+#ifndef CYLINDER_HPP_
+#define CYLINDER_HPP_
 
 #include <memory>
 #include <optional>
@@ -53,4 +53,4 @@ class Cylinder : public ICylinder {
 
 }  // namespace RayTracer
 
-#endif /* INFINITE_CYLINDER_HPP_ */
+#endif /* CYLINDER_HPP_ */

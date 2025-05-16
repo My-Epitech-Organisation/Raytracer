@@ -5,8 +5,8 @@
 ** Cylinder primitive class header
 */
 
-#ifndef CYLINDER_HPP_
-#define CYLINDER_HPP_
+#ifndef LIMITEDCYLINDER_HPP_
+#define LIMITEDCYLINDER_HPP_
 
 #include <memory>
 #include <optional>
@@ -167,4 +167,4 @@ class LimitedCylinder : public ICylinder {
 
 }  // namespace RayTracer
 
-#endif /* !CYLINDER_HPP_ */
+#endif /* !LIMITEDCYLINDER_HPP_ */
