@@ -5,6 +5,14 @@
 ** ParserException
 */
 
+/**
+ * @file ParserException.hpp
+ * @brief Exception class for handling parsing errors in the raytracer
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef PARSEREXCEPTION_HPP_
 #define PARSEREXCEPTION_HPP_
 

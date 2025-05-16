@@ -5,6 +5,14 @@
 ** Ray class implementation
 */
 
+/**
+ * @file Ray.cpp
+ * @brief Implementation of the Ray class which represents a ray with origin and direction for ray tracing
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "Ray.hpp"
 #include "Transform.hpp"
 #include "Vector3D.hpp"

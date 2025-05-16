@@ -5,6 +5,14 @@
 ** Vector3D class implementation
 */
 
+/**
+ * @file Vector3D.cpp
+ * @brief Implementation of the 3D vector class with mathematical operations for 3D graphics
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "Vector3D.hpp"
 #include <cmath>
 

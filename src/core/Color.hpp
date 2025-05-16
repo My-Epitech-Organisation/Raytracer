@@ -5,6 +5,14 @@
 ** Color class header
 */
 
+/**
+ * @file Color.hpp
+ * @brief Provides the Color class for managing RGB color values with various operations and transformations
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef COLOR_HPP_
 #define COLOR_HPP_
 

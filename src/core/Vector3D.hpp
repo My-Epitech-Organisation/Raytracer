@@ -5,6 +5,14 @@
 ** Vector3D class header
 */
 
+/**
+ * @file Vector3D.hpp
+ * @brief Definition of the Vector3D class for representing and manipulating 3D vectors in space
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef VECTOR3D_HPP_
 #define VECTOR3D_HPP_
 

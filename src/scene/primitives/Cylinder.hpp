@@ -5,6 +5,14 @@
 ** Cylinder primitive class header
 */
 
+/**
+ * @file Cylinder.hpp
+ * @brief Definition of the Cylinder class for representing cylinders in the raytracing engine
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef CYLINDER_HPP_
 #define CYLINDER_HPP_
 

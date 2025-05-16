@@ -5,6 +5,14 @@
 ** LightFactory header
 */
 
+/**
+ * @file LightFactory.hpp
+ * @brief Provides a factory class for creating different types of light sources
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef LIGHT_FACTORY_HPP_
 #define LIGHT_FACTORY_HPP_
 

@@ -1,3 +1,18 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** Main entry point for the raytracer
+*/
+
+/**
+ * @file main.cpp
+ * @brief Main entry point for the Raytracer application, handling command-line arguments, scene loading, and rendering
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <signal.h>
 #include <iostream>
 #include <libconfig.h++>

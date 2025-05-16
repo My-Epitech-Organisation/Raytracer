@@ -5,6 +5,14 @@
 ** PPM image display class header
 */
 
+/**
+ * @file PPMDisplay.hpp
+ * @brief Defines the PPMDisplay class which handles rendering to PPM image format
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef PPMDISPLAY_HPP_
 #define PPMDISPLAY_HPP_
 

@@ -5,6 +5,14 @@
 ** Scene class header
 */
 
+/**
+ * @file Scene.hpp
+ * @brief Definition of the Scene class for representing and managing the entire 3D scene
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef SCENE_HPP_
 #define SCENE_HPP_
 

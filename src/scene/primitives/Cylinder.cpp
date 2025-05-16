@@ -1,3 +1,18 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** Cylinder
+*/
+
+/**
+ * @file Cylinder.cpp
+ * @brief Implementation of the Cylinder class which provides cylindrical primitive functionality for ray tracing
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "Cylinder.hpp"
 #include <cmath>
 #include <limits>

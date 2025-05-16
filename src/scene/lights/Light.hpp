@@ -5,6 +5,14 @@
 ** Abstract Light class
 */
 
+/**
+ * @file Light.hpp
+ * @brief Defines the abstract Light base class for all light sources in the ray tracer
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef LIGHT_HPP_
 #define LIGHT_HPP_
 

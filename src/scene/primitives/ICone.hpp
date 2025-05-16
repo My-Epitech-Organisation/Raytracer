@@ -1,3 +1,18 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** ICone interface
+*/
+
+/**
+ * @file ICone.hpp
+ * @brief Definition of the ICone interface for cone primitives in the raytracing engine
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef ICONE_HPP_
 #define ICONE_HPP_
 

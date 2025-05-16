@@ -5,6 +5,14 @@
 ** PointLight
 */
 
+/**
+ * @file PointLight.hpp
+ * @brief Definition of the PointLight class for representing punctual light sources
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef POINTLIGHT_HPP_
 #define POINTLIGHT_HPP_
 
