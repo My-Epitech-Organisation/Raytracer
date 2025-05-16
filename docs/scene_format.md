@@ -1,16 +1,16 @@
-# 🧾 Guide d'utilisation des fichiers .cfg – Raytracer
+# 🧾 .cfg File Usage Guide – Raytracer
 
-Les fichiers `.cfg` définissent les scènes à rendre. Ils utilisent une syntaxe inspirée de libconfig++, lisible par l'utilisateur, et structurée en trois grandes sections :
+.cfg files define the scenes to be rendered. They use a syntax inspired by libconfig++, which is user-readable and structured into three main sections:
 
-- `camera` : configuration de la caméra
-- `primitives` : objets à afficher dans la scène
-- `lights` : sources lumineuses
+- camera: camera configuration
+- primitives: objects to display in the scene
+- lights: light sources
 
 ---
 
-## 🎥 Caméra
+## 🎥 Camera
 
-La section `camera` définit le point de vue à partir duquel la scène est observée.
+The camera section defines the point of view from which the scene is observed.
 
 ```cfg
 camera :
@@ -18,20 +18,20 @@ camera :
   resolution = { width = 800; height = 600; };
   position = { x = 0; y = 0; z = 0; };
   rotation = { x = 0; y = 0; z = 0; };
-  fieldOfView = 72.0; # En degrés
+  fieldOfView = 72.0; # In degrees
 };
 ```
 
-### Paramètres de la caméra
+### Camera Parameters
 
-- `resolution` : Résolution de l'image rendue, spécifiée par la largeur (`width`) et la hauteur (`height`).
-- `position` : Position de la caméra dans l'espace 3D, spécifiée par les coordonnées `x`, `y` et `z`.
-- `rotation` : Orientation de la caméra, spécifiée par les angles de rotation autour des axes `x`, `y` et `z`.
-- `fieldOfView` : Champ de vision de la caméra, spécifié en degrés. Il détermine l'angle de vue de la caméra.
+- resolution: Rendered image resolution, specified by width and height.
+- position: Camera position in 3D space, defined by the coordinates x, y, and z.
+- rotation: Camera orientation, defined by rotation angles around the x, y, and z axes.
+- fieldOfView: Camera field of view, specified in degrees. It determines the camera’s viewing angle.
 
-## 🏗️ Objets
+## 🏗️ Objects
 
-La section `primitives` définit les objets à afficher dans la scène. Chaque objet est défini par son type et ses propriétés.
+The primitives section defines the objects to display in the scene. Each object is defined by its type and properties.
 
 ```cfg
 primitives :
@@ -56,17 +56,18 @@ primitives :
 
 ### Transformations
 
-Les transformations sont appliquées aux objets pour les positionner et les orienter dans la scène. Elles peuvent inclure :
-- `translate` : Position de l'objet dans l'espace 3D. `x`, `y`, et `Z` sont les coordonnées de translation.
-- `rotation` : Orientation de l'objet, spécifiée par les angles de rotation autour des axes `x`, `y` et `z`.
-- `scale` : Échelle de l'objet, spécifiée par les facteurs d'échelle `x`, `y` et `z`.
+Transformations are applied to objects to position and orient them in the scene. These can include:
 
-## 📌 Remarques
+- translate: Object position in 3D space. x, y, and z are the translation coordinates.
+- rotation: Object orientation, specified by rotation angles around the x, y, and z axes.
+- scale: Object scale, specified by the scaling factors x, y, and z.
 
-Les commentaires (# ...) sont autorisés.
+## 📌 Notes
 
-L’ordre des blocs (camera, primitives, lights) n’est pas strict.
+Comments (# ...) are allowed.
 
-Chaque primitive est définie sous forme de tableau ( ... ).
+The order of blocks (camera, primitives, lights) is not strict.
 
-Le fichier doit être lisible par la bibliothèque libconfig++.
+Each primitive is defined as an array-like block (...).
+
+The file must be readable by the libconfig++ library.
