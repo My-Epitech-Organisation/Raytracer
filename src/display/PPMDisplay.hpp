@@ -144,8 +144,9 @@ class PPMDisplay {
    * @param scene The scene containing the lights
    * @param intersection The intersection data
    * @return The calculated color including lighting effects
-   */  Color calculateLighting(const Scene& scene,
-                            const Intersection& intersection) const;
+   */
+  Color calculateLighting(const Scene& scene,
+                          const Intersection& intersection) const;
 
   Vector3D reflect(const Vector3D& incident, const Vector3D& normal) const;
 };

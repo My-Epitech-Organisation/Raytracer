@@ -290,7 +290,8 @@ Color PPMDisplay::calculateLighting(const Scene& scene,
   Color baseColor = intersection.color;
   Color resultColor = baseColor * ambientIntensity;
 
-  Vector3D viewDir = (scene.getCamera().getPosition() - intersection.point).normalized();
+  Vector3D viewDir =
+      (scene.getCamera().getPosition() - intersection.point).normalized();
 
   const double specularStrength = 0.5;
   const double shininess = 32.0;
@@ -313,7 +314,8 @@ Color PPMDisplay::calculateLighting(const Scene& scene,
     // Calcul specular (Phong model)
     Vector3D reflectDir = reflect(-lightDir, intersection.normal);
     double spec = std::pow(std::max(0.0, viewDir.dot(reflectDir)), shininess);
-    Color specular = Color((uint8_t)255, (uint8_t)255, (uint8_t)255) * (specularStrength * spec * intensity);
+    Color specular = Color((uint8_t)255, (uint8_t)255, (uint8_t)255) *
+                     (specularStrength * spec * intensity);
 
     // Add specular component to the result
     resultColor += specular;
@@ -322,7 +324,8 @@ Color PPMDisplay::calculateLighting(const Scene& scene,
   return resultColor;
 }
 
-Vector3D PPMDisplay::reflect(const Vector3D& incident, const Vector3D& normal) const {
+Vector3D PPMDisplay::reflect(const Vector3D& incident,
+                             const Vector3D& normal) const {
   return incident - normal * 2.0 * incident.dot(normal);
 }
 
