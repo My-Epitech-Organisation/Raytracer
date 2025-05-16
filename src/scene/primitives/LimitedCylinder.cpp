@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** LimitedCylinder
+*/
+
 #include "LimitedCylinder.hpp"
 #include <cmath>
 #include <limits>

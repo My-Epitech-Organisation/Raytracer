@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** ICylinder
+*/
+
 #ifndef ICYLINDER_HPP_
 #define ICYLINDER_HPP_
 
