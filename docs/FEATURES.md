@@ -1,92 +1,90 @@
-# ✨ Fonctionnalités – Raytracer
+# ✨ Features – Raytracer
 
-## ✅ Fonctionnalités obligatoires (Must)
+## ✅ Mandatory Features (Must)
 
 ### 🔷 Primitives
 
-- ✅ Sphère
-- ✅ Plan
+- ✅ Sphere
+- ✅ Plane
 
 ### 🔷 Transformations
 
 - ✅ Translation
 
-### 🔷 Lumière
+### 🔷 Lighting
 
-- ✅ Lumière directionnelle
-- ✅ Lumière ambiante
+- ✅ Directional light
+- ✅ Ambient light
 
-### 🔷 Matériaux
+### 🔷 Materials
 
-- ✅ Couleur unie (Flat shading)
+- ✅ Solid color (Flat shading)
 
-### 🔷 Configuration de scène
+### 🔷 Scene Configuration
 
-- ✅ Chargement depuis un fichier externe
-- ✅ Positionnement de la caméra
-- ✅ Placement des primitives et des lumières
+- ✅ Load from external file
+- ✅ Camera positioning
+- ✅ Placement of primitives and lights
 
 ### 🔷 Interface
 
-- ✅ Aucun affichage graphique requis
-- ✅ Rendu en image `.ppm` uniquement
+- ✅ No graphical display required
+- ✅ Rendering to `.ppm` image only
 
 ---
 
-## 🧩 Fonctionnalités recommandées (Should)
+## 🧩 Recommended Features (Should)
 
 ### 🔷 Primitives
 
-- ✅ Cylindre
-- ✅ Cône
+- ✅ Cylinder
+- ✅ Cone
 
 ### 🔷 Transformations
 
 - ✅ Rotation
 
-### 🔷 Effets de lumière
+### 🔷 Lighting Effects
 
-- ⏳ Ombres portées
+- ⏳ Shadows
 
 ---
 
-## 💡 Fonctionnalités bonus (Could)
+## 💡 Bonus Features (Could)
 
-### 🔷 Primitives supplémentaires
+### 🔷 Additional Primitives
 
-- ✅ Cylindre / cône limités
+- ✅ Clipped cylinder / cone
 - ⏳ Torus, tanglecube, triangles
-- ⏳ Support des fichiers `.obj`
-- ⏳ Fractales, bande de Möbius
+- ⏳ Support for `.obj` files
+- ⏳ Fractals, Möbius strip
 
-### 🔷 Transformations avancées
+### 🔷 Advanced Transformations
 
-- ⏳ Échelle, cisaillement
-- ✅ Matrice de transformation
-- ⏳ Graphe de scène
+- ⏳ Scale, shear
+- ✅ Transformation matrix
+- ⏳ Scene graph
 
-### 🔷 Éclairage avancé
+### 🔷 Advanced Lighting
 
-- ⏳ Multiples lumières
-- ⏳ Lumière colorée
-- ⏳ Réflexion Phong, occlusion ambiante
+- ⏳ Multiple lights
+- ⏳ Colored light
+- ⏳ Phong reflection, ambient occlusion
 
-### 🔷 Matériaux
+### 🔷 Materials
 
-- ⏳ Réflexion, transparence, réfraction
-- ⏳ Textures (fichier, damier, bruit Perlin)
+- ⏳ Reflection, transparency, refraction
+- ⏳ Textures (file, checkerboard, Perlin noise)
 - ⏳ Normal mapping
 
-### 🔷 Optimisations
+### 🔷 Optimizations
 
 - ✅ Multithreading
-- ⏳ Partitionnement spatial
+- ⏳ Spatial partitioning
 - ⏳ Clustering
 
 ### 🔷 Interface (bonus)
 
-- ⏳ Aperçu temps réel
-- ⏳ Reload auto à modification de scène
-- ⏳ Arrêt anticipé du rendu
-
----
+- ⏳ Real-time preview
+- ⏳ Auto-reload on scene modification
+- ⏳ Early render stop
