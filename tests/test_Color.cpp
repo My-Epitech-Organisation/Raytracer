@@ -5,6 +5,14 @@
 ** Unit tests for Color class
 */
 
+/**
+ * @file test_Color.cpp
+ * @brief Unit tests for the Color class to validate RGB color representation and operations
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */ 
+
 #include <gtest/gtest.h>
 #include <cmath>
 #include "../src/core/Color.hpp"

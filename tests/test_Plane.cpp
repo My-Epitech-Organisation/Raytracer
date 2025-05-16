@@ -5,6 +5,14 @@
 ** Unit tests for Plane class
 */
 
+/**
+ * @file test_Plane.cpp
+ * @brief Unit tests for the Plane primitive class to verify its geometry and intersection calculations
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */ 
+
 #include <gtest/gtest.h>
 #include <cmath>
 #include <iomanip>  // Added for detailed output

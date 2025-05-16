@@ -5,6 +5,14 @@
 ** Unit tests for Sphere primitive
 */
 
+/**
+ * @file test_Sphere.cpp
+ * @brief Unit tests for the Sphere primitive class to validate geometry and ray intersections
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <gtest/gtest.h>
 #include <cmath>
 #include <memory>

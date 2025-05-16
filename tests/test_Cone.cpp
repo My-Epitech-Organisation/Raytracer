@@ -1,3 +1,18 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** test_Cone
+*/
+
+/**
+ * @file test_Cone.cpp
+ * @brief Unit tests for the Cone primitive class to validate cone geometry and ray intersections
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <cmath>
 #include <stdexcept>
 #include "../src/core/Color.hpp"
@@ -164,7 +179,7 @@ TEST_F(ConeTest, IntersectionKnownHit) {
 // (P-V).dot(Axis) = (0,1,1).dot(0,1,0) = 1
 // cos^2(angle) = cos^2(45) = (1/sqrt(2))^2 = 0.5
 // Normal_local = ( (P-V) - Axis * ( (P-V).dot(Axis) / cos^2(angle) )
-// ).normalized() Normal_local = ( (0,1,1) - (0,1,0) * (1 / 0.5) ).normalized()
+// ).normalized(); Normal_local = ( (0,1,1) - (0,1,0) * (1 / 0.5) ).normalized()
 // Normal_local = ( (0,1,1) - (0,2,0) ).normalized()
 // Normal_local = (0, -1, 1).normalized()
 // This normal points "inwards" towards the axis if we consider the +Y direction

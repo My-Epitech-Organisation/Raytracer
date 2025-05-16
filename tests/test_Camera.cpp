@@ -5,6 +5,14 @@
 ** Unit tests for Camera class
 */
 
+/**
+ * @file test_Camera.cpp
+ * @brief Unit tests for the Camera class to validate camera positioning, ray generation and transformations
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <gtest/gtest.h>
 #include <cmath>
 #include "../include/exceptions/InvalidTypeException.hpp"

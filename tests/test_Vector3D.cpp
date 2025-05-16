@@ -5,6 +5,14 @@
 ** Unit tests for Vector3D class
 */
 
+/**
+ * @file test_Vector3D.cpp
+ * @brief Unit tests for the Vector3D class to verify its functionality and correctness
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <gtest/gtest.h>
 #include "../src/core/Vector3D.hpp"
 
