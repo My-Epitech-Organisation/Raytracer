@@ -5,11 +5,11 @@
 #include <string>
 #include "display/PPMDisplay.hpp"
 #include "display/SFMLDisplay.hpp"  // Needed for SFML_AVAILABLE macro and renderWithPPM
+#include "exceptions/ParserException.hpp"
 #include "scene/Scene.hpp"
 #include "scene/SceneBuilder.hpp"
 #include "scene/lights/LightFactory.hpp"
 #include "scene/parser/SceneParser.hpp"
-#include "exceptions/ParserException.hpp"
 
 void usage() {
   std::cout << "USAGE: ./raytracer <SCENE_FILE> [OPTIONS]" << std::endl;
@@ -95,14 +95,14 @@ RayTracer::Scene buildSceneFromFile(const std::string& filePath) {
   // Parse lights
   if (cfg.exists("lights")) {
     const libconfig::Setting& lightsSetting = cfg.lookup("lights");
-    
+
     try {
       // Use LightFactory to create all lights
       auto lightResult = RayTracer::LightFactory::createLights(lightsSetting);
-      
+
       // Set the diffuse multiplier from the light factory result
       builder.withDiffuseMultiplier(lightResult.settings.diffuse);
-      
+
       // Add all created lights to the scene
       for (auto& light : lightResult.lights) {
         builder.withLight(std::shared_ptr<RayTracer::Light>(light.release()));
