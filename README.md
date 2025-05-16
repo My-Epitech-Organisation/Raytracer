@@ -36,6 +36,12 @@ make re       # Recompile tout
 
 ---
 
+## ✅ Fonctionnalités implémentées
+
+- Voir [FEATURES.md](docs/FEATURES.md) pour la liste complète des fonctionnalités.
+
+---
+
 ## 👥 Contributeurs
 
 Ce projet a été réalisé par une équipe de trois étudiants dans le cadre du module B-OOP-400 à Epitech.
