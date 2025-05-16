@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 #include "display/PPMDisplay.hpp"
-#include "display/SFMLDisplay.hpp"  // Needed for SFML_AVAILABLE macro and renderWithPPM
+#include "display/SFMLDisplay.hpp"
 #include "exceptions/ParserException.hpp"
 #include "scene/Scene.hpp"
 #include "scene/SceneBuilder.hpp"
