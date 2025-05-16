@@ -13,6 +13,9 @@ namespace RayTracer {
 
 PointLight::PointLight(const Vector3D& position) : _position(position) {}
 
+PointLight::PointLight(const Vector3D& position, const Color& color)
+    : _position(position), _color(color) {}
+
 Vector3D PointLight::getDirectionFrom(const Vector3D& point) const {
   Vector3D direction = _position - point;
   return direction.normalized();
@@ -49,7 +52,9 @@ Ray PointLight::getShadowRay(const Vector3D& point) const {
 }
 
 std::shared_ptr<ILight> PointLight::clone() const {
-  return std::make_shared<PointLight>(_position);
+  auto clone = std::make_shared<PointLight>(_position);
+  clone->_color = _color;
+  return clone;
 }
 
 Vector3D PointLight::getPosition() const {
