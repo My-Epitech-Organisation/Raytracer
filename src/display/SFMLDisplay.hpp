@@ -18,7 +18,6 @@
 #define SFMLDISPLAY_HPP_
 
 #include <atomic>
-#include <functional>
 #include <string>
 #include <thread>
 #include "../core/Color.hpp"

@@ -17,7 +17,6 @@
 #include "LimitedCone.hpp"
 #include <algorithm>
 #include <cmath>
-#include <limits>
 #include <stdexcept>
 
 namespace RayTracer {

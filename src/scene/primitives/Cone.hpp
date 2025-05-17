@@ -17,10 +17,8 @@
 #ifndef CONE_HPP_
 #define CONE_HPP_
 
-#include <cmath>
 #include <memory>
 #include <optional>
-#include <string>
 #include "../../core/Color.hpp"
 #include "../../core/Ray.hpp"
 #include "../../core/Transform.hpp"

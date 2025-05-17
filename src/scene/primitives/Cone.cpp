@@ -16,9 +16,6 @@
 
 #include "Cone.hpp"
 #include <cmath>
-#include <iomanip>
-#include <iostream>
-#include <limits>
 #include <stdexcept>
 
 namespace RayTracer {

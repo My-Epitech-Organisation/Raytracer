@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <optional>
-#include <vector>
 #include "../../../include/IPrimitive.hpp"
 #include "../../core/Color.hpp"
 #include "../../core/Ray.hpp"

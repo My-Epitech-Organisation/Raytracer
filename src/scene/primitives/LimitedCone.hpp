@@ -17,7 +17,6 @@
 #ifndef LIMITEDCONE_HPP_
 #define LIMITEDCONE_HPP_
 
-#include <limits>
 #include "ICone.hpp"
 
 namespace RayTracer {

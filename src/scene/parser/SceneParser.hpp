@@ -20,11 +20,8 @@
 #include <libconfig.h++>
 #include <memory>
 #include <vector>
-#include "../../core/Color.hpp"
-#include "../../core/Vector3D.hpp"
 #include "../Camera.hpp"
 #include "../lights/Light.hpp"
-#include "../lights/LightFactory.hpp"
 #include "../lights/LightingSettings.hpp"
 #include "../primitives/Cone.hpp"
 #include "../primitives/Cylinder.hpp"

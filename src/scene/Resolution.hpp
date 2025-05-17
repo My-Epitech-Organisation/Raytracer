@@ -17,8 +17,6 @@
 #ifndef RESOLUTION_HPP_
 #define RESOLUTION_HPP_
 
-#include <iostream>
-
 namespace RayTracer {
 
 /**
