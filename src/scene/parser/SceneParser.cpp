@@ -11,6 +11,7 @@
 #include "../../../include/exceptions/ParserException.hpp"
 #include "../lights/LightFactory.hpp"
 #include "../primitives/Cylinder.hpp"
+#include "../primitives/Torus.hpp"
 
 using namespace libconfig;
 
@@ -597,6 +598,54 @@ void SceneParser::parsePrimitives(const Setting& primitivesSetting) {
       std::cerr << "Unsupported primitive type: " << name << std::endl;
     }
   }
+}
+
+Torus SceneParser::parseTorus(const Setting& torusSetting) {
+  try {
+    double majorRadius = 1.0, tubeRadius = 0.3;
+    int r = 255, g = 255, b = 255;
+    if (torusSetting.exists("majorRadius"))
+      majorRadius = getFlexibleFloat(torusSetting["majorRadius"]);
+    if (torusSetting.exists("tubeRadius"))
+      tubeRadius = getFlexibleFloat(torusSetting["tubeRadius"]);
+    if (torusSetting.exists("color")) {
+      const Setting& colorSetting = torusSetting["color"];
+      colorSetting.lookupValue("r", r);
+      colorSetting.lookupValue("g", g);
+      colorSetting.lookupValue("b", b);
+    }
+    Color color(static_cast<uint8_t>(r), static_cast<uint8_t>(g),
+                static_cast<uint8_t>(b));
+    Torus torus(majorRadius, tubeRadius, color);
+    if (torusSetting.exists("transform")) {
+      Transform transform = parseTransform(torusSetting["transform"]);
+      torus.setTransform(transform);
+    }
+    return torus;
+  } catch (const SettingNotFoundException& e) {
+    throw ParserException(std::string("Setting not found in torus: ") +
+                          e.what());
+  } catch (const SettingTypeException& e) {
+    throw ParserException(std::string("Setting type error in torus: ") +
+                          e.what());
+  } catch (const std::exception& e) {
+    throw RaytracerException(std::string("Error parsing torus: ") + e.what());
+  }
+}
+
+std::vector<Torus> SceneParser::parseTori(const Setting& setting) {
+  std::vector<Torus> tori;
+  if (!setting.isList() && !setting.isGroup() && !setting.isArray()) {
+    throw std::runtime_error("Tori setting must be a list or group.");
+  }
+  for (int i = 0; i < setting.getLength(); ++i) {
+    try {
+      tori.push_back(parseTorus(setting[i]));
+    } catch (const std::exception& e) {
+      std::cerr << "Failed to parse a torus: " << e.what() << std::endl;
+    }
+  }
+  return tori;
 }
 
 }  // namespace RayTracer

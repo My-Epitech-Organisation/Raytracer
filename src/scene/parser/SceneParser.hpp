@@ -21,6 +21,7 @@
 #include "../primitives/LimitedCylinder.hpp"
 #include "../primitives/Plane.hpp"
 #include "../primitives/Sphere.hpp"
+#include "../primitives/Torus.hpp"
 
 namespace RayTracer {
 
@@ -46,6 +47,8 @@ class SceneParser {
   Cylinder parseInfiniteCylinder(const libconfig::Setting& cylinderSetting);
   std::vector<Cylinder> parseInfiniteCylinders(
       const libconfig::Setting& setting);
+  Torus parseTorus(const libconfig::Setting& torusSetting);
+  std::vector<Torus> parseTori(const libconfig::Setting& setting);
 };
 
 }  // namespace RayTracer
