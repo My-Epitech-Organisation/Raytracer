@@ -164,7 +164,7 @@ LightFactory::Result LightFactory::createLights(
         }
 
         Color lightColor(static_cast<uint8_t>(255), static_cast<uint8_t>(255),
-                         static_cast<uint8_t>(255));  // Par défaut blanc
+                         static_cast<uint8_t>(255));  // Default white
         if (dirs[i].exists("color")) {
           const libconfig::Setting& colorSetting = dirs[i]["color"];
           int r = 255, g = 255, b = 255;
@@ -174,6 +174,15 @@ LightFactory::Result LightFactory::createLights(
             lightColor = Color(static_cast<uint8_t>(r), static_cast<uint8_t>(g),
                                static_cast<uint8_t>(b));
           }
+        }
+
+        // Intensity is optional for directional lights
+        float intensity = 1.0f;
+        int intensityInt = 0;
+        if (dirs[i].lookupValue("intensity", intensity)) {
+          // intensity already set
+        } else if (dirs[i].lookupValue("intensity", intensityInt)) {
+          intensity = static_cast<float>(intensityInt);
         }
 
         result.lights.emplace_back(
