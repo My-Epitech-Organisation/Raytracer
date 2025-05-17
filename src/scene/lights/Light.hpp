@@ -18,9 +18,7 @@
 #define LIGHT_HPP_
 
 #include <string>
-#include <vector>
 #include "../../../include/ILight.hpp"
-#include "../../core/Vector3D.hpp"
 
 namespace RayTracer {
 
