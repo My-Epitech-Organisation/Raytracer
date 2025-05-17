@@ -16,8 +16,6 @@ Triangle::Triangle(const Vector3D& a, const Vector3D& b, const Vector3D& c,
                    const Color& color)
     : _a(a), _b(b), _c(c), _color(color), _transform() {
   _normal = (b - a).cross(c - a).normalized();
-  std::cerr << "[Triangle] Normale calculée : (" << _normal.getX() << ", "
-            << _normal.getY() << ", " << _normal.getZ() << ")" << std::endl;
   try {
     _inverseTransform = _transform.inverse();
   } catch (const std::runtime_error&) {
@@ -70,7 +68,7 @@ std::optional<Intersection> Triangle::intersect(const Ray& ray) const {
   Vector3D h = dir.cross(edge2);
   double a = edge1.dot(h);
   if (std::abs(a) < 1e-8)
-    return std::nullopt;  // Ray is parallel
+    return std::nullopt;
   double f = 1.0 / a;
   Vector3D s = orig - _a;
   double u = f * s.dot(h);
