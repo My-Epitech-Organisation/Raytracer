@@ -27,6 +27,7 @@ namespace RayTracer {
 class DirectionalLight : public Light {
  public:
   explicit DirectionalLight(const Vector3D& direction);
+  DirectionalLight(const Vector3D& direction, const Color& color);
 
   // ILight interface implementation
   Vector3D getDirectionFrom(const Vector3D& point) const override;

@@ -15,12 +15,12 @@
  */
 
 #include "LightFactory.hpp"
+#include "../../../include/exceptions/ParserException.hpp"
 #include "AmbientLight.hpp"
 #include "DirectionalLight.hpp"
 #include "Light.hpp"
 #include "LightingSettings.hpp"
 #include "PointLight.hpp"
-#include "exceptions/ParserException.hpp"
 
 namespace RayTracer {
 
@@ -30,7 +30,21 @@ LightFactory::Result LightFactory::createLights(
 
   float ambient = 0.0f;
   if (setting.lookupValue("ambient", ambient)) {
-    result.lights.emplace_back(std::make_unique<AmbientLight>(ambient));
+    Color ambientColor =
+        Color(static_cast<uint8_t>(255), static_cast<uint8_t>(255),
+              static_cast<uint8_t>(255));  // Par défaut blanc
+    if (setting.exists("ambientColor")) {
+      const libconfig::Setting& colorSetting = setting["ambientColor"];
+      int r = 255, g = 255, b = 255;
+      if (colorSetting.lookupValue("r", r) &&
+          colorSetting.lookupValue("g", g) &&
+          colorSetting.lookupValue("b", b)) {
+        ambientColor = Color(static_cast<uint8_t>(r), static_cast<uint8_t>(g),
+                             static_cast<uint8_t>(b));
+      }
+    }
+    result.lights.emplace_back(
+        std::make_unique<AmbientLight>(ambient, ambientColor));
   } else {
     throw ParserException("Missing or invalid 'ambient' field in Light config");
   }
@@ -43,13 +57,51 @@ LightFactory::Result LightFactory::createLights(
     if (points.isList() || points.isArray()) {
       for (int i = 0; i < points.getLength(); ++i) {
         float x = 0, y = 0, z = 0;
-        if (!points[i].lookupValue("x", x) || !points[i].lookupValue("y", y) ||
-            !points[i].lookupValue("z", z)) {
+        int xInt = 0, yInt = 0, zInt = 0;
+
+        bool hasX = points[i].lookupValue("x", x);
+        bool hasY = points[i].lookupValue("y", y);
+        bool hasZ = points[i].lookupValue("z", z);
+
+        if (!hasX) {
+          hasX = points[i].lookupValue("x", xInt);
+          if (hasX)
+            x = static_cast<float>(xInt);
+        }
+
+        if (!hasY) {
+          hasY = points[i].lookupValue("y", yInt);
+          if (hasY)
+            y = static_cast<float>(yInt);
+        }
+
+        if (!hasZ) {
+          hasZ = points[i].lookupValue("z", zInt);
+          if (hasZ)
+            z = static_cast<float>(zInt);
+        }
+
+        if (!hasX || !hasY || !hasZ) {
           throw ParserException("Incomplete point light definition at index " +
                                 std::to_string(i));
         }
+
+        Color lightColor =
+            Color(static_cast<uint8_t>(255), static_cast<uint8_t>(255),
+                  static_cast<uint8_t>(255));  // Par défaut blanc
+        if (points[i].exists("color")) {
+          const libconfig::Setting& colorSetting = points[i]["color"];
+          int r = 255, g = 255, b = 255;
+          if (colorSetting.lookupValue("r", r) &&
+              colorSetting.lookupValue("g", g) &&
+              colorSetting.lookupValue("b", b)) {
+            lightColor = Color(static_cast<uint8_t>(r), static_cast<uint8_t>(g),
+                               static_cast<uint8_t>(b));
+          }
+        }
+
         result.lights.emplace_back(
-            std::make_unique<PointLight>(Vector3D(x, y, z)));
+            std::make_unique<PointLight>(Vector3D(x, y, z), lightColor));
       }
     }
   }
@@ -66,8 +118,22 @@ LightFactory::Result LightFactory::createLights(
               "Incomplete directional light definition at index " +
               std::to_string(i));
         }
+
+        Color lightColor(static_cast<uint8_t>(255), static_cast<uint8_t>(255),
+                         static_cast<uint8_t>(255));  // Par défaut blanc
+        if (dirs[i].exists("color")) {
+          const libconfig::Setting& colorSetting = dirs[i]["color"];
+          int r = 255, g = 255, b = 255;
+          if (colorSetting.lookupValue("r", r) &&
+              colorSetting.lookupValue("g", g) &&
+              colorSetting.lookupValue("b", b)) {
+            lightColor = Color(static_cast<uint8_t>(r), static_cast<uint8_t>(g),
+                               static_cast<uint8_t>(b));
+          }
+        }
+
         result.lights.emplace_back(
-            std::make_unique<DirectionalLight>(Vector3D(x, y, z)));
+            std::make_unique<DirectionalLight>(Vector3D(x, y, z), lightColor));
       }
     }
   }

@@ -21,6 +21,9 @@ namespace RayTracer {
 
 AmbientLight::AmbientLight(float ambient) : _ambient(ambient) {}
 
+AmbientLight::AmbientLight(float ambient, const Color& color)
+    : _ambient(ambient), _color(color) {}
+
 Vector3D AmbientLight::getDirectionFrom(const Vector3D& point) const {
   (void)point;  // Silence unused parameter warning
   // Ambient light comes from all directions, but let's use a default
@@ -55,7 +58,9 @@ Ray AmbientLight::getShadowRay(const Vector3D& point) const {
 }
 
 std::shared_ptr<ILight> AmbientLight::clone() const {
-  return std::make_shared<AmbientLight>(_ambient);
+  auto clone = std::make_shared<AmbientLight>(_ambient);
+  clone->_color = _color;
+  return clone;
 }
 
 Vector3D AmbientLight::getPosition() const {

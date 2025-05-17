@@ -21,10 +21,10 @@
 #include <string>
 #include "display/PPMDisplay.hpp"
 #include "display/SFMLDisplay.hpp"
+#include "exceptions/ParserException.hpp"
 #include "scene/Scene.hpp"
 #include "scene/SceneBuilder.hpp"
-#include "scene/lights/DirectionalLight.hpp"
-#include "scene/lights/PointLight.hpp"
+#include "scene/lights/LightFactory.hpp"
 #include "scene/parser/SceneParser.hpp"
 
 void usage() {
@@ -112,46 +112,20 @@ RayTracer::Scene buildSceneFromFile(const std::string& filePath) {
   if (cfg.exists("lights")) {
     const libconfig::Setting& lightsSetting = cfg.lookup("lights");
 
-    double ambientIntensity = 0.0;
-    if (lightsSetting.exists("ambient")) {
-      ambientIntensity = lightsSetting["ambient"];
-      builder.withAmbientLightIntensity(ambientIntensity);
-    }
+    try {
+      // Use LightFactory to create all lights
+      auto lightResult = RayTracer::LightFactory::createLights(lightsSetting);
 
-    double diffuseMultiplier = 0.0;
-    if (lightsSetting.exists("diffuse")) {
-      diffuseMultiplier = lightsSetting["diffuse"];
-      builder.withDiffuseMultiplier(diffuseMultiplier);
-    }
+      // Set the diffuse multiplier from the light factory result
+      builder.withDiffuseMultiplier(lightResult.settings.diffuse);
 
-    // Parse and add point lights
-    if (lightsSetting.exists("point")) {
-      const libconfig::Setting& pointLights = lightsSetting["point"];
-      for (int i = 0; i < pointLights.getLength(); ++i) {
-        const libconfig::Setting& light = pointLights[i];
-        float x = 0, y = 0, z = 0;
-        if (light.lookupValue("x", x) && light.lookupValue("y", y) &&
-            light.lookupValue("z", z)) {
-          auto pointLight = std::make_shared<RayTracer::PointLight>(
-              RayTracer::Vector3D(x, y, z));
-          builder.withLight(pointLight);
-        }
+      // Add all created lights to the scene
+      for (auto& light : lightResult.lights) {
+        builder.withLight(std::shared_ptr<RayTracer::Light>(light.release()));
       }
-    }
-
-    // Parse and add directional lights
-    if (lightsSetting.exists("directional")) {
-      const libconfig::Setting& dirLights = lightsSetting["directional"];
-      for (int i = 0; i < dirLights.getLength(); ++i) {
-        const libconfig::Setting& light = dirLights[i];
-        float x = 0, y = 0, z = 0;
-        if (light.lookupValue("x", x) && light.lookupValue("y", y) &&
-            light.lookupValue("z", z)) {
-          auto dirLight = std::make_shared<RayTracer::DirectionalLight>(
-              RayTracer::Vector3D(x, y, z));
-          builder.withLight(dirLight);
-        }
-      }
+    } catch (const std::exception& e) {
+      std::cerr << "Error parsing lights: " << e.what() << std::endl;
+      throw;
     }
   }
 

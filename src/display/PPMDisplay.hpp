@@ -156,6 +156,8 @@ class PPMDisplay {
    */
   Color calculateLighting(const Scene& scene,
                           const Intersection& intersection) const;
+
+  Vector3D reflect(const Vector3D& incident, const Vector3D& normal) const;
 };
 
 }  // namespace RayTracer

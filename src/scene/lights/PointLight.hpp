@@ -29,6 +29,7 @@ namespace RayTracer {
 class PointLight : public Light {
  public:
   PointLight(const Vector3D& position);
+  PointLight(const Vector3D& position, const Color& color);
 
   // ILight interface implementation
   Vector3D getDirectionFrom(const Vector3D& point) const override;

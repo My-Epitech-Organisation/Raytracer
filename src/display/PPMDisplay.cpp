@@ -17,12 +17,14 @@
 #include "PPMDisplay.hpp"
 #include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <thread>
 #include "../core/Ray.hpp"
+#include "../scene/lights/AmbientLight.hpp"
 
 namespace RayTracer {
 
@@ -296,7 +298,22 @@ Color PPMDisplay::calculateLighting(const Scene& scene,
                                     const Intersection& intersection) const {
   double ambientIntensity = scene.getAmbientLightIntensity();
   Color baseColor = intersection.color;
-  Color resultColor = baseColor * ambientIntensity;
+
+  Color ambientColor = Color::WHITE;
+  for (const auto& light : scene.getLights()) {
+    if (auto ambient = std::dynamic_pointer_cast<AmbientLight>(light)) {
+      ambientColor = ambient->getColor();
+      break;
+    }
+  }
+
+  Color resultColor = baseColor * ambientColor * ambientIntensity;
+
+  Vector3D viewDir =
+      (scene.getCamera().getPosition() - intersection.point).normalized();
+
+  const double specularStrength = 1.2;
+  const double shininess = 24.0;
 
   for (const auto& light : scene.getLights()) {
     if (scene.isInShadow(intersection.point, light)) {
@@ -306,15 +323,45 @@ Color PPMDisplay::calculateLighting(const Scene& scene,
     Vector3D lightDir = light->getDirectionFrom(intersection.point);
     double intensity = light->getIntensityAt(intersection.point);
 
+    if (std::dynamic_pointer_cast<AmbientLight>(light)) {
+      continue;
+    }
+
     // Calculate diffuse lighting (Lambert's law)
     double diffuseFactor = std::max(0.0, intersection.normal.dot(lightDir));
-    diffuseFactor *= scene.getDiffuseMultiplier() * intensity;
+    diffuseFactor *= scene.getDiffuseMultiplier() * intensity *
+                     1.5;  // Multiplied by 1.5 for stronger diffuse
+
+    Color lightColor = light->getColor();
+
+    lightColor = Color(static_cast<uint8_t>(std::min(
+                           255, static_cast<int>(lightColor.getR() * 1.2))),
+                       static_cast<uint8_t>(std::min(
+                           255, static_cast<int>(lightColor.getG() * 1.2))),
+                       static_cast<uint8_t>(std::min(
+                           255, static_cast<int>(lightColor.getB() * 1.2))));
+
+    Color diffuseColor = baseColor * lightColor * diffuseFactor;
 
     // Add diffuse component to the result
-    resultColor += baseColor * diffuseFactor;
+    resultColor += diffuseColor;
+
+    // Calculate specular (Phong model)
+    Vector3D reflectDir = reflect(-lightDir, intersection.normal);
+    double spec = std::pow(std::max(0.0, viewDir.dot(reflectDir)), shininess);
+
+    Color specular = lightColor * (specularStrength * spec * intensity * 1.8);
+
+    // Add specular component to the result
+    resultColor += specular;
   }
 
   return resultColor;
+}
+
+Vector3D PPMDisplay::reflect(const Vector3D& incident,
+                             const Vector3D& normal) const {
+  return incident - normal * 2.0 * incident.dot(normal);
 }
 
 }  // namespace RayTracer

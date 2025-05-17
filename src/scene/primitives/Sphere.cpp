@@ -87,6 +87,10 @@ std::optional<Intersection> Sphere::intersect(const Ray& ray) const {
 
   Vector3D worldNormal = _transform.applyToNormal(localNormal).normalized();
 
+  if (worldNormal.dot(ray.getDirection()) > 0) {
+    worldNormal = -worldNormal;
+  }
+
   Intersection intersection;
   intersection.distance = worldDistance;
   intersection.point = worldIntersectionPoint;
