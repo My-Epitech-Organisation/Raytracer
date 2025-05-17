@@ -111,8 +111,53 @@ LightFactory::Result LightFactory::createLights(
     if (dirs.isList() || dirs.isArray()) {
       for (int i = 0; i < dirs.getLength(); ++i) {
         float x = 0, y = 0, z = 0;
-        if (!dirs[i].lookupValue("x", x) || !dirs[i].lookupValue("y", y) ||
-            !dirs[i].lookupValue("z", z)) {
+        int xInt = 0, yInt = 0, zInt = 0;
+
+        bool hasX = false, hasY = false, hasZ = false;
+
+        // Check for direction vector format
+        if (dirs[i].exists("direction")) {
+          const libconfig::Setting& direction = dirs[i]["direction"];
+
+          hasX = direction.lookupValue("x", x);
+          if (!hasX && direction.lookupValue("x", xInt)) {
+            x = static_cast<float>(xInt);
+            hasX = true;
+          }
+
+          hasY = direction.lookupValue("y", y);
+          if (!hasY && direction.lookupValue("y", yInt)) {
+            y = static_cast<float>(yInt);
+            hasY = true;
+          }
+
+          hasZ = direction.lookupValue("z", z);
+          if (!hasZ && direction.lookupValue("z", zInt)) {
+            z = static_cast<float>(zInt);
+            hasZ = true;
+          }
+        } else {
+          // Direct x, y, z format
+          hasX = dirs[i].lookupValue("x", x);
+          if (!hasX && dirs[i].lookupValue("x", xInt)) {
+            x = static_cast<float>(xInt);
+            hasX = true;
+          }
+
+          hasY = dirs[i].lookupValue("y", y);
+          if (!hasY && dirs[i].lookupValue("y", yInt)) {
+            y = static_cast<float>(yInt);
+            hasY = true;
+          }
+
+          hasZ = dirs[i].lookupValue("z", z);
+          if (!hasZ && dirs[i].lookupValue("z", zInt)) {
+            z = static_cast<float>(zInt);
+            hasZ = true;
+          }
+        }
+
+        if (!hasX || !hasY || !hasZ) {
           throw ParserException(
               "Incomplete directional light definition at index " +
               std::to_string(i));
