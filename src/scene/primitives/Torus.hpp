@@ -19,6 +19,8 @@
 
 namespace RayTracer {
 
+constexpr double ROOT_FINDING_THRESHOLD = 1e-4;
+
 class Torus : public IPrimitive {
  public:
   Torus(double majorRadius, double tubeRadius, const Color& color);

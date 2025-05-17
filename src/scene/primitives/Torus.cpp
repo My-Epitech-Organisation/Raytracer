@@ -86,7 +86,7 @@ std::optional<Intersection> Torus::intersect(const Ray& ray) const {
 
   // optimisation to find roots
   std::vector<std::pair<double, double>> intervals;
-  double t_prev = 1e-4;
+  double t_prev = ROOT_FINDING_THRESHOLD;
   double val_prev = a4 * t_prev * t_prev * t_prev * t_prev +
                     a3 * t_prev * t_prev * t_prev + a2 * t_prev * t_prev +
                     a1 * t_prev + a0;
