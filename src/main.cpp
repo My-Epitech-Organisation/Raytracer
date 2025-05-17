@@ -21,7 +21,6 @@
 #include <string>
 #include "display/PPMDisplay.hpp"
 #include "display/SFMLDisplay.hpp"
-#include "exceptions/ParserException.hpp"
 #include "scene/Scene.hpp"
 #include "scene/SceneBuilder.hpp"
 #include "scene/lights/LightFactory.hpp"
