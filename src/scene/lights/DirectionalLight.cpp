@@ -15,7 +15,6 @@
  */
 
 #include "DirectionalLight.hpp"
-#include <cmath>
 #include <limits>
 
 namespace RayTracer {
@@ -28,20 +27,17 @@ DirectionalLight::DirectionalLight(const Vector3D& direction,
     : _direction(direction), _color(color) {}
 
 Vector3D DirectionalLight::getDirectionFrom(const Vector3D& point) const {
-  (void)point;  // Silence unused parameter warning
-  // Directional light has the same direction regardless of point
-  return -_direction;  // Negative because we want direction FROM point TO light
+  (void)point;
+  return -_direction;
 }
 
 double DirectionalLight::getDistanceFrom(const Vector3D& point) const {
-  (void)point;  // Silence unused parameter warning
-  // Directional lights are infinitely far away
+  (void)point;
   return std::numeric_limits<double>::infinity();
 }
 
 double DirectionalLight::getIntensityAt(const Vector3D& point) const {
-  (void)point;  // Silence unused parameter warning
-  // Directional lights have constant intensity
+  (void)point;
   return 1.0;
 }
 
@@ -54,8 +50,7 @@ bool DirectionalLight::castsShadows() const {
 }
 
 Ray DirectionalLight::getShadowRay(const Vector3D& point) const {
-  Vector3D direction = -_direction;  // Direction from point to light
-  // Small epsilon to avoid self-shadowing
+  Vector3D direction = -_direction;
   return Ray(point + direction * 0.001, direction);
 }
 
@@ -66,8 +61,6 @@ std::shared_ptr<ILight> DirectionalLight::clone() const {
 }
 
 Vector3D DirectionalLight::getPosition() const {
-  // Directional lights don't have a position, return a position infinitely far
-  // in the direction
   return Vector3D(std::numeric_limits<double>::infinity() * _direction.getX(),
                   std::numeric_limits<double>::infinity() * _direction.getY(),
                   std::numeric_limits<double>::infinity() * _direction.getZ());
