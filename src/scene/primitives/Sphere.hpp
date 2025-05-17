@@ -5,6 +5,15 @@
 ** Sphere primitive class header
 */
 
+/**
+ * @file Sphere.hpp
+ * @brief Definition of the Sphere class for representing spheres in the
+ * raytracing engine
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef SPHERE_HPP_
 #define SPHERE_HPP_
 

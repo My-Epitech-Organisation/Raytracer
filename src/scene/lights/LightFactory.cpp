@@ -5,6 +5,15 @@
 ** LightFactory implementation
 */
 
+/**
+ * @file LightFactory.cpp
+ * @brief Implementation of the factory class for creating different types of
+ * light sources
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "LightFactory.hpp"
 #include "../../../include/exceptions/ParserException.hpp"
 #include "AmbientLight.hpp"

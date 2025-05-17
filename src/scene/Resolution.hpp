@@ -5,6 +5,15 @@
 ** Resolution
 */
 
+/**
+ * @file Resolution.hpp
+ * @brief Defines the Resolution class for managing image dimensions in the ray
+ * tracer
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef RESOLUTION_HPP_
 #define RESOLUTION_HPP_
 

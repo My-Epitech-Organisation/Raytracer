@@ -5,6 +5,15 @@
 ** Scene class implementation
 */
 
+/**
+ * @file Scene.cpp
+ * @brief Implementation of the Scene class that manages all 3D objects, lights
+ * and rendering environment
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "Scene.hpp"
 #include <algorithm>
 #include <limits>

@@ -5,6 +5,15 @@
 ** Unit tests for Cylinder class
 */
 
+/**
+ * @file test_Cylinder.cpp
+ * @brief Unit tests for the Cylinder primitive class to verify its geometry and
+ * intersection calculations
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <gtest/gtest.h>
 #include <cmath>
 #include <limits>
@@ -13,6 +22,7 @@
 #include "../src/core/Transform.hpp"
 #include "../src/core/Vector3D.hpp"
 #include "../src/scene/primitives/Cylinder.hpp"
+#include "../src/scene/primitives/LimitedCylinder.hpp"
 
 using namespace RayTracer;
 
@@ -43,24 +53,24 @@ using namespace RayTracer;
   EXPECT_PRED_FORMAT3(AssertVectorsNearlyEqualCylinderTest, v1, v2, epsilon)
 
 TEST(CylinderTest, ConstructorValid) {
-  Cylinder cyl(1.0, 2.0, Color::RED);
+  LimitedCylinder cyl(1.0, 2.0, Color::RED);
   EXPECT_EQ(cyl.getRadius(), 1.0);
   EXPECT_EQ(cyl.getHeight(), 2.0);
   EXPECT_EQ(cyl.getColor(), Color::RED);
 }
 
 TEST(CylinderTest, ConstructorInvalidRadius) {
-  EXPECT_THROW(Cylinder(0.0, 2.0, Color::RED), std::invalid_argument);
-  EXPECT_THROW(Cylinder(-1.0, 2.0, Color::RED), std::invalid_argument);
+  EXPECT_THROW(LimitedCylinder(0.0, 2.0, Color::RED), std::invalid_argument);
+  EXPECT_THROW(LimitedCylinder(-1.0, 2.0, Color::RED), std::invalid_argument);
 }
 
 TEST(CylinderTest, ConstructorInvalidHeight) {
-  EXPECT_THROW(Cylinder(1.0, 0.0, Color::RED), std::invalid_argument);
-  EXPECT_THROW(Cylinder(1.0, -2.0, Color::RED), std::invalid_argument);
+  EXPECT_THROW(LimitedCylinder(1.0, 0.0, Color::RED), std::invalid_argument);
+  EXPECT_THROW(LimitedCylinder(1.0, -2.0, Color::RED), std::invalid_argument);
 }
 
 TEST(CylinderTest, RayIntersectionMiss) {
-  Cylinder cyl(1.0, 2.0, Color::BLUE);
+  LimitedCylinder cyl(1.0, 2.0, Color::BLUE);
   Ray ray(Vector3D(0, 0, -5),
           Vector3D(0, 1, 0));  // Ray parallel to Y, outside cylinder body
   auto intersection = cyl.intersect(ray);
@@ -73,9 +83,7 @@ TEST(CylinderTest, RayIntersectionMiss) {
 }
 
 TEST(CylinderTest, RayIntersectionBody) {
-  Cylinder cyl(
-      1.0, 2.0,
-      Color::GREEN);  // Centered at origin, radius 1, height 2 (-1 to 1 on Y)
+  Cylinder cyl(1.0, Color::GREEN);                 // infini
   Ray ray(Vector3D(0, 0, -5), Vector3D(0, 0, 1));  // Ray along +Z, hits body
 
   auto intersection = cyl.intersect(ray);
@@ -89,8 +97,9 @@ TEST(CylinderTest, RayIntersectionBody) {
   EXPECT_EQ(intersection->color, Color::GREEN);
 }
 
+// Les tests de caps et de hauteur sont pour LimitedCylinder
 TEST(CylinderTest, RayIntersectionTopCap) {
-  Cylinder cyl(1.0, 2.0, Color::RED);              // Height from -1 to 1 on Y
+  LimitedCylinder cyl(1.0, 2.0, Color::RED);       // Height from -1 to 1 on Y
   Ray ray(Vector3D(0, 5, 0), Vector3D(0, -1, 0));  // Ray along -Y, hits top cap
 
   auto intersection = cyl.intersect(ray);
@@ -104,7 +113,7 @@ TEST(CylinderTest, RayIntersectionTopCap) {
 }
 
 TEST(CylinderTest, RayIntersectionBottomCap) {
-  Cylinder cyl(1.0, 2.0, Color::BLUE);
+  LimitedCylinder cyl(1.0, 2.0, Color::BLUE);
   Ray ray(Vector3D(0.5, -5, 0.5),
           Vector3D(0, 1, 0));  // Ray along +Y, hits bottom cap
 
@@ -119,7 +128,7 @@ TEST(CylinderTest, RayIntersectionBottomCap) {
 }
 
 TEST(CylinderTest, RayParallelInsideNoHitBody) {
-  Cylinder cyl(1.0, 2.0, Color::YELLOW);
+  LimitedCylinder cyl(1.0, 2.0, Color::YELLOW);
   // Ray parallel to Y-axis, starting inside the cylinder's radius, pointing
   // upwards
   Ray ray(Vector3D(0.5, -5, 0), Vector3D(0, 1, 0));
@@ -135,7 +144,7 @@ TEST(CylinderTest, RayParallelInsideNoHitBody) {
 }
 
 TEST(CylinderTest, RayGrazingEdgeShouldHitCap) {
-  Cylinder cyl(1.0, 2.0, Color::CYAN);
+  LimitedCylinder cyl(1.0, 2.0, Color::CYAN);
   // Ray grazes the top edge, should hit the cap, not the body at y=1
   Ray ray(Vector3D(1.0 - CYLINDER_EPSILON, 5.0, 0.0), Vector3D(0, -1, 0));
   auto intersection = cyl.intersect(ray);
@@ -146,7 +155,7 @@ TEST(CylinderTest, RayGrazingEdgeShouldHitCap) {
 }
 
 TEST(CylinderTest, GetNormalAt) {
-  Cylinder cyl(1.0, 2.0, Color::WHITE);
+  LimitedCylinder cyl(1.0, 2.0, Color::WHITE);
   // Point on top cap
   EXPECT_VECTORS_NEARLY_EQUAL_CYLINDER(cyl.getNormalAt(Vector3D(0, 1, 0)),
                                        Vector3D(0, 1, 0), CYLINDER_EPSILON);
@@ -167,7 +176,7 @@ TEST(CylinderTest, GetNormalAt) {
 }
 
 TEST(CylinderTest, Clone) {
-  Cylinder original(1.5, 3.0, Color::MAGENTA);
+  LimitedCylinder original(1.5, 3.0, Color::MAGENTA);
   Transform t;
   t.translate(1, 2, 3);
   t.rotateX(45);
@@ -176,15 +185,13 @@ TEST(CylinderTest, Clone) {
   std::shared_ptr<IPrimitive> cloneBase = original.clone();
   ASSERT_NE(cloneBase, nullptr);
 
-  std::shared_ptr<Cylinder> clone =
-      std::dynamic_pointer_cast<Cylinder>(cloneBase);
+  std::shared_ptr<LimitedCylinder> clone =
+      std::dynamic_pointer_cast<LimitedCylinder>(cloneBase);
   ASSERT_NE(clone, nullptr);
 
   EXPECT_EQ(clone->getRadius(), 1.5);
   EXPECT_EQ(clone->getHeight(), 3.0);
   EXPECT_EQ(clone->getColor(), Color::MAGENTA);
-  // EXPECT_EQ(clone->getTransform(), t); // Assuming Transform has operator==
-  // If not, compare matrices or individual components
 
   // Test intersection with a ray to ensure clone behaves the same
   Ray ray(Vector3D(1, 0, -5), Vector3D(0, 0, 1));

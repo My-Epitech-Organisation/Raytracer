@@ -5,6 +5,15 @@
 ** SceneBuilder class header
 */
 
+/**
+ * @file SceneBuilder.hpp
+ * @brief Defines the SceneBuilder class which implements the Builder pattern
+ * for creating Scene objects
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef SCENEBUILDER_HPP_
 #define SCENEBUILDER_HPP_
 

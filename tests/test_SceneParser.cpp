@@ -5,6 +5,15 @@
 ** test_SceneParser
 */
 
+/**
+ * @file test_SceneParser.cpp
+ * @brief Unit tests for the SceneParser class to validate parsing of scene
+ * configuration files
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <gtest/gtest.h>
 #include <libconfig.h++>
 #include "../src/core/Color.hpp"

@@ -1,0 +1,21 @@
+/**
+ * @page faq Frequently Asked Questions
+ *
+ * 🔹 **Q : Does this project run on Windows?**
+ * A : Nope. Unix only, bro.
+ *
+ * 🔹 **Q : Why do I have a segmentation fault?**
+ * A : You forgot to handle a nullptr 😭
+ *
+ * 🔹 **Q : Can we add dynamic lights?**
+ * A : Stay tuned 💡
+ *
+ * ---
+ *
+ * ## 🔗 Useful Links
+ * - 🌐 [GitHub](https://github.com/My-Epitech-Organisation/Raytracer)
+ * - 🏠 [Main Page](index.html)
+ * - 📖 \ref user_guide "User Guide"
+ *
+ * ---
+ */

@@ -5,6 +5,15 @@
 ** SFML display class implementation
 */
 
+/**
+ * @file SFMLDisplay.cpp
+ * @brief Implementation of the display system using SFML for real-time
+ * rendering visualization
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "SFMLDisplay.hpp"
 
 // Only compile SFML implementation if available

@@ -5,6 +5,15 @@
 ** Transform class header
 */
 
+/**
+ * @file Transform.hpp
+ * @brief Provides the Transform class for representing and applying 3D
+ * transformations like translation, rotation, and scaling
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef TRANSFORM_HPP_
 #define TRANSFORM_HPP_
 

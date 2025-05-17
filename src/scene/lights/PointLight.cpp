@@ -5,6 +5,15 @@
 ** PointLight
 */
 
+/**
+ * @file PointLight.cpp
+ * @brief Implementation of the point light class which simulates light
+ * emanating from a specific position in 3D space
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "PointLight.hpp"
 #include <cmath>
 #include "../../core/Vector3D.hpp"

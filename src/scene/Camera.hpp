@@ -5,6 +5,14 @@
 ** Camera class header
 */
 
+/**
+ * @file Camera.hpp
+ * @brief Defines the Camera class for scene viewing and ray generation
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef CAMERA_HPP_
 #define CAMERA_HPP_
 

@@ -5,6 +5,15 @@
 ** test_LightFactory
 */
 
+/**
+ * @file test_LightFactory.cpp
+ * @brief Unit tests for the LightFactory class to verify light source creation
+ * from configuration
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <gtest/gtest.h>
 #include "../include/exceptions/ParserException.hpp"
 #include "../src/scene/lights/LightFactory.hpp"

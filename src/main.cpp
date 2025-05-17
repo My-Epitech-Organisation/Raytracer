@@ -1,3 +1,19 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** Main entry point for the raytracer
+*/
+
+/**
+ * @file main.cpp
+ * @brief Main entry point for the Raytracer application, handling command-line
+ * arguments, scene loading, and rendering
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <signal.h>
 #include <iostream>
 #include <libconfig.h++>
@@ -89,6 +105,26 @@ RayTracer::Scene buildSceneFromFile(const std::string& filePath) {
     for (const auto& limitedCone : limitedCones) {
       builder.withPrimitive(
           std::make_shared<RayTracer::LimitedCone>(limitedCone));
+    }
+  }
+
+  // Parse cylinders if they exist
+  if (primitivesSetting.exists("cylinders")) {
+    const libconfig::Setting& cylindersSetting = primitivesSetting["cylinders"];
+    auto cylinders = parser.parseInfiniteCylinders(cylindersSetting);
+    for (const auto& cylinder : cylinders) {
+      builder.withPrimitive(std::make_shared<RayTracer::Cylinder>(cylinder));
+    }
+  }
+
+  // Parse limited cylinders if they exist
+  if (primitivesSetting.exists("limitedcylinders")) {
+    const libconfig::Setting& cylindersSetting =
+        primitivesSetting["limitedcylinders"];
+    auto limitedCylinders = parser.parseLimitedCylinders(cylindersSetting);
+    for (const auto& limitedCylinder : limitedCylinders) {
+      builder.withPrimitive(
+          std::make_shared<RayTracer::LimitedCylinder>(limitedCylinder));
     }
   }
 
