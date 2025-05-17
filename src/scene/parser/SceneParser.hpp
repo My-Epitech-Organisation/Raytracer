@@ -137,8 +137,10 @@ class SceneParser {
   Cylinder parseInfiniteCylinder(const libconfig::Setting& cylinderSetting);
   std::vector<Cylinder> parseInfiniteCylinders(
       const libconfig::Setting& setting);
+  std::vector<Cylinder> parseCylinders(const libconfig::Setting& setting);
   Torus parseTorus(const libconfig::Setting& torusSetting);
   std::vector<Torus> parseTori(const libconfig::Setting& setting);
+  std::vector<Torus> parseToruses(const libconfig::Setting& setting);
 };
 
 }  // namespace RayTracer

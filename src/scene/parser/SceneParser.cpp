@@ -15,6 +15,8 @@
  */
 
 #include "SceneParser.hpp"
+#include <algorithm>
+#include <cctype>
 #include <libconfig.h++>
 #include "../../../include/exceptions/InvalidTypeException.hpp"
 #include "../../../include/exceptions/ParserException.hpp"
@@ -34,15 +36,25 @@ Camera SceneParser::parseCamera(const Setting& cameraSetting) {
     const Setting& fovSetting = cameraSetting["fieldOfView"];
 
     int width, height;
-    res.lookupValue("width", width);
-    res.lookupValue("height", height);
+    double tempWidth, tempHeight;
+    if (res.lookupValue("width", tempWidth)) {
+      width = static_cast<int>(tempWidth);
+    } else {
+      res.lookupValue("width", width);
+    }
 
-    int posX, posY, posZ;
+    if (res.lookupValue("height", tempHeight)) {
+      height = static_cast<int>(tempHeight);
+    } else {
+      res.lookupValue("height", height);
+    }
+
+    double posX, posY, posZ;
     pos.lookupValue("x", posX);
     pos.lookupValue("y", posY);
     pos.lookupValue("z", posZ);
 
-    int rotX, rotY, rotZ;
+    double rotX, rotY, rotZ;
     rot.lookupValue("x", rotX);
     rot.lookupValue("y", rotY);
     rot.lookupValue("z", rotZ);
@@ -201,8 +213,12 @@ float getFlexibleFloat(const Setting& setting) {
 Transform SceneParser::parseTransform(const Setting& transformSetting) {
   Transform transform;
 
-  if (transformSetting.exists("translate")) {
-    const Setting& translateSetting = transformSetting["translate"];
+  // Handle both "translate" and "translation" attributes
+  if (transformSetting.exists("translate") ||
+      transformSetting.exists("translation")) {
+    const Setting& translateSetting = transformSetting.exists("translate")
+                                          ? transformSetting["translate"]
+                                          : transformSetting["translation"];
     double x, y, z;
     translateSetting.lookupValue("x", x);
     translateSetting.lookupValue("y", y);
@@ -587,16 +603,25 @@ void SceneParser::parsePrimitives(const Setting& primitivesSetting) {
     const Setting& primitiveGroup = primitivesSetting[i];
     std::string name = primitiveGroup.getName();
 
-    if (name == "spheres") {
+    // Convert to lowercase for case-insensitive comparison
+    std::string nameLower = name;
+    std::transform(nameLower.begin(), nameLower.end(), nameLower.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
+
+    if (nameLower == "spheres") {
       this->parseSpheres(primitiveGroup);
-    } else if (name == "planes") {
+    } else if (nameLower == "planes") {
       this->parsePlanes(primitiveGroup);
-    } else if (name == "cones") {
+    } else if (nameLower == "cones") {
       this->parseCones(primitiveGroup);
-    } else if (name == "limitedcones") {
+    } else if (nameLower == "cylinders") {
+      this->parseCylinders(primitiveGroup);
+    } else if (nameLower == "limitedcones") {
       this->parseLimitedCones(primitiveGroup);
-    } else if (name == "limitedcylinders") {
+    } else if (nameLower == "limitedcylinders") {
       this->parseLimitedCylinders(primitiveGroup);
+    } else if (nameLower == "toruses") {
+      this->parseToruses(primitiveGroup);
     } else {
       std::cerr << "Unsupported primitive type: " << name << std::endl;
     }
