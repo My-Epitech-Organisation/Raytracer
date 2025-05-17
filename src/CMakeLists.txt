@@ -11,11 +11,12 @@ set(RAYTRACER_SOURCES
     scene/Scene.cpp
     scene/SceneBuilder.cpp
     scene/Camera.cpp
+    scene/primitives/Cylinder.cpp
     scene/primitives/Sphere.cpp
     scene/primitives/Plane.cpp
-    scene/primitives/Cylinder.cpp
     scene/primitives/Cone.cpp
     scene/primitives/LimitedCone.cpp
+    scene/primitives/LimitedCylinder.cpp
     scene/lights/LightFactory.cpp
     scene/lights/PointLight.cpp
     scene/lights/DirectionalLight.cpp

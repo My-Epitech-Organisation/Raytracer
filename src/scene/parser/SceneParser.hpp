@@ -27,7 +27,9 @@
 #include "../lights/LightFactory.hpp"
 #include "../lights/LightingSettings.hpp"
 #include "../primitives/Cone.hpp"
+#include "../primitives/Cylinder.hpp"
 #include "../primitives/LimitedCone.hpp"
+#include "../primitives/LimitedCylinder.hpp"
 #include "../primitives/Plane.hpp"
 #include "../primitives/Sphere.hpp"
 
@@ -130,6 +132,13 @@ class SceneParser {
    * @return Vector of limited cones.
    */
   std::vector<LimitedCone> parseLimitedCones(const libconfig::Setting& setting);
+  LimitedCylinder parseLimitedCylinder(
+      const libconfig::Setting& cylinderSetting);
+  std::vector<LimitedCylinder> parseLimitedCylinders(
+      const libconfig::Setting& setting);
+  Cylinder parseInfiniteCylinder(const libconfig::Setting& cylinderSetting);
+  std::vector<Cylinder> parseInfiniteCylinders(
+      const libconfig::Setting& setting);
 };
 
 }  // namespace RayTracer
