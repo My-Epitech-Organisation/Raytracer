@@ -136,6 +136,15 @@ RayTracer::Scene buildSceneFromFile(const std::string& filePath) {
     }
   }
 
+  // Parse triangles if they exist
+  if (primitivesSetting.exists("triangles")) {
+    const libconfig::Setting& trianglesSetting = primitivesSetting["triangles"];
+    auto triangles = parser.parseTriangles(trianglesSetting);
+    for (const auto& triangle : triangles) {
+      builder.withPrimitive(std::make_shared<RayTracer::Triangle>(triangle));
+    }
+  }
+
   // Parse lights
   if (cfg.exists("lights")) {
     const libconfig::Setting& lightsSetting = cfg.lookup("lights");

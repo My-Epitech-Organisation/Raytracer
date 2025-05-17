@@ -30,6 +30,7 @@
 #include "../primitives/Plane.hpp"
 #include "../primitives/Sphere.hpp"
 #include "../primitives/Torus.hpp"
+#include "../primitives/Triangle.hpp"
 
 namespace RayTracer {
 
@@ -139,6 +140,8 @@ class SceneParser {
       const libconfig::Setting& setting);
   Torus parseTorus(const libconfig::Setting& torusSetting);
   std::vector<Torus> parseTori(const libconfig::Setting& setting);
+  Triangle parseTriangle(const libconfig::Setting& triangleSetting);
+  std::vector<Triangle> parseTriangles(const libconfig::Setting& setting);
 };
 
 }  // namespace RayTracer
