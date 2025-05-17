@@ -24,6 +24,7 @@ set(RAYTRACER_SOURCES
     scene/lights/DirectionalLight.cpp
     scene/lights/AmbientLight.cpp
     scene/parser/SceneParser.cpp
+    scene/parser/SceneParserAliases.cpp
     exceptions/RaytracerException.cpp
 )
 
