@@ -1,5 +1,5 @@
 /**
- * @page USER_GUIDE User Guide
+ * @page user_guide User Guide
  *
  * # 🌈 Welcome to Raytracer: YOUR CPU GOES BRRRRR! 🌀
  *
@@ -119,4 +119,13 @@
  * ---
  *
  * 💖 Enjoy your Raytracer engine! The more features you add, the closer you get to *true photorealism*! 🌟
+ *
+ * ---
+ *
+ * ## 🔗 Useful Links
+ * - 🌐 [GitHub](https://github.com/My-Epitech-Organisation/Raytracer)
+ * - 🏠 [Main Page](index.html)
+ * - 📖 \ref faq "FAQ"
+ *
+ * ---
  */
