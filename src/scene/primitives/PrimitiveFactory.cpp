@@ -64,12 +64,10 @@ std::unordered_map<std::string, PrimitiveFactory::PrimitiveCreator>
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createTorus(setting));
          }},
-        {"tori",
-         [](const Setting& setting) {
+        {"tori", [](const Setting& setting) {
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createTorus(setting));
-         }}
-    };
+         }}};
 
 PrimitiveFactory::Result PrimitiveFactory::createPrimitives(
     const Setting& setting) {
@@ -750,9 +748,9 @@ std::shared_ptr<Torus> PrimitiveFactory::createTorus(const Setting& setting) {
 void PrimitiveFactory::applyTransformIfExists(
     const Setting& setting, std::shared_ptr<IPrimitive> primitive) {
   if (!setting.exists("transform")) {
-    return; // No transformation to apply
+    return;  // No transformation to apply
   }
-  
+
   const Setting& transformSetting = setting["transform"];
   Transform transform;
 
@@ -766,22 +764,22 @@ void PrimitiveFactory::applyTransformIfExists(
 
   if (translateSetting) {
     double x = 0.0, y = 0.0, z = 0.0;
-    
+
     // Get x component
     if (translateSetting->exists("x")) {
       x = getFlexibleFloat((*translateSetting)["x"]);
     }
-    
+
     // Get y component
     if (translateSetting->exists("y")) {
       y = getFlexibleFloat((*translateSetting)["y"]);
     }
-    
+
     // Get z component
     if (translateSetting->exists("z")) {
       z = getFlexibleFloat((*translateSetting)["z"]);
     }
-    
+
     transform.translate(x, y, z);
   }
 
@@ -795,22 +793,22 @@ void PrimitiveFactory::applyTransformIfExists(
 
   if (rotateSetting) {
     double x = 0.0, y = 0.0, z = 0.0;
-    
+
     // Get x rotation
     if (rotateSetting->exists("x")) {
       x = getFlexibleFloat((*rotateSetting)["x"]);
     }
-    
+
     // Get y rotation
     if (rotateSetting->exists("y")) {
       y = getFlexibleFloat((*rotateSetting)["y"]);
     }
-    
+
     // Get z rotation
     if (rotateSetting->exists("z")) {
       z = getFlexibleFloat((*rotateSetting)["z"]);
     }
-    
+
     transform.rotateX(x);
     transform.rotateY(y);
     transform.rotateZ(z);
@@ -820,22 +818,22 @@ void PrimitiveFactory::applyTransformIfExists(
   if (transformSetting.exists("scale")) {
     const Setting& scaleSetting = transformSetting["scale"];
     double x = 1.0, y = 1.0, z = 1.0;
-    
+
     // Get x scale
     if (scaleSetting.exists("x")) {
       x = getFlexibleFloat(scaleSetting["x"]);
     }
-    
+
     // Get y scale
     if (scaleSetting.exists("y")) {
       y = getFlexibleFloat(scaleSetting["y"]);
     }
-    
+
     // Get z scale
     if (scaleSetting.exists("z")) {
       z = getFlexibleFloat(scaleSetting["z"]);
     }
-    
+
     transform.scale(x, y, z);
   }
 
@@ -846,20 +844,23 @@ void PrimitiveFactory::applyTransformIfExists(
 Color PrimitiveFactory::parseColor(const Setting& setting) {
   // Default to white
   uint8_t r = 255, g = 255, b = 255;
-  
+
   // Get each color component, supporting both int and float formats
   if (setting.exists("r")) {
-    r = static_cast<uint8_t>(std::min(255.0f, std::max(0.0f, getFlexibleFloat(setting["r"]))));
+    r = static_cast<uint8_t>(
+        std::min(255.0f, std::max(0.0f, getFlexibleFloat(setting["r"]))));
   }
-  
+
   if (setting.exists("g")) {
-    g = static_cast<uint8_t>(std::min(255.0f, std::max(0.0f, getFlexibleFloat(setting["g"]))));
+    g = static_cast<uint8_t>(
+        std::min(255.0f, std::max(0.0f, getFlexibleFloat(setting["g"]))));
   }
-  
+
   if (setting.exists("b")) {
-    b = static_cast<uint8_t>(std::min(255.0f, std::max(0.0f, getFlexibleFloat(setting["b"]))));
+    b = static_cast<uint8_t>(
+        std::min(255.0f, std::max(0.0f, getFlexibleFloat(setting["b"]))));
   }
-  
+
   return Color(r, g, b);
 }
 
