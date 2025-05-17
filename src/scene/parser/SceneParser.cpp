@@ -666,7 +666,8 @@ Triangle SceneParser::parseTriangle(const Setting& triangleSetting) {
       az = getFlexibleFloat(aSet["z"]);
     } catch (const std::exception& e) {
       std::cerr << "Triangle: Exception for 'a': " << e.what() << std::endl;
-      throw ParserException("Triangle: missing or invalid 'a' coordinates (type exception)");
+      throw ParserException(
+          "Triangle: missing or invalid 'a' coordinates (type exception)");
     }
   } else {
     throw ParserException("Triangle: missing 'a' vertex");
@@ -682,7 +683,8 @@ Triangle SceneParser::parseTriangle(const Setting& triangleSetting) {
       bz = getFlexibleFloat(bSet["z"]);
     } catch (const std::exception& e) {
       std::cerr << "Triangle: Exception for 'b': " << e.what() << std::endl;
-      throw ParserException("Triangle: missing or invalid 'b' coordinates (type exception)");
+      throw ParserException(
+          "Triangle: missing or invalid 'b' coordinates (type exception)");
     }
   } else {
     throw ParserException("Triangle: missing 'b' vertex");
@@ -698,7 +700,8 @@ Triangle SceneParser::parseTriangle(const Setting& triangleSetting) {
       cz = getFlexibleFloat(cSet["z"]);
     } catch (const std::exception& e) {
       std::cerr << "Triangle: Exception for 'c': " << e.what() << std::endl;
-      throw ParserException("Triangle: missing or invalid 'c' coordinates (type exception)");
+      throw ParserException(
+          "Triangle: missing or invalid 'c' coordinates (type exception)");
     }
   } else {
     throw ParserException("Triangle: missing 'c' vertex");
@@ -709,8 +712,10 @@ Triangle SceneParser::parseTriangle(const Setting& triangleSetting) {
     colorSet.lookupValue("g", g);
     colorSet.lookupValue("b", b_col);
   }
-  Color color(static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(b_col));
-  Triangle tri(Vector3D(ax, ay, az), Vector3D(bx, by, bz), Vector3D(cx, cy, cz), color);
+  Color color(static_cast<uint8_t>(r), static_cast<uint8_t>(g),
+              static_cast<uint8_t>(b_col));
+  Triangle tri(Vector3D(ax, ay, az), Vector3D(bx, by, bz), Vector3D(cx, cy, cz),
+               color);
   if (triangleSetting.exists("transform")) {
     tri.setTransform(parseTransform(triangleSetting["transform"]));
   }
