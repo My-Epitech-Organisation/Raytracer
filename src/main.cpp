@@ -25,6 +25,7 @@
 #include "scene/SceneBuilder.hpp"
 #include "scene/lights/LightFactory.hpp"
 #include "scene/parser/SceneParser.hpp"
+#include "scene/primitives/PrimitiveFactory.hpp"
 
 void usage() {
   std::cout << "USAGE: ./raytracer <SCENE_FILE> [OPTIONS]" << std::endl;
@@ -66,65 +67,19 @@ RayTracer::Scene buildSceneFromFile(const std::string& filePath) {
   RayTracer::Camera camera = parser.parseCamera(cameraSetting);
   builder.withCamera(camera);
 
-  // Parse primitives
+  // Parse primitives using the PrimitiveFactory
   const libconfig::Setting& primitivesSetting = cfg.lookup("primitives");
+  try {
+    auto primitiveResult =
+        RayTracer::PrimitiveFactory::createPrimitives(primitivesSetting);
 
-  // Parse spheres if they exist
-  if (primitivesSetting.exists("spheres")) {
-    const libconfig::Setting& spheresSetting = primitivesSetting["spheres"];
-    auto spheres = parser.parseSpheres(spheresSetting);
-    for (const auto& sphere : spheres) {
-      builder.withPrimitive(std::make_shared<RayTracer::Sphere>(sphere));
+    // Add all created primitives to the scene
+    for (const auto& primitive : primitiveResult.primitives) {
+      builder.withPrimitive(primitive);
     }
-  }
-
-  // Parse planes if they exist
-  if (primitivesSetting.exists("planes")) {
-    const libconfig::Setting& planesSetting = primitivesSetting["planes"];
-    auto planes = parser.parsePlanes(planesSetting);
-    for (const auto& plane : planes) {
-      builder.withPrimitive(std::make_shared<RayTracer::Plane>(plane));
-    }
-  }
-
-  // Parse cones if they exist
-  if (primitivesSetting.exists("cones")) {
-    const libconfig::Setting& conesSetting = primitivesSetting["cones"];
-    auto cones = parser.parseCones(conesSetting);
-    for (const auto& cone : cones) {
-      builder.withPrimitive(std::make_shared<RayTracer::Cone>(cone));
-    }
-  }
-
-  // Parse limited cones if they exist
-  if (primitivesSetting.exists("limitedcones")) {
-    const libconfig::Setting& limitedConesSetting =
-        primitivesSetting["limitedcones"];
-    auto limitedCones = parser.parseLimitedCones(limitedConesSetting);
-    for (const auto& limitedCone : limitedCones) {
-      builder.withPrimitive(
-          std::make_shared<RayTracer::LimitedCone>(limitedCone));
-    }
-  }
-
-  // Parse cylinders if they exist
-  if (primitivesSetting.exists("cylinders")) {
-    const libconfig::Setting& cylindersSetting = primitivesSetting["cylinders"];
-    auto cylinders = parser.parseInfiniteCylinders(cylindersSetting);
-    for (const auto& cylinder : cylinders) {
-      builder.withPrimitive(std::make_shared<RayTracer::Cylinder>(cylinder));
-    }
-  }
-
-  // Parse limited cylinders if they exist
-  if (primitivesSetting.exists("limitedcylinders")) {
-    const libconfig::Setting& cylindersSetting =
-        primitivesSetting["limitedcylinders"];
-    auto limitedCylinders = parser.parseLimitedCylinders(cylindersSetting);
-    for (const auto& limitedCylinder : limitedCylinders) {
-      builder.withPrimitive(
-          std::make_shared<RayTracer::LimitedCylinder>(limitedCylinder));
-    }
+  } catch (const std::exception& e) {
+    std::cerr << "Error creating primitives: " << e.what() << std::endl;
+    throw;
   }
 
   // Parse lights
