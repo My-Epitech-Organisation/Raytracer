@@ -18,7 +18,6 @@
 #include "../../../include/exceptions/ParserException.hpp"
 #include "AmbientLight.hpp"
 #include "DirectionalLight.hpp"
-#include "Light.hpp"
 #include "LightingSettings.hpp"
 #include "PointLight.hpp"
 
@@ -32,7 +31,7 @@ LightFactory::Result LightFactory::createLights(
   if (setting.lookupValue("ambient", ambient)) {
     Color ambientColor =
         Color(static_cast<uint8_t>(255), static_cast<uint8_t>(255),
-              static_cast<uint8_t>(255));  // Par défaut blanc
+              static_cast<uint8_t>(255));
     if (setting.exists("ambientColor")) {
       const libconfig::Setting& colorSetting = setting["ambientColor"];
       int r = 255, g = 255, b = 255;

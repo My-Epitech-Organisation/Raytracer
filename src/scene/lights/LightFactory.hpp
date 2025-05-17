@@ -19,7 +19,6 @@
 #include <libconfig.h++>
 #include <memory>
 #include <vector>
-#include "../../core/Vector3D.hpp"
 #include "Light.hpp"
 #include "LightingSettings.hpp"
 
