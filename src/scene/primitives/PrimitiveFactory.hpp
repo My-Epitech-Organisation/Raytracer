@@ -30,6 +30,7 @@
 #include "LimitedCylinder.hpp"
 #include "Plane.hpp"
 #include "Sphere.hpp"
+#include "Torus.hpp"
 
 namespace RayTracer {
 
@@ -101,6 +102,13 @@ class PrimitiveFactory {
    */
   static std::shared_ptr<LimitedCylinder> createLimitedCylinder(
       const libconfig::Setting& setting);
+
+  /**
+   * @brief Create a torus primitive from configuration
+   * @param setting libconfig setting containing torus parameters
+   * @return A shared pointer to the created torus
+   */
+  static std::shared_ptr<Torus> createTorus(const libconfig::Setting& setting);
 
   /**
    * @brief Create all primitives of a specific type from configuration
