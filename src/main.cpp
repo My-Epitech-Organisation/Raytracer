@@ -110,6 +110,15 @@ RayTracer::Scene buildSceneFromFile(const std::string& filePath) {
     }
   }
 
+  // Parse tori if they exist
+  if (primitivesSetting.exists("torus")) {
+    const libconfig::Setting& toriSetting = primitivesSetting["torus"];
+    auto tori = parser.parseTori(toriSetting);
+    for (const auto& torus : tori) {
+      builder.withPrimitive(std::make_shared<RayTracer::Torus>(torus));
+    }
+  }
+
   // Parse lights
   if (cfg.exists("lights")) {
     const libconfig::Setting& lightsSetting = cfg.lookup("lights");
