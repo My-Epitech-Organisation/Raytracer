@@ -15,7 +15,6 @@
  */
 
 #include "PointLight.hpp"
-#include <cmath>
 #include "../../core/Vector3D.hpp"
 
 namespace RayTracer {
@@ -58,7 +57,6 @@ bool PointLight::castsShadows() const {
 
 Ray PointLight::getShadowRay(const Vector3D& point) const {
   Vector3D direction = getDirectionFrom(point);
-  // Small epsilon to avoid self-shadowing
   return Ray(point + direction * 0.001, direction);
 }
 
