@@ -5,13 +5,20 @@
 ** Cone
 */
 
+/**
+ * @file Cone.hpp
+ * @brief Definition of the Cone class for representing infinite cones in the
+ * raytracing engine
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef CONE_HPP_
 #define CONE_HPP_
 
-#include <cmath>
 #include <memory>
 #include <optional>
-#include <string>
 #include "../../core/Color.hpp"
 #include "../../core/Ray.hpp"
 #include "../../core/Transform.hpp"

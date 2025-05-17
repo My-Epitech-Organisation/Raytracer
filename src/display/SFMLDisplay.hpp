@@ -5,11 +5,19 @@
 ** SFML display class header
 */
 
+/**
+ * @file SFMLDisplay.hpp
+ * @brief Defines the SFMLDisplay class which handles real-time rendering using
+ * the SFML library
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef SFMLDISPLAY_HPP_
 #define SFMLDISPLAY_HPP_
 
 #include <atomic>
-#include <functional>
 #include <string>
 #include <thread>
 #include "../core/Color.hpp"

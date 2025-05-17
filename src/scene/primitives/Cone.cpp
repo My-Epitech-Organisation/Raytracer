@@ -5,11 +5,17 @@
 ** Cone
 */
 
+/**
+ * @file Cone.cpp
+ * @brief Implementation of the infinite cone primitive with ray-cone
+ * intersection algorithms
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "Cone.hpp"
 #include <cmath>
-#include <iomanip>
-#include <iostream>
-#include <limits>
 #include <stdexcept>
 
 namespace RayTracer {

@@ -19,7 +19,9 @@ set(RAYTRACER_SOURCES
     scene/primitives/LimitedCylinder.cpp
     scene/primitives/Torus.cpp
     scene/lights/LightFactory.cpp
-    scene/lights/Light.cpp
+    scene/lights/PointLight.cpp
+    scene/lights/DirectionalLight.cpp
+    scene/lights/AmbientLight.cpp
     scene/parser/SceneParser.cpp
     exceptions/RaytracerException.cpp
 )

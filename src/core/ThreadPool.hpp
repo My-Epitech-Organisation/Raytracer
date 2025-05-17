@@ -1,3 +1,19 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** ThreadPool
+*/
+
+/**
+ * @file ThreadPool.hpp
+ * @brief Provides a thread pool implementation for parallel task execution in
+ * the ray tracer
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef THREADPOOL_HPP_
 #define THREADPOOL_HPP_
 

@@ -5,6 +5,14 @@
 ** Resolution
 */
 
+/**
+ * @file Resolution.cpp
+ * @brief Implementation of the Resolution class which handles image dimensions
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "Resolution.hpp"
 #include "../../include/exceptions/InvalidTypeException.hpp"
 

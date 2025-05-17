@@ -5,6 +5,15 @@
 ** test_LightFactory
 */
 
+/**
+ * @file test_LightFactory.cpp
+ * @brief Unit tests for the LightFactory class to verify light source creation
+ * from configuration
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <gtest/gtest.h>
 #include "../include/exceptions/ParserException.hpp"
 #include "../src/scene/lights/LightFactory.hpp"
@@ -20,13 +29,15 @@ TEST(SceneParserTest, ParseLightConfigurationFromFile) {
     const auto& lightsSetting = cfg.lookup("lights");
 
     SceneParser parser;
-    auto parsedLight = parser.parseLights(lightsSetting);
+    auto parsedLight = parser.parseLightingSettings(lightsSetting);
 
-    ASSERT_NE(parsedLight, nullptr);
-    EXPECT_FLOAT_EQ(parsedLight->getAmbient(), 0.4f);
-    EXPECT_FLOAT_EQ(parsedLight->getDiffuse(), 0.6f);
-    EXPECT_EQ(parsedLight->getPointLights().size(), 1);
-    EXPECT_EQ(parsedLight->getDirectionalLights().size(), 0);
+    EXPECT_FLOAT_EQ(parsedLight.first.diffuse, 0.6f);
+    EXPECT_EQ(parsedLight.second.size(), 2);
+
+    EXPECT_EQ(parsedLight.second[0]->toString(),
+              "AmbientLight with intensity: 0.400000");
+    EXPECT_EQ(parsedLight.second[1]->toString(),
+              "PointLight at (400.000000, 100.000000, 500.000000)");
 
     SUCCEED();
 
@@ -44,7 +55,7 @@ TEST(LightFactoryTest, MissingAmbientThrows) {
   )");
 
   const auto& lights = cfg.lookup("lights");
-  EXPECT_THROW(LightFactory::createLight(lights), RayTracer::ParserException);
+  EXPECT_THROW(LightFactory::createLights(lights), RayTracer::ParserException);
 }
 
 TEST(LightFactoryTest, InvalidDirectionalDefinition) {
@@ -60,7 +71,7 @@ TEST(LightFactoryTest, InvalidDirectionalDefinition) {
   )");
 
   const auto& lights = cfg.lookup("lights");
-  EXPECT_THROW(LightFactory::createLight(lights), RayTracer::ParserException);
+  EXPECT_THROW(LightFactory::createLights(lights), RayTracer::ParserException);
 }
 
 TEST(LightFactoryTest, AmbientDiffuseOnly) {
@@ -73,11 +84,9 @@ TEST(LightFactoryTest, AmbientDiffuseOnly) {
   )");
 
   const auto& lights = cfg.lookup("lights");
-  auto light = LightFactory::createLight(lights);
+  auto light = LightFactory::createLights(lights);
 
-  ASSERT_NE(light, nullptr);
-  EXPECT_EQ(light->getPointLights().size(), 0);
-  EXPECT_EQ(light->getDirectionalLights().size(), 0);
+  EXPECT_EQ(light.lights.size(), 1);
 }
 
 TEST(LightFactoryTest, MultiplePointLights) {
@@ -94,9 +103,62 @@ TEST(LightFactoryTest, MultiplePointLights) {
   )");
 
   const auto& lights = cfg.lookup("lights");
-  auto light = LightFactory::createLight(lights);
+  auto light = LightFactory::createLights(lights);
 
-  ASSERT_EQ(light->getPointLights().size(), 2);
-  EXPECT_TRUE(light->getPointLights()[0].isEqual(Vector3D(1, 1, 1)));
-  EXPECT_TRUE(light->getPointLights()[1].isEqual(Vector3D(2, 2, 2)));
+  ASSERT_EQ(light.lights.size(), 3);
+  EXPECT_EQ(light.lights[0]->toString(),
+            "AmbientLight with intensity: 0.200000");
+  EXPECT_EQ(light.lights[1]->toString(),
+            "PointLight at (1.000000, 1.000000, 1.000000)");
+  EXPECT_EQ(light.lights[2]->toString(),
+            "PointLight at (2.000000, 2.000000, 2.000000)");
+}
+
+TEST(LightFactoryTest, DirectionalLightParsedCorrectly) {
+  libconfig::Config cfg;
+  cfg.readString(R"(
+    lights: {
+      ambient = 0.1;
+      diffuse = 0.3;
+      directional = (
+        { x = -1.0; y = -0.5; z = 0.0; }
+      );
+    };
+  )");
+
+  const auto& lights = cfg.lookup("lights");
+  auto light = LightFactory::createLights(lights);
+
+  ASSERT_EQ(light.lights.size(), 2);
+  EXPECT_EQ(light.lights[0]->toString(),
+            "AmbientLight with intensity: 0.100000");
+  EXPECT_EQ(light.lights[1]->toString(),
+            "DirectionalLight with direction (-1.000000, -0.500000, 0.000000)");
+}
+
+TEST(LightFactoryTest, PointAndDirectionalLightsParsedCorrectly) {
+  libconfig::Config cfg;
+  cfg.readString(R"(
+    lights: {
+      ambient = 0.2;
+      diffuse = 0.6;
+      point = (
+        { x = 0.0; y = 1.0; z = 2.0; }
+      );
+      directional = (
+        { x = 0.0; y = -1.0; z = 0.0; }
+      );
+    };
+  )");
+
+  const auto& lights = cfg.lookup("lights");
+  auto light = LightFactory::createLights(lights);
+
+  ASSERT_EQ(light.lights.size(), 3);
+  EXPECT_EQ(light.lights[0]->toString(),
+            "AmbientLight with intensity: 0.200000");
+  EXPECT_EQ(light.lights[1]->toString(),
+            "PointLight at (0.000000, 1.000000, 2.000000)");
+  EXPECT_EQ(light.lights[2]->toString(),
+            "DirectionalLight with direction (0.000000, -1.000000, 0.000000)");
 }

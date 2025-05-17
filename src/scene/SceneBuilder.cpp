@@ -5,6 +5,15 @@
 ** SceneBuilder class implementation
 */
 
+/**
+ * @file SceneBuilder.cpp
+ * @brief Implementation of the builder pattern for constructing Scene objects
+ * with a fluent interface
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "SceneBuilder.hpp"
 
 namespace RayTracer {

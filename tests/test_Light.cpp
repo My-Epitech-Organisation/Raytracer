@@ -5,48 +5,56 @@
 ** test_Light
 */
 
+/**
+ * @file test_Light.cpp
+ * @brief Unit tests for Light classes to validate lighting calculations and
+ * behaviors
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <gtest/gtest.h>
 #include <sstream>
+#include "../src/scene/lights/DirectionalLight.hpp"
 #include "../src/scene/lights/Light.hpp"
+#include "../src/scene/lights/PointLight.hpp"
 
 using namespace RayTracer;
 
 TEST(LightTest, BasicInitialization) {
   std::vector<Vector3D> points = {Vector3D(1, 2, 3)};
   std::vector<Vector3D> dirs = {Vector3D(0, -1, 0)};
-  Light light(0.5f, 0.8f, points, dirs);
+  PointLight pointLight(points[0]);
+  DirectionalLight directionalLight(dirs[0]);
 
-  EXPECT_FLOAT_EQ(light.getAmbient(), 0.5f);
-  EXPECT_FLOAT_EQ(light.getDiffuse(), 0.8f);
-  EXPECT_EQ(light.getPointLights().size(), 1);
-  EXPECT_EQ(light.getDirectionalLights().size(), 1);
+  EXPECT_EQ(pointLight.getPosition(), points[0]);
+  EXPECT_EQ(directionalLight.getDirection(), dirs[0]);
 }
 
 TEST(LightTest, ToStringOutput) {
-  Light light(0.2f, 0.3f, {Vector3D(1, 2, 3)}, {Vector3D(4, 5, 6)});
-  std::string str = light.toString();
+  PointLight pointLight(Vector3D(1, 2, 3));
+  DirectionalLight directionalLight(Vector3D(4, 5, 6));
 
-  EXPECT_NE(str.find("Ambient: 0.2"), std::string::npos);
-  EXPECT_NE(str.find("Diffuse: 0.3"), std::string::npos);
-  EXPECT_NE(str.find("Vector3D(1, 2, 3)"), std::string::npos);
-  EXPECT_NE(str.find("Vector3D(4, 5, 6)"), std::string::npos);
+  std::string pointStr = pointLight.toString();
+  std::string dirStr = directionalLight.toString();
+
+  EXPECT_NE(pointStr.find("PointLight"), std::string::npos);
+  EXPECT_NE(dirStr.find("DirectionalLight"), std::string::npos);
 }
 
 TEST(LightTest, DefaultInitialization) {
-  Light light;
-  EXPECT_FLOAT_EQ(light.getAmbient(), 0.0f);
-  EXPECT_FLOAT_EQ(light.getDiffuse(), 0.0f);
-  EXPECT_TRUE(light.getPointLights().empty());
-  EXPECT_TRUE(light.getDirectionalLights().empty());
+  PointLight pointLight(Vector3D(0, 0, 0));
+  DirectionalLight directionalLight(Vector3D(0, 0, 0));
+
+  EXPECT_EQ(pointLight.getPosition(), Vector3D(0, 0, 0));
+  EXPECT_EQ(directionalLight.getDirection(), Vector3D(0, 0, 0));
 }
 
 TEST(LightTest, AddLights) {
-  Light light;
-  light.addPointLight(Vector3D(1, 2, 3));
-  light.addDirectionalLight(Vector3D(4, 5, 6));
+  PointLight pointLight(Vector3D(1, 2, 3));
+  DirectionalLight directionalLight(Vector3D(4, 5, 6));
 
-  ASSERT_EQ(light.getPointLights().size(), 1);
-  ASSERT_EQ(light.getDirectionalLights().size(), 1);
-  EXPECT_TRUE(light.getPointLights()[0].isEqual(Vector3D(1, 2, 3)));
-  EXPECT_TRUE(light.getDirectionalLights()[0].isEqual(Vector3D(4, 5, 6)));
+  EXPECT_EQ(pointLight.getPosition(), Vector3D(1, 2, 3));
+  EXPECT_EQ(directionalLight.getDirection(), Vector3D(4, 5, 6));
 }

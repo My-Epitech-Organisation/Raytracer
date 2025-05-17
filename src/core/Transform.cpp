@@ -5,6 +5,15 @@
 ** Transform class implementation
 */
 
+/**
+ * @file Transform.cpp
+ * @brief Implementation of the transformation matrix class for 3D affine
+ * transformations
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "Transform.hpp"
 #include "../../include/exceptions/RaytracerException.hpp"
 

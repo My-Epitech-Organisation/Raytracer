@@ -5,6 +5,14 @@
 ** Matrix class header
 */
 
+/**
+ * @file Matrix.hpp
+ * @brief Definition of the Matrix class for 3D mathematical transformations
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef MATRIX_HPP_
 #define MATRIX_HPP_
 

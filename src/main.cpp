@@ -1,3 +1,19 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** Main entry point for the raytracer
+*/
+
+/**
+ * @file main.cpp
+ * @brief Main entry point for the Raytracer application, handling command-line
+ * arguments, scene loading, and rendering
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <signal.h>
 #include <iostream>
 #include <libconfig.h++>
@@ -7,6 +23,7 @@
 #include "display/SFMLDisplay.hpp"
 #include "scene/Scene.hpp"
 #include "scene/SceneBuilder.hpp"
+#include "scene/lights/LightFactory.hpp"
 #include "scene/parser/SceneParser.hpp"
 
 void usage() {
@@ -123,16 +140,20 @@ RayTracer::Scene buildSceneFromFile(const std::string& filePath) {
   if (cfg.exists("lights")) {
     const libconfig::Setting& lightsSetting = cfg.lookup("lights");
 
-    double ambientIntensity = 0.0;
-    if (lightsSetting.exists("ambient")) {
-      ambientIntensity = lightsSetting["ambient"];
-      builder.withAmbientLightIntensity(ambientIntensity);
-    }
+    try {
+      // Use LightFactory to create all lights
+      auto lightResult = RayTracer::LightFactory::createLights(lightsSetting);
 
-    double diffuseMultiplier = 0.0;
-    if (lightsSetting.exists("diffuse")) {
-      diffuseMultiplier = lightsSetting["diffuse"];
-      builder.withDiffuseMultiplier(diffuseMultiplier);
+      // Set the diffuse multiplier from the light factory result
+      builder.withDiffuseMultiplier(lightResult.settings.diffuse);
+
+      // Add all created lights to the scene
+      for (auto& light : lightResult.lights) {
+        builder.withLight(std::shared_ptr<RayTracer::Light>(light.release()));
+      }
+    } catch (const std::exception& e) {
+      std::cerr << "Error parsing lights: " << e.what() << std::endl;
+      throw;
     }
   }
 

@@ -5,6 +5,14 @@
 ** RaytracerException
 */
 
+/**
+ * @file RaytracerException.hpp
+ * @brief Base exception class for all raytracer-specific errors
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef RAYTRACEREXCEPTION_HPP_
 #define RAYTRACEREXCEPTION_HPP_
 

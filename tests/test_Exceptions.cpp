@@ -5,6 +5,14 @@
 ** test_Exceptions
 */
 
+/**
+ * @file test_Exceptions.cpp
+ * @brief Unit tests for exception handling in the raytracer
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <gtest/gtest.h>
 #include "exceptions/InvalidTypeException.hpp"
 #include "exceptions/ParserException.hpp"

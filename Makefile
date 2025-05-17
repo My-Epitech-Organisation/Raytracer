@@ -67,4 +67,9 @@ check_normalize:
 	@echo "Using clang-format version: $$(clang-format --version)"
 	@find . \( -name "*.cpp" -o -name "*.hpp" \) -exec clang-format -n -Werror {} \;
 
-.PHONY: all re tests_run clean fclean normalize check_normalize cov
+doc:
+	@echo "Generating documentation..."
+	@doxygen Doxyfile
+	@open docs/html/index.html
+
+.PHONY: all re tests_run clean fclean normalize check_normalize cov doc
