@@ -5,10 +5,18 @@
 ** LimitedCone
 */
 
+/**
+ * @file LimitedCone.cpp
+ * @brief Implementation of a cone primitive with height constraints and
+ * optional cap for ray tracing
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "LimitedCone.hpp"
 #include <algorithm>
 #include <cmath>
-#include <limits>
 #include <stdexcept>
 
 namespace RayTracer {

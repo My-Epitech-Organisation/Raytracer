@@ -24,6 +24,7 @@ make normalize # Applying clang format to all C++ files
 make check_normalize # Check if all C++ files are normalized
 make tests_run # Run tests
 make cov # Generate code coverage report
+make doc # Generate documentation
 ```
 
 ### 🚀 Usage

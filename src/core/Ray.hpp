@@ -5,6 +5,15 @@
 ** Ray class header
 */
 
+/**
+ * @file Ray.hpp
+ * @brief Provides the Ray class for representing rays with origin points and
+ * direction vectors for ray tracing
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef RAY_HPP_
 #define RAY_HPP_
 

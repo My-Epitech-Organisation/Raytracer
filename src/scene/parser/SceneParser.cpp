@@ -5,6 +5,15 @@
 ** SceneParser
 */
 
+/**
+ * @file SceneParser.cpp
+ * @brief Implementation of the configuration file parser for loading 3D scenes
+ * from cfg files
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "SceneParser.hpp"
 #include <libconfig.h++>
 #include "../../../include/exceptions/InvalidTypeException.hpp"
@@ -566,16 +575,10 @@ std::vector<Cylinder> SceneParser::parseInfiniteCylinders(
   return cylinders;
 }
 
-std::shared_ptr<Light> SceneParser::parseLights(const Setting& lightsSetting) {
-  try {
-    return LightFactory::createLight(lightsSetting);
-  } catch (const SettingNotFoundException& e) {
-    throw ParserException(std::string("Missing light setting: ") + e.what());
-  } catch (const SettingTypeException& e) {
-    throw ParserException(std::string("Light setting type error: ") + e.what());
-  } catch (const std::exception& e) {
-    throw RaytracerException(std::string("Error parsing lights: ") + e.what());
-  }
+std::pair<LightingSettings, std::vector<std::unique_ptr<Light>>>
+SceneParser::parseLightingSettings(const libconfig::Setting& lightsSetting) {
+  auto result = LightFactory::createLights(lightsSetting);
+  return {result.settings, std::move(result.lights)};
 }
 
 void SceneParser::parsePrimitives(const Setting& primitivesSetting) {

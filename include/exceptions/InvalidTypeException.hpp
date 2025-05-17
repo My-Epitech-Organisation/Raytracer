@@ -5,6 +5,14 @@
 ** InvalidTypeException
 */
 
+/**
+ * @file InvalidTypeException.hpp
+ * @brief Exception class for handling invalid type errors in the raytracer
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef INVALIDTYPEEXCEPTION_HPP_
 #define INVALIDTYPEEXCEPTION_HPP_
 

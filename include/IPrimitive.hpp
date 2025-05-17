@@ -5,6 +5,15 @@
 ** Interface for geometric primitives
 */
 
+/**
+ * @file IPrimitive.hpp
+ * @brief Interface defining the behavior of geometric primitives in the
+ * raytracing engine
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef IPRIMITIVE_HPP_
 #define IPRIMITIVE_HPP_
 

@@ -1,3 +1,19 @@
+/*
+** EPITECH PROJECT, 2025
+** Raytracer
+** File description:
+** RenderTile
+*/
+
+/**
+ * @file RenderTile.hpp
+ * @brief Defines the RenderTile class for dividing the image into smaller
+ * chunks for parallel rendering
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef RENDERTILE_HPP_
 #define RENDERTILE_HPP_
 

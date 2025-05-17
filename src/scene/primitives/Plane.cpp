@@ -5,6 +5,15 @@
 ** Plane primitive implementation
 */
 
+/**
+ * @file Plane.cpp
+ * @brief Implementation of the infinite plane primitive with checkerboard
+ * pattern support
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "Plane.hpp"
 #include <cmath>
 #include <iostream>

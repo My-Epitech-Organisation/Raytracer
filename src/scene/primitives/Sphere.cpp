@@ -5,6 +5,15 @@
 ** Sphere primitive class implementation
 */
 
+/**
+ * @file Sphere.cpp
+ * @brief Implementation of the sphere primitive with ray-sphere intersection
+ * calculation
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "Sphere.hpp"
 #include <cmath>
 #include "../../../include/exceptions/InvalidTypeException.hpp"
@@ -77,6 +86,10 @@ std::optional<Intersection> Sphere::intersect(const Ray& ray) const {
       (worldIntersectionPoint - ray.getOrigin()).getMagnitude();
 
   Vector3D worldNormal = _transform.applyToNormal(localNormal).normalized();
+
+  if (worldNormal.dot(ray.getDirection()) > 0) {
+    worldNormal = -worldNormal;
+  }
 
   Intersection intersection;
   intersection.distance = worldDistance;

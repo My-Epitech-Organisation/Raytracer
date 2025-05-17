@@ -5,37 +5,30 @@
 ** Abstract Light class
 */
 
+/**
+ * @file Light.hpp
+ * @brief Defines the abstract Light base class for all light sources in the ray
+ * tracer
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef LIGHT_HPP_
 #define LIGHT_HPP_
 
 #include <string>
-#include <vector>
-#include "../../core/Vector3D.hpp"
+#include "../../../include/ILight.hpp"
 
 namespace RayTracer {
 
-class Light {
+/**
+ * @brief Abstract base class for all light types
+ */
+class Light : public ILight {
  public:
-  Light();
-  Light(float ambient, float diffuse, const std::vector<Vector3D>& pointLights,
-        const std::vector<Vector3D>& directionalLights);
-
-  float getAmbient() const;
-  float getDiffuse() const;
-
-  const std::vector<Vector3D>& getPointLights() const;
-  const std::vector<Vector3D>& getDirectionalLights() const;
-
-  void addPointLight(const Vector3D& light);
-  void addDirectionalLight(const Vector3D& light);
-
-  std::string toString() const;
-
- private:
-  float _ambient;
-  float _diffuse;
-  std::vector<Vector3D> _pointLights;
-  std::vector<Vector3D> _directionalLights;
+  virtual ~Light() = default;
+  virtual std::string toString() const = 0;
 };
 
 }  // namespace RayTracer

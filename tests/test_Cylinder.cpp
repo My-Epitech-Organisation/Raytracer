@@ -5,6 +5,15 @@
 ** Unit tests for Cylinder class
 */
 
+/**
+ * @file test_Cylinder.cpp
+ * @brief Unit tests for the Cylinder primitive class to verify its geometry and
+ * intersection calculations
+ * @author Santi
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include <gtest/gtest.h>
 #include <cmath>
 #include <limits>
