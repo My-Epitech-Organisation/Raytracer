@@ -17,10 +17,6 @@
 #ifndef LIGHTING_SETTINGS_HPP_
 #define LIGHTING_SETTINGS_HPP_
 
-#include <vector>
-#include "../../core/Vector3D.hpp"
-#include "Light.hpp"
-
 namespace RayTracer {
 
 struct LightingSettings {
