@@ -143,6 +143,13 @@ class PrimitiveFactory {
    */
   static float getFlexibleFloat(const libconfig::Setting& setting);
 
+  /**
+   * @brief Normalize a primitive type name to lowercase for consistent lookup
+   * @param typeName The type name to normalize
+   * @return The normalized type name
+   */
+  static std::string normalizeTypeName(const std::string& typeName);
+
   // Type to factory method mapping for primitive creation
   using PrimitiveCreator =
       std::function<std::shared_ptr<IPrimitive>(const libconfig::Setting&)>;

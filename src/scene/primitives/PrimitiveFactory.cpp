@@ -34,17 +34,7 @@ std::unordered_map<std::string, PrimitiveFactory::PrimitiveCreator>
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createSphere(setting));
          }},
-        {"Spheres",
-         [](const Setting& setting) {
-           return std::static_pointer_cast<IPrimitive>(
-               PrimitiveFactory::createSphere(setting));
-         }},
         {"planes",
-         [](const Setting& setting) {
-           return std::static_pointer_cast<IPrimitive>(
-               PrimitiveFactory::createPlane(setting));
-         }},
-        {"Planes",
          [](const Setting& setting) {
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createPlane(setting));
@@ -54,22 +44,7 @@ std::unordered_map<std::string, PrimitiveFactory::PrimitiveCreator>
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createCone(setting));
          }},
-        {"Cones",
-         [](const Setting& setting) {
-           return std::static_pointer_cast<IPrimitive>(
-               PrimitiveFactory::createCone(setting));
-         }},
         {"limitedcones",
-         [](const Setting& setting) {
-           return std::static_pointer_cast<IPrimitive>(
-               PrimitiveFactory::createLimitedCone(setting));
-         }},
-        {"limitedCones",
-         [](const Setting& setting) {
-           return std::static_pointer_cast<IPrimitive>(
-               PrimitiveFactory::createLimitedCone(setting));
-         }},
-        {"LimitedCones",
          [](const Setting& setting) {
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createLimitedCone(setting));
@@ -79,22 +54,7 @@ std::unordered_map<std::string, PrimitiveFactory::PrimitiveCreator>
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createCylinder(setting));
          }},
-        {"Cylinders",
-         [](const Setting& setting) {
-           return std::static_pointer_cast<IPrimitive>(
-               PrimitiveFactory::createCylinder(setting));
-         }},
         {"limitedcylinders",
-         [](const Setting& setting) {
-           return std::static_pointer_cast<IPrimitive>(
-               PrimitiveFactory::createLimitedCylinder(setting));
-         }},
-        {"limitedCylinders",
-         [](const Setting& setting) {
-           return std::static_pointer_cast<IPrimitive>(
-               PrimitiveFactory::createLimitedCylinder(setting));
-         }},
-        {"LimitedCylinders",
          [](const Setting& setting) {
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createLimitedCylinder(setting));
@@ -104,10 +64,12 @@ std::unordered_map<std::string, PrimitiveFactory::PrimitiveCreator>
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createTorus(setting));
          }},
-        {"Toruses", [](const Setting& setting) {
+        {"tori",
+         [](const Setting& setting) {
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createTorus(setting));
-         }}};
+         }}
+    };
 
 PrimitiveFactory::Result PrimitiveFactory::createPrimitives(
     const Setting& setting) {
@@ -117,22 +79,10 @@ PrimitiveFactory::Result PrimitiveFactory::createPrimitives(
   for (int i = 0; i < setting.getLength(); ++i) {
     const Setting& primitiveGroup = setting[i];
     std::string typeName = primitiveGroup.getName();
-    std::string typeNameLower = typeName;
-
-    // Convert to lowercase for case-insensitive comparison
-    std::transform(typeNameLower.begin(), typeNameLower.end(),
-                   typeNameLower.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
+    std::string normalizedTypeName = normalizeTypeName(typeName);
 
     // Check if this primitive type is supported (with case insensitivity)
-    auto it = std::find_if(
-        primitiveCreators.begin(), primitiveCreators.end(),
-        [&typeNameLower](const auto& entry) {
-          std::string key = entry.first;
-          std::transform(key.begin(), key.end(), key.begin(),
-                         [](unsigned char c) { return std::tolower(c); });
-          return key == typeNameLower;
-        });
+    auto it = primitiveCreators.find(normalizedTypeName);
 
     if (it != primitiveCreators.end()) {
       try {
@@ -799,204 +749,143 @@ std::shared_ptr<Torus> PrimitiveFactory::createTorus(const Setting& setting) {
 
 void PrimitiveFactory::applyTransformIfExists(
     const Setting& setting, std::shared_ptr<IPrimitive> primitive) {
-  if (setting.exists("transform")) {
-    const Setting& transformSetting = setting["transform"];
-    Transform transform;
-
-    // Apply translation if it exists (support both "translate" and
-    // "translation")
-    if (transformSetting.exists("translate")) {
-      const Setting& translateSetting = transformSetting["translate"];
-      double x = 0.0, y = 0.0, z = 0.0;
-      int xInt = 0, yInt = 0, zInt = 0;
-
-      if (translateSetting.exists("x")) {
-        bool hasX = translateSetting.lookupValue("x", x);
-        if (!hasX && translateSetting.lookupValue("x", xInt)) {
-          x = static_cast<double>(xInt);
-        }
-      }
-
-      if (translateSetting.exists("y")) {
-        bool hasY = translateSetting.lookupValue("y", y);
-        if (!hasY && translateSetting.lookupValue("y", yInt)) {
-          y = static_cast<double>(yInt);
-        }
-      }
-
-      if (translateSetting.exists("z")) {
-        bool hasZ = translateSetting.lookupValue("z", z);
-        if (!hasZ && translateSetting.lookupValue("z", zInt)) {
-          z = static_cast<double>(zInt);
-        }
-      }
-
-      transform.translate(x, y, z);
-    } else if (transformSetting.exists("translation")) {
-      const Setting& translateSetting = transformSetting["translation"];
-      double x = 0.0, y = 0.0, z = 0.0;
-      int xInt = 0, yInt = 0, zInt = 0;
-
-      if (translateSetting.exists("x")) {
-        bool hasX = translateSetting.lookupValue("x", x);
-        if (!hasX && translateSetting.lookupValue("x", xInt)) {
-          x = static_cast<double>(xInt);
-        }
-      }
-
-      if (translateSetting.exists("y")) {
-        bool hasY = translateSetting.lookupValue("y", y);
-        if (!hasY && translateSetting.lookupValue("y", yInt)) {
-          y = static_cast<double>(yInt);
-        }
-      }
-
-      if (translateSetting.exists("z")) {
-        bool hasZ = translateSetting.lookupValue("z", z);
-        if (!hasZ && translateSetting.lookupValue("z", zInt)) {
-          z = static_cast<double>(zInt);
-        }
-      }
-
-      transform.translate(x, y, z);
-    }
-
-    // Apply rotation if it exists (support both "rotate" and "rotation")
-    if (transformSetting.exists("rotate")) {
-      const Setting& rotateSetting = transformSetting["rotate"];
-      double x = 0.0, y = 0.0, z = 0.0;
-      int xInt = 0, yInt = 0, zInt = 0;
-
-      if (rotateSetting.exists("x")) {
-        bool hasX = rotateSetting.lookupValue("x", x);
-        if (!hasX && rotateSetting.lookupValue("x", xInt)) {
-          x = static_cast<double>(xInt);
-        }
-      }
-
-      if (rotateSetting.exists("y")) {
-        bool hasY = rotateSetting.lookupValue("y", y);
-        if (!hasY && rotateSetting.lookupValue("y", yInt)) {
-          y = static_cast<double>(yInt);
-        }
-      }
-
-      if (rotateSetting.exists("z")) {
-        bool hasZ = rotateSetting.lookupValue("z", z);
-        if (!hasZ && rotateSetting.lookupValue("z", zInt)) {
-          z = static_cast<double>(zInt);
-        }
-      }
-
-      transform.rotateX(x);
-      transform.rotateY(y);
-      transform.rotateZ(z);
-    } else if (transformSetting.exists("rotation")) {
-      const Setting& rotateSetting = transformSetting["rotation"];
-      double x = 0.0, y = 0.0, z = 0.0;
-      int xInt = 0, yInt = 0, zInt = 0;
-
-      if (rotateSetting.exists("x")) {
-        bool hasX = rotateSetting.lookupValue("x", x);
-        if (!hasX && rotateSetting.lookupValue("x", xInt)) {
-          x = static_cast<double>(xInt);
-        }
-      }
-
-      if (rotateSetting.exists("y")) {
-        bool hasY = rotateSetting.lookupValue("y", y);
-        if (!hasY && rotateSetting.lookupValue("y", yInt)) {
-          y = static_cast<double>(yInt);
-        }
-      }
-
-      if (rotateSetting.exists("z")) {
-        bool hasZ = rotateSetting.lookupValue("z", z);
-        if (!hasZ && rotateSetting.lookupValue("z", zInt)) {
-          z = static_cast<double>(zInt);
-        }
-      }
-
-      transform.rotateX(x);
-      transform.rotateY(y);
-      transform.rotateZ(z);
-    }
-
-    // Apply scale if it exists
-    if (transformSetting.exists("scale")) {
-      const Setting& scaleSetting = transformSetting["scale"];
-      double x = 1.0, y = 1.0, z = 1.0;
-      int xInt = 1, yInt = 1, zInt = 1;
-
-      if (scaleSetting.exists("x")) {
-        bool hasX = scaleSetting.lookupValue("x", x);
-        if (!hasX && scaleSetting.lookupValue("x", xInt)) {
-          x = static_cast<double>(xInt);
-        }
-      }
-
-      if (scaleSetting.exists("y")) {
-        bool hasY = scaleSetting.lookupValue("y", y);
-        if (!hasY && scaleSetting.lookupValue("y", yInt)) {
-          y = static_cast<double>(yInt);
-        }
-      }
-
-      if (scaleSetting.exists("z")) {
-        bool hasZ = scaleSetting.lookupValue("z", z);
-        if (!hasZ && scaleSetting.lookupValue("z", zInt)) {
-          z = static_cast<double>(zInt);
-        }
-      }
-
-      transform.scale(x, y, z);
-    }
-
-    // Apply the combined transformation to the primitive
-    primitive->setTransform(transform);
+  if (!setting.exists("transform")) {
+    return; // No transformation to apply
   }
+  
+  const Setting& transformSetting = setting["transform"];
+  Transform transform;
+
+  // Handle translation (support both "translate" and "translation")
+  const Setting* translateSetting = nullptr;
+  if (transformSetting.exists("translate")) {
+    translateSetting = &transformSetting["translate"];
+  } else if (transformSetting.exists("translation")) {
+    translateSetting = &transformSetting["translation"];
+  }
+
+  if (translateSetting) {
+    double x = 0.0, y = 0.0, z = 0.0;
+    
+    // Get x component
+    if (translateSetting->exists("x")) {
+      x = getFlexibleFloat((*translateSetting)["x"]);
+    }
+    
+    // Get y component
+    if (translateSetting->exists("y")) {
+      y = getFlexibleFloat((*translateSetting)["y"]);
+    }
+    
+    // Get z component
+    if (translateSetting->exists("z")) {
+      z = getFlexibleFloat((*translateSetting)["z"]);
+    }
+    
+    transform.translate(x, y, z);
+  }
+
+  // Handle rotation (support both "rotate" and "rotation")
+  const Setting* rotateSetting = nullptr;
+  if (transformSetting.exists("rotate")) {
+    rotateSetting = &transformSetting["rotate"];
+  } else if (transformSetting.exists("rotation")) {
+    rotateSetting = &transformSetting["rotation"];
+  }
+
+  if (rotateSetting) {
+    double x = 0.0, y = 0.0, z = 0.0;
+    
+    // Get x rotation
+    if (rotateSetting->exists("x")) {
+      x = getFlexibleFloat((*rotateSetting)["x"]);
+    }
+    
+    // Get y rotation
+    if (rotateSetting->exists("y")) {
+      y = getFlexibleFloat((*rotateSetting)["y"]);
+    }
+    
+    // Get z rotation
+    if (rotateSetting->exists("z")) {
+      z = getFlexibleFloat((*rotateSetting)["z"]);
+    }
+    
+    transform.rotateX(x);
+    transform.rotateY(y);
+    transform.rotateZ(z);
+  }
+
+  // Handle scaling
+  if (transformSetting.exists("scale")) {
+    const Setting& scaleSetting = transformSetting["scale"];
+    double x = 1.0, y = 1.0, z = 1.0;
+    
+    // Get x scale
+    if (scaleSetting.exists("x")) {
+      x = getFlexibleFloat(scaleSetting["x"]);
+    }
+    
+    // Get y scale
+    if (scaleSetting.exists("y")) {
+      y = getFlexibleFloat(scaleSetting["y"]);
+    }
+    
+    // Get z scale
+    if (scaleSetting.exists("z")) {
+      z = getFlexibleFloat(scaleSetting["z"]);
+    }
+    
+    transform.scale(x, y, z);
+  }
+
+  // Apply the combined transformation to the primitive
+  primitive->setTransform(transform);
 }
 
 Color PrimitiveFactory::parseColor(const Setting& setting) {
-  int r = 255, g = 255, b = 255;  // Default to white
-  double rDouble = 255.0, gDouble = 255.0, bDouble = 255.0;
-
-  // Try to get values as integers first
-  bool hasR = setting.lookupValue("r", r);
-  bool hasG = setting.lookupValue("g", g);
-  bool hasB = setting.lookupValue("b", b);
-
-  // If not available as integers, try as floats
-  if (!hasR && setting.lookupValue("r", rDouble)) {
-    r = static_cast<int>(rDouble);
+  // Default to white
+  uint8_t r = 255, g = 255, b = 255;
+  
+  // Get each color component, supporting both int and float formats
+  if (setting.exists("r")) {
+    r = static_cast<uint8_t>(std::min(255.0f, std::max(0.0f, getFlexibleFloat(setting["r"]))));
   }
-
-  if (!hasG && setting.lookupValue("g", gDouble)) {
-    g = static_cast<int>(gDouble);
+  
+  if (setting.exists("g")) {
+    g = static_cast<uint8_t>(std::min(255.0f, std::max(0.0f, getFlexibleFloat(setting["g"]))));
   }
-
-  if (!hasB && setting.lookupValue("b", bDouble)) {
-    b = static_cast<int>(bDouble);
+  
+  if (setting.exists("b")) {
+    b = static_cast<uint8_t>(std::min(255.0f, std::max(0.0f, getFlexibleFloat(setting["b"]))));
   }
-
-  // Ensure RGB values are within valid range [0, 255]
-  r = std::min(255, std::max(0, r));
-  g = std::min(255, std::max(0, g));
-  b = std::min(255, std::max(0, b));
-
-  return Color(static_cast<uint8_t>(r), static_cast<uint8_t>(g),
-               static_cast<uint8_t>(b));
+  
+  return Color(r, g, b);
 }
 
 float PrimitiveFactory::getFlexibleFloat(const Setting& setting) {
-  switch (setting.getType()) {
-    case Setting::TypeInt:
-      return static_cast<float>(static_cast<int>(setting));
-    case Setting::TypeFloat:
-      return static_cast<float>(setting);
-    default:
-      throw ParserException("Expected a numeric type (int or float)");
+  try {
+    switch (setting.getType()) {
+      case Setting::TypeInt:
+        return static_cast<float>(static_cast<int>(setting));
+      case Setting::TypeInt64:
+        return static_cast<float>(static_cast<long long>(setting));
+      case Setting::TypeFloat:
+        return static_cast<float>(setting);
+      default:
+        throw ParserException("Expected a numeric type (int or float)");
+    }
+  } catch (const SettingTypeException& e) {
+    throw ParserException(std::string("Setting type error: ") + e.what());
   }
+}
+
+std::string PrimitiveFactory::normalizeTypeName(const std::string& typeName) {
+  std::string normalizedName = typeName;
+  std::transform(normalizedName.begin(), normalizedName.end(),
+                 normalizedName.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+  return normalizedName;
 }
 
 }  // namespace RayTracer
