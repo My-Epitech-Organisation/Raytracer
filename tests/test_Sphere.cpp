@@ -157,20 +157,21 @@ TEST(SphereTest, RayIntersectionFromOutside) {
 // TEST(SphereTest, RayIntersectionFromInside) {
 //   Sphere sphere;  // Unit sphere at origin
 
-//   // Ray pointing outward from inside the sphere
-//   Ray ray(Vector3D(0, 0, 0), Vector3D(0, 0, 1));
+// // Ray pointing outward from inside the sphere
+// Ray ray(Vector3D(0, 0, 0), Vector3D(0, 0, 1));
 
-//   auto intersection = sphere.intersect(ray);
+// auto intersection = sphere.intersect(ray);
 
-//   ASSERT_TRUE(intersection.has_value());
-//   EXPECT_DOUBLE_EQ(intersection->distance,
-//                    1.0);  // Ray starts at center, sphere surface is 1 unit away
-//   EXPECT_TRUE(
-//       vectorsNearlyEqual_Sphere(intersection->point, Vector3D(0, 0, 1)));
-//   EXPECT_TRUE(
-//       vectorsNearlyEqual_Sphere(intersection->normal, Vector3D(0, 0, 1)));
-//   EXPECT_EQ(intersection->color, Color::RED);
-//   EXPECT_EQ(intersection->primitive, &sphere);
+// ASSERT_TRUE(intersection.has_value());
+// EXPECT_DOUBLE_EQ(intersection->distance,
+//                  1.0);  // Ray starts at center, sphere surface is 1 unit
+//                  away
+// EXPECT_TRUE(
+//     vectorsNearlyEqual_Sphere(intersection->point, Vector3D(0, 0, 1)));
+// EXPECT_TRUE(
+//     vectorsNearlyEqual_Sphere(intersection->normal, Vector3D(0, 0, 1)));
+// EXPECT_EQ(intersection->color, Color::RED);
+// EXPECT_EQ(intersection->primitive, &sphere);
 // }
 
 TEST(SphereTest, RayMissesSphere) {
