@@ -43,7 +43,6 @@ TEST(PrimitiveFactoryTest, CreateSphere) {
                                                  static_cast<uint8_t>(0),
                                                  static_cast<uint8_t>(0))));
 
-    std::cout << "Sphere created successfully!\n";
   } catch (const std::exception& e) {
     FAIL() << "Exception thrown during sphere creation: " << e.what();
   }
