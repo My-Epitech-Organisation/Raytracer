@@ -41,6 +41,89 @@
  *   fieldOfView = 72.0;
  * }
  * ```
+ * 
+ * ### 📂 Scene Configuration Structure
+ * 
+ * Scene files use the libconfig++ format and are organized into three main sections:
+ * 
+ * #### 1. Camera Configuration
+ * ```cfg
+ * camera: {
+ *   resolution = { width = 1920; height = 1080; };
+ *   position = { x = 0; y = -100; z = 20; };
+ *   rotation = { x = 0; y = 0; z = 0; };
+ *   fieldOfView = 72.0;
+ * };
+ * ```
+ * 
+ * #### 2. Primitives Configuration
+ * Primitives are organized by type in array format:
+ * ```cfg
+ * primitives: {
+ *   # Spheres with position, radius and color
+ *   spheres = (
+ *     { x = 60; y = 5; z = 40; r = 25; color = { r = 255; g = 64; b = 64; }; },
+ *     { x = -40; y = 20; z = -10; r = 35; color = { r = 64; g = 255; b = 64; }; }
+ *   );
+ *   
+ *   # Planes with axis, position and color
+ *   planes = (
+ *     { axis = "Z"; position = -20; color = { r = 64; g = 64; b = 255; }; }
+ *   );
+ *   
+ *   # Cylinders with radius and color
+ *   cylinders = (
+ *     { 
+ *       radius = 5;
+ *       color = { r = 0; g = 255; b = 255; };
+ *       transform = {
+ *         translate = { x = 10; y = 0; z = 0; };
+ *         rotate = { x = 0; y = 0; z = 90; };
+ *       };
+ *     }
+ *   );
+ * };
+ * ```
+ * 
+ * #### 3. Lighting Configuration
+ * ```cfg
+ * lights: {
+ *   ambient = 0.3;
+ *   diffuse = 0.7;
+ *   
+ *   # Point lights with position and color
+ *   point = (
+ *     { x = 200; y = 50; z = 0; color = { r = 255; g = 255; b = 255; }; }
+ *   );
+ *   
+ *   # Directional lights with direction and color
+ *   directional = (
+ *     { direction = { x = -1; y = -1; z = -1; }; color = { r = 255; g = 255; b = 255; }; }
+ *   );
+ * };
+ * ```
+ * 
+ * ### 📝 Example Scenes
+ * 
+ * The project includes several example scenes in the `scenes/` directory that you can use as templates:
+ * 
+ * - `scenes/basic_scene.cfg` - A simple scene with a few spheres and a plane
+ * - `scenes/complex_scene.cfg` - A more complex scene with multiple primitive types
+ * - `scenes/demo_sphere.cfg` - Showcase of spheres with various transformations
+ * - `scenes/demo_cylinder.cfg` - Demonstration of cylinder primitives
+ * 
+ * To run an example scene:
+ * ```bash
+ * ./raytracer scenes/basic_scene.cfg
+ * ```
+ * 
+ * ### 🛠️ Configuration Tips
+ * 
+ * - All primitive attributes support both integer and float values
+ * - Colors are defined with RGB values from 0-255
+ * - Comments can be added with `#` or `//`
+ * - Transformation blocks can be added to any primitive for positioning
+ * - The order of sections (camera, primitives, lights) is not important
  *
  * ---
  *
