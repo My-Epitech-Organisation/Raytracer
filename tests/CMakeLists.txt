@@ -13,6 +13,7 @@ set(TEST_SOURCES
     test_Exceptions.cpp
     test_Cone.cpp
     test_Torus.cpp
+    test_Triangle.cpp
 )
 
 # Test executable

@@ -31,6 +31,7 @@
 #include "Plane.hpp"
 #include "Sphere.hpp"
 #include "Torus.hpp"
+#include "Triangle.hpp"
 
 namespace RayTracer {
 
@@ -109,6 +110,14 @@ class PrimitiveFactory {
    * @return A shared pointer to the created torus
    */
   static std::shared_ptr<Torus> createTorus(const libconfig::Setting& setting);
+
+  /**
+   * @brief Create a triangle primitive from configuration
+   * @param setting libconfig setting containing triangle parameters
+   * @return A shared pointer to the created triangle
+   */
+  static std::shared_ptr<Triangle> createTriangle(
+      const libconfig::Setting& setting);
 
   /**
    * @brief Create all primitives of a specific type from configuration

@@ -16,9 +16,6 @@
 
 #include "SceneParser.hpp"
 #include <algorithm>
-#include "SceneParser.hpp"
-#include <algorithm>
-using namespace libconfig;
 #include <cctype>
 #include <libconfig.h++>
 #include "../../../include/exceptions/InvalidTypeException.hpp"
@@ -26,7 +23,10 @@ using namespace libconfig;
 #include "../lights/LightFactory.hpp"
 #include "../primitives/Cylinder.hpp"
 #include "../primitives/Torus.hpp"
+#include "../primitives/Triangle.hpp"
 #include "../primitives/PrimitiveFactory.hpp"
+
+using namespace libconfig;
 namespace RayTracer {
 
 Camera SceneParser::parseCamera(const Setting& cameraSetting) {
@@ -656,6 +656,87 @@ std::vector<Torus> SceneParser::parseTori(const Setting& setting) {
     }
   }
   return tori;
+}
+
+Triangle SceneParser::parseTriangle(const Setting& triangleSetting) {
+  double ax = 0, ay = 0, az = 0, bx = 0, by = 0, bz = 0, cx = 0, cy = 0, cz = 0;
+  int r = 255, g = 255, b_col = 255;
+  if (triangleSetting.exists("a")) {
+    const Setting& aSet = triangleSetting["a"];
+    try {
+      if (!aSet.exists("x") || !aSet.exists("y") || !aSet.exists("z")) {
+        throw ParserException("Triangle: missing or invalid 'a' coordinates");
+      }
+      ax = getFlexibleFloat(aSet["x"]);
+      ay = getFlexibleFloat(aSet["y"]);
+      az = getFlexibleFloat(aSet["z"]);
+    } catch (const std::exception& e) {
+      std::cerr << "Triangle: Exception for 'a': " << e.what() << std::endl;
+      throw ParserException(
+          "Triangle: missing or invalid 'a' coordinates (type exception)");
+    }
+  } else {
+    throw ParserException("Triangle: missing 'a' vertex");
+  }
+  if (triangleSetting.exists("b")) {
+    const Setting& bSet = triangleSetting["b"];
+    try {
+      if (!bSet.exists("x") || !bSet.exists("y") || !bSet.exists("z")) {
+        throw ParserException("Triangle: missing or invalid 'b' coordinates");
+      }
+      bx = getFlexibleFloat(bSet["x"]);
+      by = getFlexibleFloat(bSet["y"]);
+      bz = getFlexibleFloat(bSet["z"]);
+    } catch (const std::exception& e) {
+      std::cerr << "Triangle: Exception for 'b': " << e.what() << std::endl;
+      throw ParserException(
+          "Triangle: missing or invalid 'b' coordinates (type exception)");
+    }
+  } else {
+    throw ParserException("Triangle: missing 'b' vertex");
+  }
+  if (triangleSetting.exists("c")) {
+    const Setting& cSet = triangleSetting["c"];
+    try {
+      if (!cSet.exists("x") || !cSet.exists("y") || !cSet.exists("z")) {
+        throw ParserException("Triangle: missing or invalid 'c' coordinates");
+      }
+      cx = getFlexibleFloat(cSet["x"]);
+      cy = getFlexibleFloat(cSet["y"]);
+      cz = getFlexibleFloat(cSet["z"]);
+    } catch (const std::exception& e) {
+      std::cerr << "Triangle: Exception for 'c': " << e.what() << std::endl;
+      throw ParserException(
+          "Triangle: missing or invalid 'c' coordinates (type exception)");
+    }
+  } else {
+    throw ParserException("Triangle: missing 'c' vertex");
+  }
+  if (triangleSetting.exists("color")) {
+    const Setting& colorSet = triangleSetting["color"];
+    colorSet.lookupValue("r", r);
+    colorSet.lookupValue("g", g);
+    colorSet.lookupValue("b", b_col);
+  }
+  Color color(static_cast<uint8_t>(r), static_cast<uint8_t>(g),
+              static_cast<uint8_t>(b_col));
+  Triangle tri(Vector3D(ax, ay, az), Vector3D(bx, by, bz), Vector3D(cx, cy, cz),
+               color);
+  if (triangleSetting.exists("transform")) {
+    tri.setTransform(parseTransform(triangleSetting["transform"]));
+  }
+  return tri;
+}
+
+std::vector<Triangle> SceneParser::parseTriangles(const Setting& setting) {
+  std::vector<Triangle> triangles;
+  if (!setting.isList() && !setting.isGroup() && !setting.isArray()) {
+    throw std::runtime_error("Triangles setting must be a list or group.");
+  }
+  for (int i = 0; i < setting.getLength(); ++i) {
+    triangles.push_back(parseTriangle(setting[i]));
+  }
+  return triangles;
 }
 
 }  // namespace RayTracer

@@ -30,7 +30,7 @@
 #include "../primitives/Plane.hpp"
 #include "../primitives/Sphere.hpp"
 #include "../primitives/Torus.hpp"
-#include "../../../include/IPrimitive.hpp"  // For std::shared_ptr<IPrimitive>
+#include "../primitives/Triangle.hpp"
 
 namespace RayTracer {
 
@@ -150,6 +150,8 @@ class SceneParser {
   Torus parseTorus(const libconfig::Setting& torusSetting);
   std::vector<Torus> parseTori(const libconfig::Setting& setting);
   std::vector<Torus> parseToruses(const libconfig::Setting& setting);
+  Triangle parseTriangle(const libconfig::Setting& triangleSetting);
+  std::vector<Triangle> parseTriangles(const libconfig::Setting& setting);
 
  private:
   // Store parsed primitives

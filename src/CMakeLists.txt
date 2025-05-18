@@ -19,6 +19,7 @@ set(RAYTRACER_SOURCES
     scene/primitives/LimitedCylinder.cpp
     scene/primitives/PrimitiveFactory.cpp
     scene/primitives/Torus.cpp
+    scene/primitives/Triangle.cpp
     scene/lights/LightFactory.cpp
     scene/lights/PointLight.cpp
     scene/lights/DirectionalLight.cpp

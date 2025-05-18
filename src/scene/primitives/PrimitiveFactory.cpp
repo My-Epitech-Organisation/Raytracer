@@ -72,6 +72,16 @@ std::unordered_map<std::string, PrimitiveFactory::PrimitiveCreator>
          [](const Setting& setting) {
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createTorus(setting));
+         }},
+        {"triangles",
+         [](const Setting& setting) {
+           return std::static_pointer_cast<IPrimitive>(
+               PrimitiveFactory::createTriangle(setting));
+         }},
+        {"triangle",
+         [](const Setting& setting) {
+           return std::static_pointer_cast<IPrimitive>(
+               PrimitiveFactory::createTriangle(setting));
          }}};
 
 PrimitiveFactory::Result PrimitiveFactory::createPrimitives(
@@ -887,11 +897,79 @@ float PrimitiveFactory::getFlexibleFloat(const Setting& setting) {
 }
 
 std::string PrimitiveFactory::normalizeTypeName(const std::string& typeName) {
-  std::string normalizedName = typeName;
-  std::transform(normalizedName.begin(), normalizedName.end(),
-                 normalizedName.begin(),
+  std::string result = typeName;
+  std::transform(result.begin(), result.end(), result.begin(),
                  [](unsigned char c) { return std::tolower(c); });
-  return normalizedName;
+  return result;
+}
+
+std::shared_ptr<Triangle> PrimitiveFactory::createTriangle(
+    const Setting& setting) {
+  try {
+    // Parse vertices a, b, c
+    double ax = 0, ay = 0, az = 0, bx = 0, by = 0, bz = 0, cx = 0, cy = 0, cz = 0;
+
+    // Parse vertex a
+    if (setting.exists("a")) {
+      const Setting& aSet = setting["a"];
+      if (!aSet.exists("x") || !aSet.exists("y") || !aSet.exists("z")) {
+        throw ParserException("Triangle: missing or invalid 'a' coordinates");
+      }
+      ax = getFlexibleFloat(aSet["x"]);
+      ay = getFlexibleFloat(aSet["y"]);
+      az = getFlexibleFloat(aSet["z"]);
+    } else {
+      throw ParserException("Triangle: missing 'a' vertex");
+    }
+
+    // Parse vertex b
+    if (setting.exists("b")) {
+      const Setting& bSet = setting["b"];
+      if (!bSet.exists("x") || !bSet.exists("y") || !bSet.exists("z")) {
+        throw ParserException("Triangle: missing or invalid 'b' coordinates");
+      }
+      bx = getFlexibleFloat(bSet["x"]);
+      by = getFlexibleFloat(bSet["y"]);
+      bz = getFlexibleFloat(bSet["z"]);
+    } else {
+      throw ParserException("Triangle: missing 'b' vertex");
+    }
+
+    // Parse vertex c
+    if (setting.exists("c")) {
+      const Setting& cSet = setting["c"];
+      if (!cSet.exists("x") || !cSet.exists("y") || !cSet.exists("z")) {
+        throw ParserException("Triangle: missing or invalid 'c' coordinates");
+      }
+      cx = getFlexibleFloat(cSet["x"]);
+      cy = getFlexibleFloat(cSet["y"]);
+      cz = getFlexibleFloat(cSet["z"]);
+    } else {
+      throw ParserException("Triangle: missing 'c' vertex");
+    }
+
+    // Parse color
+    Color color;
+    if (setting.exists("color")) {
+      color = parseColor(setting["color"]);
+    } else {
+      // Default to white if no color specified
+      color = Color(uint8_t(255), uint8_t(255), uint8_t(255));
+    }
+
+    // Create the triangle
+    auto triangle = std::make_shared<Triangle>(
+        Vector3D(ax, ay, az), Vector3D(bx, by, bz), Vector3D(cx, cy, cz), color);
+
+    // Apply transform if it exists
+    if (setting.exists("transform")) {
+      applyTransformIfExists(setting, triangle);
+    }
+
+    return triangle;
+  } catch (const std::exception& e) {
+    throw ParserException(std::string("Failed to create Triangle: ") + e.what());
+  }
 }
 
 }  // namespace RayTracer
