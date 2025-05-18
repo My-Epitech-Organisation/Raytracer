@@ -57,6 +57,10 @@
  * ✅ Supported Primitives:
  * - Sphere
  * - Plane
+ * - Cone (infinite and limited)
+ * - Cylinder (infinite and limited) 
+ * - Torus
+ * - Triangle
  *
  * ✅ Transformations:
  * - Translation
@@ -84,15 +88,90 @@
  * ## ⚙️ Compilation
  *
  * ### Makefile
- * - Required targets: `all`, `clean`, `fclean`, `re`
+ * The project provides a comprehensive Makefile with several useful targets:
+ * 
+ * ```bash
+ * make          # Compiles the project and creates the raytracer executable
+ * make clean    # Removes object files
+ * make fclean   # Removes all compiled files, build directory, and documentation
+ * make re       # Completely rebuilds the project (fclean + all)
+ * make normalize # Applies clang-format to all C++ files
+ * make check_normalize # Checks if code follows clang-format style without modifying
+ * make tests_run # Compiles and runs unit tests
+ * make cov      # Generates code coverage report (requires lcov)
+ * make doc      # Generates documentation using Doxygen and opens it
+ * ```
  *
  * ### CMake (optional):
+ * If you prefer using CMake directly:
  * ```bash
  * mkdir build && cd build
  * cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
  * cmake --build .
  * ```
+ * 
+ * #### CMake Build Options:
+ * - `-DBUILD_TESTS=ON` - Enable building test suite
+ * - `-DBUILD_PLUGINS=ON` - Enable building plugin modules
+ * - `-DCMAKE_BUILD_TYPE=Debug|Release` - Set build configuration
  *
+ * ---
+ *
+ * ## 🧠 Extending the Raytracer
+ * 
+ * ### 🔶 Adding a New Primitive
+ * 
+ * To add a new primitive to the raytracer, follow these steps:
+ * 
+ * 1. **Create the Primitive Class**:
+ *    - Implement a class that inherits from `IPrimitive` (or an appropriate interface like `ICylinder` if it's a variant)
+ *    - Required methods to implement:
+ *      - `intersect()` - Calculate ray intersection with your primitive
+ *      - `getNormalAt()` - Calculate surface normal at a point
+ *      - `setTransform()`, `getTransform()` - Handle transformations
+ *      - `setColor()`, `getColor()` - Handle color properties
+ *      - `clone()` - Create a copy of the primitive
+ * 
+ * 2. **Update the Factory**:
+ *    - In `PrimitiveFactory.cpp`, add a creation method for your primitive:
+ *      ```cpp
+ *      std::shared_ptr<YourPrimitive> PrimitiveFactory::createYourPrimitive(
+ *          const Setting& setting) {
+ *          // Parse configuration and create your primitive
+ *      }
+ *      ```
+ *    - Add the appropriate entry to the `primitiveCreators` map in the same file
+ * 
+ * 3. **Add the declaration in PrimitiveFactory.hpp**:
+ *    - Declare your creation method
+ *    - Include your primitive's header file
+ * 
+ * 4. **Example Usage in Configuration**:
+ *    ```cfg
+ *    primitives:
+ *    {
+ *      yourprimitives = (
+ *        {
+ *          // Your primitive's parameters
+ *          param1 = value1;
+ *          color = { r = 255; g = 0; b = 0; };
+ *          transform = {
+ *            translate = { x = 0; y = 0; z = 0; };
+ *            rotate = { x = 0; y = 0; z = 0; };
+ *            scale = { x = 1; y = 1; z = 1; };
+ *          };
+ *        }
+ *      );
+ *    }
+ *    ```
+ * 
+ * Note that the factory supports multiple formats for primitive parameters:
+ * - Direct coordinates: `x = 0; y = 10; z = 5;`
+ * - Grouped coordinates: `position = { x = 0; y = 10; z = 5; };`
+ * - Both integer and float values
+ * 
+ * The system also automatically applies transformations if a `transform` block is present.
+ * 
  * ---
  *
  * ## 🔌 Extensions and Plugins (bonus)
