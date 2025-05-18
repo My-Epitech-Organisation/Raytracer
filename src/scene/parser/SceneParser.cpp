@@ -16,6 +16,9 @@
 
 #include "SceneParser.hpp"
 #include <algorithm>
+#include "SceneParser.hpp"
+#include <algorithm>
+using namespace libconfig;
 #include <cctype>
 #include <libconfig.h++>
 #include "../../../include/exceptions/InvalidTypeException.hpp"
@@ -23,9 +26,7 @@
 #include "../lights/LightFactory.hpp"
 #include "../primitives/Cylinder.hpp"
 #include "../primitives/Torus.hpp"
-
-using namespace libconfig;
-
+#include "../primitives/PrimitiveFactory.hpp"
 namespace RayTracer {
 
 Camera SceneParser::parseCamera(const Setting& cameraSetting) {
@@ -599,32 +600,13 @@ SceneParser::parseLightingSettings(const libconfig::Setting& lightsSetting) {
 }
 
 void SceneParser::parsePrimitives(const Setting& primitivesSetting) {
-  for (int i = 0; i < primitivesSetting.getLength(); ++i) {
-    const Setting& primitiveGroup = primitivesSetting[i];
-    std::string name = primitiveGroup.getName();
-
-    // Convert to lowercase for case-insensitive comparison
-    std::string nameLower = name;
-    std::transform(nameLower.begin(), nameLower.end(), nameLower.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
-
-    if (nameLower == "spheres") {
-      this->parseSpheres(primitiveGroup);
-    } else if (nameLower == "planes") {
-      this->parsePlanes(primitiveGroup);
-    } else if (nameLower == "cones") {
-      this->parseCones(primitiveGroup);
-    } else if (nameLower == "cylinders") {
-      this->parseCylinders(primitiveGroup);
-    } else if (nameLower == "limitedcones") {
-      this->parseLimitedCones(primitiveGroup);
-    } else if (nameLower == "limitedcylinders") {
-      this->parseLimitedCylinders(primitiveGroup);
-    } else if (nameLower == "toruses") {
-      this->parseToruses(primitiveGroup);
-    } else {
-      std::cerr << "Unsupported primitive type: " << name << std::endl;
+  try {
+    auto primitiveResult = PrimitiveFactory::createPrimitives(primitivesSetting);
+    for (const auto& primitive : primitiveResult.primitives) {
+      _primitives.push_back(primitive);
     }
+  } catch (const std::exception& e) {
+    std::cerr << "Error creating primitives: " << e.what() << std::endl;
   }
 }
 

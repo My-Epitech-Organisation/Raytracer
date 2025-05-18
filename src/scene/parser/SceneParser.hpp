@@ -30,6 +30,7 @@
 #include "../primitives/Plane.hpp"
 #include "../primitives/Sphere.hpp"
 #include "../primitives/Torus.hpp"
+#include "../../../include/IPrimitive.hpp"  // For std::shared_ptr<IPrimitive>
 
 namespace RayTracer {
 
@@ -111,6 +112,14 @@ class SceneParser {
   void parsePrimitives(const libconfig::Setting& primitivesSetting);
 
   /**
+   * @brief Get the parsed primitives
+   * @return Vector of primitives
+   */
+  const std::vector<std::shared_ptr<IPrimitive>>& getPrimitives() const {
+    return _primitives;
+  }
+
+  /**
    * @brief Parse a geometric transformation.
    * @param transformSetting Reference to the transformation parameters.
    * @return A Transform instance.
@@ -141,6 +150,10 @@ class SceneParser {
   Torus parseTorus(const libconfig::Setting& torusSetting);
   std::vector<Torus> parseTori(const libconfig::Setting& setting);
   std::vector<Torus> parseToruses(const libconfig::Setting& setting);
+
+ private:
+  // Store parsed primitives
+  std::vector<std::shared_ptr<IPrimitive>> _primitives;
 };
 
 }  // namespace RayTracer

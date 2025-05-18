@@ -67,6 +67,11 @@ std::unordered_map<std::string, PrimitiveFactory::PrimitiveCreator>
         {"tori", [](const Setting& setting) {
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createTorus(setting));
+         }},
+        {"torus",
+         [](const Setting& setting) {
+           return std::static_pointer_cast<IPrimitive>(
+               PrimitiveFactory::createTorus(setting));
          }}};
 
 PrimitiveFactory::Result PrimitiveFactory::createPrimitives(
