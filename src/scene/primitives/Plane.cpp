@@ -8,7 +8,7 @@
 /**
  * @file Plane.cpp
  * @brief Implementation of the infinite plane primitive
- * @author Santi
+ * @author @mael
  * @date 2025-05-16
  * @version 1.0
  */

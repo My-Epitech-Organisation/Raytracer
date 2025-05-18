@@ -9,7 +9,7 @@
  * @file RenderTile.hpp
  * @brief Defines the RenderTile class for dividing the image into smaller
  * chunks for parallel rendering
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

@@ -9,7 +9,7 @@
  * @file ThreadPool.hpp
  * @brief Provides a thread pool implementation for parallel task execution in
  * the ray tracer
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

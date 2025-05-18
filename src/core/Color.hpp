@@ -9,7 +9,7 @@
  * @file Color.hpp
  * @brief Provides the Color class for managing RGB color values with various
  * operations and transformations
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

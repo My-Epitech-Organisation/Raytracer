@@ -9,7 +9,7 @@
  * @file ThreadPool.cpp
  * @brief Implementation of a thread pool for parallel task execution to
  * optimize rendering performance
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

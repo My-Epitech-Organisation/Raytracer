@@ -9,7 +9,7 @@
  * @file AmbientLight.hpp
  * @brief Definition of the AmbientLight class for representing ambient lighting
  * in the scene
- * @author Santi
+ * @author @santiago
  * @date 2025-05-16
  * @version 1.0
  */

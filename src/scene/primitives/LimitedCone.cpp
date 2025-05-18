@@ -9,7 +9,7 @@
  * @file LimitedCone.cpp
  * @brief Implementation of a cone primitive with height constraints and
  * optional cap for ray tracing
- * @author Santi
+ * @author @mael
  * @date 2025-05-16
  * @version 1.0
  */

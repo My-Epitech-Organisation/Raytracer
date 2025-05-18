@@ -9,7 +9,7 @@
  * @file Transform.cpp
  * @brief Implementation of the transformation matrix class for 3D affine
  * transformations
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

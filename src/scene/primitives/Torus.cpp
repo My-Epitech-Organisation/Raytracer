@@ -5,6 +5,15 @@
 ** Torus
 */
 
+/**
+ * @file Torus.cpp
+ * @brief Implementation of the Torus class which provides toroidal primitive
+ * functionality for ray tracing
+ * @author @mael
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "Torus.hpp"
 #include <cmath>
 #include <stdexcept>

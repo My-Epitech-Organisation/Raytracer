@@ -9,7 +9,7 @@
  * @file Cone.hpp
  * @brief Definition of the Cone class for representing infinite cones in the
  * raytracing engine
- * @author Santi
+ * @author @mael
  * @date 2025-05-16
  * @version 1.0
  */

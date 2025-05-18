@@ -9,7 +9,7 @@
  * @file SceneParser.hpp
  * @brief Definition of the SceneParser class for parsing scene configuration
  * files
- * @author Santi
+ * @author @santiago
  * @date 2025-05-16
  * @version 1.0
  */

@@ -8,7 +8,7 @@
 /**
  * @file Matrix.hpp
  * @brief Definition of the Matrix class for 3D mathematical transformations
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

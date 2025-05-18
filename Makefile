@@ -39,6 +39,8 @@ fclean: clean
 	@echo "Cleaning up build directory..."
 	@rm -rf $(BUILD_DIR)
 	@rm -f $(TARGET)
+	@echo "Cleaning up generated documentation..."
+	@rm -rf $(DOCS_OUT)
 
 normalize:
 	@echo "Applying clang format to all C++ files..."
@@ -70,6 +72,14 @@ check_normalize:
 doc:
 	@echo "Generating documentation..."
 	@doxygen Doxyfile
-	@open docs/html/index.html
+	@# Cross-platform open command - uses appropriate opener by OS
+	@if [ "$(shell uname)" = "Darwin" ]; then \
+		open docs/html/index.html; \
+	elif [ "$(shell uname)" = "Linux" ]; then \
+		xdg-open docs/html/index.html 2>/dev/null || \
+		echo "Documentation generated at: docs/html/index.html"; \
+	else \
+		echo "Documentation generated at: docs/html/index.html"; \
+	fi
 
 .PHONY: all re tests_run clean fclean normalize check_normalize cov doc

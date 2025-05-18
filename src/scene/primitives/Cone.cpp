@@ -9,7 +9,7 @@
  * @file Cone.cpp
  * @brief Implementation of the infinite cone primitive with ray-cone
  * intersection algorithms
- * @author Santi
+ * @author @mael
  * @date 2025-05-16
  * @version 1.0
  */

@@ -8,7 +8,7 @@
 /**
  * @file Matrix.cpp
  * @brief Implementation of the 4x4 matrix class for 3D transformations
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

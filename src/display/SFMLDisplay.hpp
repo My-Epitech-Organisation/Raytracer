@@ -9,7 +9,7 @@
  * @file SFMLDisplay.hpp
  * @brief Defines the SFMLDisplay class which handles real-time rendering using
  * the SFML library
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

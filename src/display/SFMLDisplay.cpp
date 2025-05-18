@@ -9,7 +9,7 @@
  * @file SFMLDisplay.cpp
  * @brief Implementation of the display system using SFML for real-time
  * rendering visualization
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

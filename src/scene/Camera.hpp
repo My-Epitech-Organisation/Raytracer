@@ -8,7 +8,7 @@
 /**
  * @file Camera.hpp
  * @brief Defines the Camera class for scene viewing and ray generation
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

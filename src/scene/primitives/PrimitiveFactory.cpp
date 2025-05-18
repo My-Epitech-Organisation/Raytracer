@@ -9,7 +9,7 @@
  * @file PrimitiveFactory.cpp
  * @brief Implementation of the factory class for creating different types of
  * primitives
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-17
  * @version 1.0
  */
