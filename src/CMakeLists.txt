@@ -14,6 +14,7 @@ set(RAYTRACER_SOURCES
     scene/primitives/Cylinder.cpp
     scene/primitives/Sphere.cpp
     scene/primitives/Plane.cpp
+    scene/primitives/CheckerboardPlane.cpp
     scene/primitives/Cone.cpp
     scene/primitives/LimitedCone.cpp
     scene/primitives/LimitedCylinder.cpp

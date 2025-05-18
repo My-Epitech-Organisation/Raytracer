@@ -29,6 +29,7 @@
 #include "LimitedCone.hpp"
 #include "LimitedCylinder.hpp"
 #include "Plane.hpp"
+#include "CheckerboardPlane.hpp"
 #include "Sphere.hpp"
 #include "Torus.hpp"
 #include "Triangle.hpp"

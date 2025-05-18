@@ -117,14 +117,16 @@ class Plane : public IPrimitive {
   Vector3D getNormal() const;
 
  private:
-  Axis getAxisFromChar(char axis) const;
-  char getCharFromAxis(Axis axis) const;
   Vector3D _normal;      ///< The normal vector of the plane (derived from axis)
   double _position;      ///< Position along the axis
   Axis _axis;            ///< Axis the plane is perpendicular to (X, Y, Z)
   Color _color;          ///< The color of the plane
   Transform _transform;  ///< Transformation applied to the plane
   Transform _inverseTransform;  ///< Inverse transformation
+
+ protected:
+  Axis getAxisFromChar(char axis) const;
+  char getCharFromAxis(Axis axis) const;
 };
 
 }  // namespace RayTracer

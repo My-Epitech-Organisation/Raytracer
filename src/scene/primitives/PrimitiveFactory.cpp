@@ -21,6 +21,7 @@
 #include <iostream>
 #include "../../../include/exceptions/ParserException.hpp"
 #include "../../core/Transform.hpp"
+#include "CheckerboardPlane.hpp"
 
 using namespace libconfig;
 
@@ -213,12 +214,36 @@ std::shared_ptr<Plane> PrimitiveFactory::createPlane(const Setting& setting) {
       color = parseColor(setting["color"]);
     }
 
-    auto plane = std::make_shared<Plane>(axis, pos, color);
-
-    // Apply any transformation
-    applyTransformIfExists(setting, plane);
-
-    return plane;
+    // Check if this is a checkerboard plane
+    if (setting.exists("checkerboard")) {
+      Color alternateColor = Color::BLACK;  // Default alternate color
+      double squareSize = 1.0;              // Default square size
+      
+      const Setting& checkerboardSetting = setting["checkerboard"];
+      
+      if (checkerboardSetting.exists("alternateColor")) {
+        alternateColor = parseColor(checkerboardSetting["alternateColor"]);
+      }
+      
+      if (checkerboardSetting.exists("size")) {
+        squareSize = getFlexibleFloat(checkerboardSetting["size"]);
+      }
+      
+      auto plane = std::make_shared<CheckerboardPlane>(axis, pos, color, alternateColor, squareSize);
+      
+      // Apply any transformation
+      applyTransformIfExists(setting, plane);
+      
+      return plane;
+    } else {
+      // Create a regular plane
+      auto plane = std::make_shared<Plane>(axis, pos, color);
+      
+      // Apply any transformation
+      applyTransformIfExists(setting, plane);
+      
+      return plane;
+    }
   } catch (const SettingNotFoundException& e) {
     throw ParserException(std::string("Setting not found in plane: ") +
                           e.what());
