@@ -21,9 +21,7 @@
 namespace RayTracer {
 
 Plane::Plane(char axis, double position, const Color& color)
-    : _position(position),
-      _color(color),
-      _transform() {
+    : _position(position), _color(color), _transform() {
   _axis = getAxisFromChar(axis);
   if (_axis == Axis::X) {
     _normal = Vector3D(1, 0, 0);

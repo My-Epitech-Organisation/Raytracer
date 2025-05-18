@@ -24,12 +24,12 @@
 #include <unordered_map>
 #include <vector>
 #include "../../../include/IPrimitive.hpp"
+#include "CheckerboardPlane.hpp"
 #include "Cone.hpp"
 #include "Cylinder.hpp"
 #include "LimitedCone.hpp"
 #include "LimitedCylinder.hpp"
 #include "Plane.hpp"
-#include "CheckerboardPlane.hpp"
 #include "Sphere.hpp"
 #include "Torus.hpp"
 #include "Triangle.hpp"

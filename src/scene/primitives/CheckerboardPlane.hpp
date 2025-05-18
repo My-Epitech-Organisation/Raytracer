@@ -7,8 +7,9 @@
 
 /**
  * @file CheckerboardPlane.hpp
- * @brief Definition of the CheckerboardPlane class for representing infinite planes with a checkerboard pattern
- * @author GitHub Copilot
+ * @brief Definition of the CheckerboardPlane class for representing infinite
+ * planes with a checkerboard pattern
+ * @author paul-antoine.salmon@epitech.eu
  * @date 2025-05-18
  * @version 1.0
  */
@@ -21,7 +22,6 @@
 #include "../../../include/IPrimitive.hpp"
 #include "../../core/Color.hpp"
 #include "../../core/Ray.hpp"
-#include "../../core/Transform.hpp"
 #include "../../core/Vector3D.hpp"
 #include "Plane.hpp"
 
@@ -41,7 +41,7 @@ class CheckerboardPlane : public Plane {
    * @param squareSize The size of each checkerboard square
    */
   CheckerboardPlane(char axis, double position, const Color& color,
-                  const Color& alternateColor, double squareSize);
+                    const Color& alternateColor, double squareSize);
 
   /**
    * @brief Destructor

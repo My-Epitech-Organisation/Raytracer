@@ -8,7 +8,7 @@
 /**
  * @file CheckerboardPlane.cpp
  * @brief Implementation of the checkerboard plane primitive
- * @author GitHub Copilot
+ * @author paul-antoine.salmon@epitech.eu
  * @date 2025-05-18
  * @version 1.0
  */
@@ -20,58 +20,48 @@
 
 namespace RayTracer {
 
-CheckerboardPlane::CheckerboardPlane(char axis, double position, const Color& color,
-                             const Color& alternateColor, double squareSize)
-    : Plane(axis, position, color),  // Call the parent constructor
+CheckerboardPlane::CheckerboardPlane(char axis, double position,
+                                     const Color& color,
+                                     const Color& alternateColor,
+                                     double squareSize)
+    : Plane(axis, position, color),
       _alternateColor(alternateColor),
-      _squareSize(squareSize) {
-  // All initialization is done in the initializer list
-}
+      _squareSize(squareSize) {}
 
 std::optional<Intersection> CheckerboardPlane::intersect(const Ray& ray) const {
-  // Get the basic intersection using the parent Plane class
   auto intersection = Plane::intersect(ray);
-  
+
   if (!intersection) {
     return std::nullopt;
   }
-  
-  // Get the local intersection point to determine the color
+
   Ray localRay = ray.transform(getTransform().inverse());
-  Vector3D localIntersectionPoint = localRay.pointAt(
-      (intersection->point - ray.getOrigin()).getMagnitude() / 
-      ray.getDirection().getMagnitude());
-  
-  // Determine which color to use based on the checkerboard pattern
+  Vector3D localIntersectionPoint =
+      localRay.pointAt((intersection->point - ray.getOrigin()).getMagnitude() /
+                       ray.getDirection().getMagnitude());
+
   intersection->color = getColorAtPoint(localIntersectionPoint);
-  
+
   return intersection;
 }
 
 Color CheckerboardPlane::getColorAtPoint(const Vector3D& point) const {
-  // Determine the checkerboard pattern based on the point coordinates
-  // We need to choose which coordinates to check based on the plane's axis
   double u, v;
   Axis axis = getAxis();
-  
-  // Pick the appropriate coordinates to check based on the plane's axis
+
   if (axis == Axis::X) {
     u = point.getY();
     v = point.getZ();
   } else if (axis == Axis::Y) {
     u = point.getX();
     v = point.getZ();
-  } else { // axis == Axis::Z
+  } else {
     u = point.getX();
     v = point.getY();
   }
-  
-  // Determine if we're in an "even" or "odd" square
-  // Divide by square size and see if the integer part is even or odd
+
   int uCheckIndex = static_cast<int>(std::floor(u / _squareSize));
   int vCheckIndex = static_cast<int>(std::floor(v / _squareSize));
-  
-  // If the sum is even, use the primary color, otherwise use the alternate color
   if ((uCheckIndex + vCheckIndex) % 2 == 0) {
     return getColor();
   } else {
