@@ -213,27 +213,7 @@ std::shared_ptr<Plane> PrimitiveFactory::createPlane(const Setting& setting) {
       color = parseColor(setting["color"]);
     }
 
-    Color alternateColor = Color::BLACK;
-    double checkSize = 10.0;
-
-    if (setting.exists("checkerboard")) {
-      const Setting& checkerboardSetting = setting["checkerboard"];
-
-      if (checkerboardSetting.exists("alternateColor")) {
-        alternateColor = parseColor(checkerboardSetting["alternateColor"]);
-      }
-
-      if (checkerboardSetting.exists("size")) {
-        const Setting& sizeSetting = checkerboardSetting["size"];
-        checkSize = getFlexibleFloat(sizeSetting);
-        if (checkSize <= 0.0) {
-          checkSize = 1.0;  // Clamp to a minimum positive value
-        }
-      }
-    }
-
-    auto plane =
-        std::make_shared<Plane>(axis, pos, color, alternateColor, checkSize);
+    auto plane = std::make_shared<Plane>(axis, pos, color);
 
     // Apply any transformation
     applyTransformIfExists(setting, plane);
