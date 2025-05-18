@@ -40,7 +40,7 @@ fclean: clean
 	@rm -rf $(BUILD_DIR)
 	@rm -f $(TARGET)
 	@echo "Cleaning up generated documentation..."
-	@rm -rf $(DOCS_OUT)
+	@rm -rf docs/html
 
 normalize:
 	@echo "Applying clang format to all C++ files..."
