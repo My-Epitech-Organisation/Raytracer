@@ -22,9 +22,9 @@
 #include "../../../include/exceptions/ParserException.hpp"
 #include "../lights/LightFactory.hpp"
 #include "../primitives/Cylinder.hpp"
+#include "../primitives/PrimitiveFactory.hpp"
 #include "../primitives/Torus.hpp"
 #include "../primitives/Triangle.hpp"
-#include "../primitives/PrimitiveFactory.hpp"
 
 using namespace libconfig;
 namespace RayTracer {
@@ -50,15 +50,65 @@ Camera SceneParser::parseCamera(const Setting& cameraSetting) {
       res.lookupValue("height", height);
     }
 
-    double posX, posY, posZ;
-    pos.lookupValue("x", posX);
-    pos.lookupValue("y", posY);
-    pos.lookupValue("z", posZ);
+    double posX = 0, posY = 0, posZ = 0;
+    try {
+      if (pos.exists("x")) {
+        if (pos["x"].getType() == Setting::TypeInt) {
+          posX = static_cast<double>(static_cast<int>(pos["x"]));
+        } else if (pos["x"].getType() == Setting::TypeFloat) {
+          posX = static_cast<double>(pos["x"]);
+        }
+      }
 
-    double rotX, rotY, rotZ;
-    rot.lookupValue("x", rotX);
-    rot.lookupValue("y", rotY);
-    rot.lookupValue("z", rotZ);
+      if (pos.exists("y")) {
+        if (pos["y"].getType() == Setting::TypeInt) {
+          posY = static_cast<double>(static_cast<int>(pos["y"]));
+        } else if (pos["y"].getType() == Setting::TypeFloat) {
+          posY = static_cast<double>(pos["y"]);
+        }
+      }
+
+      if (pos.exists("z")) {
+        if (pos["z"].getType() == Setting::TypeInt) {
+          posZ = static_cast<double>(static_cast<int>(pos["z"]));
+        } else if (pos["z"].getType() == Setting::TypeFloat) {
+          posZ = static_cast<double>(pos["z"]);
+        }
+      }
+    } catch (const std::exception& e) {
+      throw ParserException(std::string("Error parsing camera position: ") +
+                            e.what());
+    }
+
+    double rotX = 0, rotY = 0, rotZ = 0;
+    try {
+      if (rot.exists("x")) {
+        if (rot["x"].getType() == Setting::TypeInt) {
+          rotX = static_cast<double>(static_cast<int>(rot["x"]));
+        } else if (rot["x"].getType() == Setting::TypeFloat) {
+          rotX = static_cast<double>(rot["x"]);
+        }
+      }
+
+      if (rot.exists("y")) {
+        if (rot["y"].getType() == Setting::TypeInt) {
+          rotY = static_cast<double>(static_cast<int>(rot["y"]));
+        } else if (rot["y"].getType() == Setting::TypeFloat) {
+          rotY = static_cast<double>(rot["y"]);
+        }
+      }
+
+      if (rot.exists("z")) {
+        if (rot["z"].getType() == Setting::TypeInt) {
+          rotZ = static_cast<double>(static_cast<int>(rot["z"]));
+        } else if (rot["z"].getType() == Setting::TypeFloat) {
+          rotZ = static_cast<double>(rot["z"]);
+        }
+      }
+    } catch (const std::exception& e) {
+      throw ParserException(std::string("Error parsing camera rotation: ") +
+                            e.what());
+    }
 
     float fov;
     if (fovSetting.isNumber())
@@ -601,7 +651,8 @@ SceneParser::parseLightingSettings(const libconfig::Setting& lightsSetting) {
 
 void SceneParser::parsePrimitives(const Setting& primitivesSetting) {
   try {
-    auto primitiveResult = PrimitiveFactory::createPrimitives(primitivesSetting);
+    auto primitiveResult =
+        PrimitiveFactory::createPrimitives(primitivesSetting);
     for (const auto& primitive : primitiveResult.primitives) {
       _primitives.push_back(primitive);
     }

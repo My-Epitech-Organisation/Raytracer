@@ -64,7 +64,8 @@ std::unordered_map<std::string, PrimitiveFactory::PrimitiveCreator>
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createTorus(setting));
          }},
-        {"tori", [](const Setting& setting) {
+        {"tori",
+         [](const Setting& setting) {
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createTorus(setting));
          }},
@@ -78,8 +79,7 @@ std::unordered_map<std::string, PrimitiveFactory::PrimitiveCreator>
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createTriangle(setting));
          }},
-        {"triangle",
-         [](const Setting& setting) {
+        {"triangle", [](const Setting& setting) {
            return std::static_pointer_cast<IPrimitive>(
                PrimitiveFactory::createTriangle(setting));
          }}};
@@ -907,7 +907,8 @@ std::shared_ptr<Triangle> PrimitiveFactory::createTriangle(
     const Setting& setting) {
   try {
     // Parse vertices a, b, c
-    double ax = 0, ay = 0, az = 0, bx = 0, by = 0, bz = 0, cx = 0, cy = 0, cz = 0;
+    double ax = 0, ay = 0, az = 0, bx = 0, by = 0, bz = 0, cx = 0, cy = 0,
+           cz = 0;
 
     // Parse vertex a
     if (setting.exists("a")) {
@@ -958,8 +959,9 @@ std::shared_ptr<Triangle> PrimitiveFactory::createTriangle(
     }
 
     // Create the triangle
-    auto triangle = std::make_shared<Triangle>(
-        Vector3D(ax, ay, az), Vector3D(bx, by, bz), Vector3D(cx, cy, cz), color);
+    auto triangle =
+        std::make_shared<Triangle>(Vector3D(ax, ay, az), Vector3D(bx, by, bz),
+                                   Vector3D(cx, cy, cz), color);
 
     // Apply transform if it exists
     if (setting.exists("transform")) {
@@ -968,7 +970,8 @@ std::shared_ptr<Triangle> PrimitiveFactory::createTriangle(
 
     return triangle;
   } catch (const std::exception& e) {
-    throw ParserException(std::string("Failed to create Triangle: ") + e.what());
+    throw ParserException(std::string("Failed to create Triangle: ") +
+                          e.what());
   }
 }
 
