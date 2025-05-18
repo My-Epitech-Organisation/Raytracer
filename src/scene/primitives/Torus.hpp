@@ -8,7 +8,6 @@
 #ifndef TORUS_HPP_
 #define TORUS_HPP_
 
-#include <limits>
 #include <memory>
 #include <optional>
 #include "../../../include/IPrimitive.hpp"

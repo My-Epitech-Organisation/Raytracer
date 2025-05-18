@@ -7,7 +7,6 @@
 
 #include "Triangle.hpp"
 #include <cmath>
-#include <iostream>
 #include <stdexcept>
 
 namespace RayTracer {
