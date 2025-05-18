@@ -17,7 +17,6 @@
 #ifndef COLOR_HPP_
 #define COLOR_HPP_
 
-#include <algorithm>
 #include <cstdint>
 #include <iostream>
 
