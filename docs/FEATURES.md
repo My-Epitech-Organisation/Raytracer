@@ -46,7 +46,7 @@
 
 ### 🔷 Lighting Effects
 
-- ⏳ Shadows
+- ✅ Shadows
 
 ---
 
@@ -55,7 +55,9 @@
 ### 🔷 Additional Primitives
 
 - ✅ Clipped cylinder / cone
-- ⏳ Torus, tanglecube, triangles
+- ✅ Torus
+- ✅ Triangles
+- ⏳ Tanglecube
 - ⏳ Support for `.obj` files
 - ⏳ Fractals, Möbius strip
 
@@ -67,7 +69,7 @@
 
 ### 🔷 Advanced Lighting
 
-- ⏳ Multiple lights
+- ✅ Multiple point lights
 - ⏳ Colored light
 - ⏳ Phong reflection, ambient occlusion
 
@@ -85,6 +87,17 @@
 
 ### 🔷 Interface (bonus)
 
-- ⏳ Real-time preview
+- ✅ preview (SFML)
+- ✅ Early render stop
+- ⏳ Real-time preview (SFML)
 - ⏳ Auto-reload on scene modification
-- ⏳ Early render stop
+
+---
+
+## 🏗️ Architecture Features
+
+### 🔷 Architecture
+
+- ✅ Object-oriented design with interfaces (IPrimitive, ILight)
+- ⏳ Plugins system for dynamic loading
+- ✅ Design patterns (Factory, Builder)
