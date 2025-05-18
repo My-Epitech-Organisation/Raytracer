@@ -5,6 +5,15 @@
 ** Cylinder primitive class header
 */
 
+/**
+ * @file LimitedCylinder.hpp
+ * @brief Header file for the LimitedCylinder class which provides limited
+ * cylinder primitive functionality for ray tracing
+ * @author @mael
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef LIMITEDCYLINDER_HPP_
 #define LIMITEDCYLINDER_HPP_
 

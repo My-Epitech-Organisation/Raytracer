@@ -8,7 +8,7 @@
 /**
  * @file Resolution.cpp
  * @brief Implementation of the Resolution class which handles image dimensions
- * @author Santi
+ * @author @santiago
  * @date 2025-05-16
  * @version 1.0
  */

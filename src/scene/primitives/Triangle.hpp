@@ -5,6 +5,15 @@
 ** Triangle
 */
 
+/**
+ * @file Triangle.cpp
+ * @brief Implementation of the Triangle class for representing triangular
+ * primitives in the raytracing engine
+ * @author @paul-antoine
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #pragma once
 
 #include <memory>

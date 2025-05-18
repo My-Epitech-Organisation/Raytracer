@@ -9,7 +9,7 @@
  * @file PointLight.hpp
  * @brief Definition of the PointLight class for representing punctual light
  * sources
- * @author Santi
+ * @author @santiago
  * @date 2025-05-16
  * @version 1.0
  */

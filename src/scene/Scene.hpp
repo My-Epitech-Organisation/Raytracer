@@ -9,7 +9,7 @@
  * @file Scene.hpp
  * @brief Definition of the Scene class for representing and managing the entire
  * 3D scene
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

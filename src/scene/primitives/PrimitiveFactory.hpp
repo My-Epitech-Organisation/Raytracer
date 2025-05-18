@@ -9,7 +9,7 @@
  * @file PrimitiveFactory.hpp
  * @brief Provides a factory class for creating different types of primitive
  * objects
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-17
  * @version 1.0
  */

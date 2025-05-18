@@ -9,7 +9,7 @@
  * @file Ray.cpp
  * @brief Implementation of the Ray class which represents a ray with origin and
  * direction for ray tracing
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

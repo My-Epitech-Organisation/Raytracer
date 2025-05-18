@@ -9,7 +9,7 @@
  * @file DirectionalLight.hpp
  * @brief Definition of the DirectionalLight class for representing directional
  * light sources
- * @author Santi
+ * @author @santiago
  * @date 2025-05-16
  * @version 1.0
  */

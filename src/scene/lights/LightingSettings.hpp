@@ -9,7 +9,7 @@
  * @file LightingSettings.hpp
  * @brief Defines the LightingSettings structure for storing global lighting
  * parameters
- * @author Santi
+ * @author @santiago
  * @date 2025-05-16
  * @version 1.0
  */

@@ -5,6 +5,14 @@
 ** ICylinder
 */
 
+/**
+ * @file ICylinder.hpp
+ * @brief Interface for cylinder primitives in the raytracing engine
+ * @author @mael
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #ifndef ICYLINDER_HPP_
 #define ICYLINDER_HPP_
 

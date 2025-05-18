@@ -5,6 +5,15 @@
 ** LimitedCylinder
 */
 
+/**
+ * @file LimitedCylinder.cpp
+ * @brief Implementation of the LimitedCylinder class which provides limited
+ * cylinder primitive functionality for ray tracing
+ * @author @mael
+ * @date 2025-05-16
+ * @version 1.0
+ */
+
 #include "LimitedCylinder.hpp"
 #include <cmath>
 #include <limits>

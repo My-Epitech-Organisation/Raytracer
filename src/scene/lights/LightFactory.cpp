@@ -9,7 +9,7 @@
  * @file LightFactory.cpp
  * @brief Implementation of the factory class for creating different types of
  * light sources
- * @author Santi
+ * @author @santiago
  * @date 2025-05-16
  * @version 1.0
  */

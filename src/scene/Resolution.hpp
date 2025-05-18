@@ -9,7 +9,7 @@
  * @file Resolution.hpp
  * @brief Defines the Resolution class for managing image dimensions in the ray
  * tracer
- * @author Santi
+ * @author @santiago
  * @date 2025-05-16
  * @version 1.0
  */

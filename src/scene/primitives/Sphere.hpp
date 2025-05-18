@@ -9,7 +9,7 @@
  * @file Sphere.hpp
  * @brief Definition of the Sphere class for representing spheres in the
  * raytracing engine
- * @author Santi
+ * @author @paul-antoine
  * @date 2025-05-16
  * @version 1.0
  */

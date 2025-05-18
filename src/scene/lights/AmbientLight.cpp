@@ -9,7 +9,7 @@
  * @file AmbientLight.cpp
  * @brief Implementation of the ambient light class which provides constant,
  * non-directional illumination
- * @author Santi
+ * @author @santiago
  * @date 2025-05-16
  * @version 1.0
  */
