@@ -69,7 +69,6 @@ TEST(PrimitiveFactoryTest, CreatePlane) {
                                                 static_cast<uint8_t>(64),
                                                 static_cast<uint8_t>(255))));
 
-    std::cout << "Plane created successfully!\n";
   } catch (const std::exception& e) {
     FAIL() << "Exception thrown during plane creation: " << e.what();
   }
