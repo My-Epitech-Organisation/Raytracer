@@ -226,6 +226,9 @@ std::shared_ptr<Plane> PrimitiveFactory::createPlane(const Setting& setting) {
 
       if (checkerboardSetting.exists("size")) {
         squareSize = getFlexibleFloat(checkerboardSetting["size"]);
+        if (squareSize <= 0.0) {
+          throw ParserException("Checkerboard square size must be positive.");
+        }
       }
 
       auto plane = std::make_shared<CheckerboardPlane>(
