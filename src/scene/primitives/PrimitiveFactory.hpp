@@ -24,6 +24,7 @@
 #include <unordered_map>
 #include <vector>
 #include "../../../include/IPrimitive.hpp"
+#include "CheckerboardPlane.hpp"
 #include "Cone.hpp"
 #include "Cylinder.hpp"
 #include "LimitedCone.hpp"

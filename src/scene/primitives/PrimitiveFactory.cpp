@@ -21,6 +21,7 @@
 #include <iostream>
 #include "../../../include/exceptions/ParserException.hpp"
 #include "../../core/Transform.hpp"
+#include "CheckerboardPlane.hpp"
 
 using namespace libconfig;
 
@@ -213,10 +214,10 @@ std::shared_ptr<Plane> PrimitiveFactory::createPlane(const Setting& setting) {
       color = parseColor(setting["color"]);
     }
 
-    Color alternateColor = Color::BLACK;
-    double checkSize = 10.0;
-
     if (setting.exists("checkerboard")) {
+      Color alternateColor = Color::BLACK;  // Default alternate color
+      double squareSize = 1.0;              // Default square size
+
       const Setting& checkerboardSetting = setting["checkerboard"];
 
       if (checkerboardSetting.exists("alternateColor")) {
@@ -224,21 +225,28 @@ std::shared_ptr<Plane> PrimitiveFactory::createPlane(const Setting& setting) {
       }
 
       if (checkerboardSetting.exists("size")) {
-        const Setting& sizeSetting = checkerboardSetting["size"];
-        checkSize = getFlexibleFloat(sizeSetting);
-        if (checkSize <= 0.0) {
-          checkSize = 1.0;  // Clamp to a minimum positive value
+        squareSize = getFlexibleFloat(checkerboardSetting["size"]);
+        if (squareSize <= 0.0) {
+          throw ParserException("Checkerboard square size must be positive.");
         }
       }
+
+      auto plane = std::make_shared<CheckerboardPlane>(
+          axis, pos, color, alternateColor, squareSize);
+
+      // Apply any transformation
+      applyTransformIfExists(setting, plane);
+
+      return plane;
+    } else {
+      // Create a regular plane
+      auto plane = std::make_shared<Plane>(axis, pos, color);
+
+      // Apply any transformation
+      applyTransformIfExists(setting, plane);
+
+      return plane;
     }
-
-    auto plane =
-        std::make_shared<Plane>(axis, pos, color, alternateColor, checkSize);
-
-    // Apply any transformation
-    applyTransformIfExists(setting, plane);
-
-    return plane;
   } catch (const SettingNotFoundException& e) {
     throw ParserException(std::string("Setting not found in plane: ") +
                           e.what());
